@@ -1,8 +1,16 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --background: #f2f2f7;
+  --foreground: #1c1c1e;
+  --surface: #ffffff;
+  --surface-secondary: #f9f9fb;
+  --line: #d1d1d6;
+  --muted: #6e6e73;
+  --accent: #007aff;
+  --success: #34c759;
+  --danger: #ff3b30;
+  --shadow-soft: 0 10px 30px rgba(15, 23, 42, 0.08);
 }
 
 @theme inline {
@@ -12,15 +20,113 @@
   --font-mono: Menlo, Monaco, "Courier New", monospace;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
-}
-
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: "Helvetica Neue", Arial, sans-serif;
+  min-height: 100vh;
+  background-image: radial-gradient(
+      1200px 500px at -5% -10%,
+      rgba(0, 122, 255, 0.12),
+      transparent 55%
+    ),
+    radial-gradient(1200px 500px at 110% -15%, rgba(52, 199, 89, 0.1), transparent 55%);
+}
+
+.ios-card {
+  background: var(--surface);
+  border: 1px solid rgba(209, 209, 214, 0.75);
+  border-radius: 20px;
+  box-shadow: var(--shadow-soft);
+}
+
+.ios-fade-up {
+  animation: ios-fade-up 380ms ease-out both;
+}
+
+.ios-fade-up-delay-1 {
+  animation-delay: 70ms;
+}
+
+.ios-fade-up-delay-2 {
+  animation-delay: 140ms;
+}
+
+.ios-fade-up-delay-3 {
+  animation-delay: 210ms;
+}
+
+@keyframes ios-fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.ios-section-title {
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--foreground);
+}
+
+.ios-group-title {
+  font-size: 0.72rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  font-weight: 700;
+  color: var(--muted);
+}
+
+.ios-btn-primary {
+  height: 42px;
+  border-radius: 14px;
+  background: var(--accent);
+  color: #fff;
+  padding: 0 14px;
+  font-size: 0.84rem;
+  font-weight: 600;
+  transition: transform 140ms ease, filter 140ms ease, box-shadow 140ms ease;
+}
+
+.ios-btn-secondary {
+  height: 42px;
+  border-radius: 14px;
+  background: var(--surface-secondary);
+  border: 1px solid var(--line);
+  color: var(--foreground);
+  padding: 0 14px;
+  font-size: 0.84rem;
+  font-weight: 600;
+  transition: transform 140ms ease, background-color 140ms ease, border-color 140ms ease;
+}
+
+.ios-btn-danger {
+  border-radius: 12px;
+  border: 1px solid rgba(255, 59, 48, 0.5);
+  color: var(--danger);
+  background: #fff;
+  padding: 0 10px;
+  font-size: 0.72rem;
+  height: 32px;
+  font-weight: 600;
+  transition: transform 140ms ease, background-color 140ms ease;
+}
+
+.ios-chip {
+  background: rgba(0, 122, 255, 0.12);
+  color: var(--accent);
+  border-radius: 999px;
+  padding: 3px 10px;
+  font-size: 0.72rem;
+  font-weight: 600;
+}
+
+.ios-btn-primary:hover,
+.ios-btn-secondary:hover,
+.ios-btn-danger:hover {
+  transform: translateY(-1px);
 }

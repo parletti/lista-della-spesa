@@ -73,3 +73,21 @@ File migration:
 2. Seed presente con categorie e prodotti iniziali.
 3. Endpoint `GET /api/autocomplete?q=lat` restituisce suggerimenti pertinenti.
 4. Aggiungendo un prodotto noto (es. `latte`) viene valorizzata la categoria su `shopping_items`.
+
+## Step 10 - Security hardening + audit
+
+File migration:
+- `supabase/migrations/20260226201000_step10_security_audit.sql`
+
+### Come applicarla
+1. Apri Supabase Dashboard.
+2. Vai su `SQL Editor`.
+3. Esegui il contenuto della migration.
+
+### Verifica rapida
+1. Tabella `audit_logs` presente.
+2. Inserimento eventi audit funzionante durante:
+   - richiesta magic link invito
+   - creazione/accettazione invito
+   - add/toggle/delete item
+3. RLS `audit_logs` attivo.

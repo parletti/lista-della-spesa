@@ -26,6 +26,7 @@ Policy implementate per:
 - `shopping_items`: select/insert/update solo nella propria famiglia
 - `invites`: select membri famiglia, insert/update solo admin famiglia
 - `categories/products_catalog/product_aliases`: select authenticated
+- `audit_logs`: select solo membri della stessa famiglia
 
 ## Inviti
 - Token random (`base64url`) generato server-side
@@ -47,6 +48,28 @@ Policy implementate per:
 Nota:
 - rate-limit attuale è in-memory, quindi locale/singola istanza.
 - Da completare in fase hardening: backend condiviso (Redis/Upstash).
+
+## Audit log
+Eventi tracciati (principali):
+- `MAGIC_LINK_REQUEST`
+- `INVITE_CREATE`
+- `INVITE_ACCEPT`
+- `ITEM_ADD`
+- `ITEM_ADD_DEDUP`
+- `ITEM_REACTIVATE`
+- `ITEM_TOGGLE`
+- `ITEM_DELETE`
+
+Tabella: `audit_logs` con metadata JSON, timestamp e contesto famiglia/attore.
+
+## Security headers
+Header globali impostati in `next.config.ts`:
+- `Content-Security-Policy`
+- `Strict-Transport-Security`
+- `X-Frame-Options`
+- `X-Content-Type-Options`
+- `Referrer-Policy`
+- `Permissions-Policy`
 
 ## Azioni raccomandate periodiche
 1. Ruotare `service_role` in caso di esposizione.

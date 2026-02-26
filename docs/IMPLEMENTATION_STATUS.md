@@ -49,20 +49,24 @@
 ## In corso / da fare
 
 ### Step 8 - Voce assistita
-- Pulsante microfono
-- Trascrizione + conferma
-- Fallback input manuale
+- Pulsante microfono nel form aggiunta prodotto
+- Trascrizione Web Speech API (it-IT)
+- Conferma esplicita utente tramite click su `Aggiungi` (no autosave)
+- Fallback tastiera in caso di browser non supportato o permessi negati
 
 ### Step 9 - Offline base + PWA
-- Manifest + service worker
-- Cache shell
-- Sync base al reconnect
+- Manifest PWA attivo
+- Service worker registrato con app shell cache
+- Pagina offline `/offline`
+- Coda offline minima per aggiunta prodotti
+- Sync automatico queue add al reconnect (`online`)
 
 ### Step 10 - Hardening sicurezza
-- Rate-limit persistente distribuito
-- Audit log eventi critici
-- Security headers completi
-- Validazione input server-side estesa
+- Audit log eventi critici (`audit_logs`) su item/invite/auth
+- Security headers completi (CSP, HSTS, X-Frame-Options, ecc.)
+- Validazione input server-side unificata (helper centralizzati)
+- Rate-limit esteso a endpoint sensibili e azioni server principali
+- Nota: rate-limit persistente distribuito ancora da fare (attuale in-memory)
 
 ### Step 11 - Deploy progressivo
 - Preview environment

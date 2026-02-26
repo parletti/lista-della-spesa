@@ -11,6 +11,8 @@ import {
   resolveCatalogMatchByText,
 } from "@/lib/catalog/resolve";
 import { normalizeProductText } from "@/lib/catalog/normalize";
+import { consumeRateLimit } from "@/lib/security/rate-limit";
+import { writeAuditLog } from "@/lib/security/audit";
 
 function parseFamilyName(raw: FormDataEntryValue | null) {
   if (typeof raw !== "string") {
@@ -86,6 +88,15 @@ async function getUserContext(): Promise<UserContext | null> {
     familyId: membership.data?.family_id ?? null,
     familyRole: (membership.data?.role as "ADMIN" | "MEMBER" | undefined) ?? null,
   };
+}
+
+function enforceUserRateLimit(
+  context: UserContext,
+  action: string,
+  limit: number,
+  windowMs: number,
+) {
+  return consumeRateLimit(`action:${action}:${context.authUserId}`, limit, windowMs);
 }
 
 export async function createFamilyAction(
@@ -186,6 +197,14 @@ export async function addShoppingItemAction(
     return { ok: false, error: "Devi prima creare o unirti a una famiglia." };
   }
 
+  const addLimit = enforceUserRateLimit(context, "add-item", 60, 60 * 1000);
+  if (!addLimit.ok) {
+    return {
+      ok: false,
+      error: `Troppi inserimenti. Riprova tra ${addLimit.retryAfterSec} secondi.`,
+    };
+  }
+
   const admin = getSupabaseAdminClient();
   const match = selectedProductId
     ? await resolveCatalogMatchByProductId(selectedProductId, text)
@@ -217,6 +236,14 @@ export async function addShoppingItemAction(
   }
 
   if (pendingExisting.data) {
+    await writeAuditLog({
+      familyId: context.familyId,
+      actorProfileId: context.profileId,
+      eventType: "ITEM_ADD_DEDUP",
+      entityType: "shopping_item",
+      entityId: pendingExisting.data.id,
+      metadata: { text },
+    });
     revalidatePath("/app");
     return { ok: true };
   }
@@ -264,6 +291,15 @@ export async function addShoppingItemAction(
       return { ok: false, error: reactivate.error.message };
     }
 
+    await writeAuditLog({
+      familyId: context.familyId,
+      actorProfileId: context.profileId,
+      eventType: "ITEM_REACTIVATE",
+      entityType: "shopping_item",
+      entityId: boughtExisting.data.id,
+      metadata: { text, categoryId: match.categoryId, productId: match.productId },
+    });
+
     revalidatePath("/app");
     return { ok: true };
   }
@@ -276,11 +312,20 @@ export async function addShoppingItemAction(
     category_id: match.categoryId,
     status: "PENDING",
     added_by: context.profileId,
-  });
+  }).select("id").single();
 
-  if (insertResult.error) {
+  if (insertResult.error || !insertResult.data) {
     return { ok: false, error: insertResult.error.message };
   }
+
+  await writeAuditLog({
+    familyId: context.familyId,
+    actorProfileId: context.profileId,
+    eventType: "ITEM_ADD",
+    entityType: "shopping_item",
+    entityId: insertResult.data.id,
+    metadata: { text, categoryId: match.categoryId, productId: match.productId },
+  });
 
   revalidatePath("/app");
   return { ok: true };
@@ -294,6 +339,11 @@ export async function toggleShoppingItemAction(formData: FormData) {
 
   const context = await getUserContext();
   if (!context || !context.familyId) {
+    return;
+  }
+
+  const toggleLimit = enforceUserRateLimit(context, "toggle-item", 120, 60 * 1000);
+  if (!toggleLimit.ok) {
     return;
   }
 
@@ -320,6 +370,49 @@ export async function toggleShoppingItemAction(formData: FormData) {
     .update(updatePayload)
     .eq("id", currentItem.data.id)
     .eq("family_id", context.familyId);
+
+  await writeAuditLog({
+    familyId: context.familyId,
+    actorProfileId: context.profileId,
+    eventType: "ITEM_TOGGLE",
+    entityType: "shopping_item",
+    entityId: currentItem.data.id,
+    metadata: { nextStatus },
+  });
+
+  revalidatePath("/app");
+}
+
+export async function deleteShoppingItemAction(formData: FormData) {
+  const itemIdRaw = formData.get("item_id");
+  if (typeof itemIdRaw !== "string" || itemIdRaw.length < 10) {
+    return;
+  }
+
+  const context = await getUserContext();
+  if (!context || !context.familyId) {
+    return;
+  }
+
+  const deleteLimit = enforceUserRateLimit(context, "delete-item", 60, 60 * 1000);
+  if (!deleteLimit.ok) {
+    return;
+  }
+
+  const admin = getSupabaseAdminClient();
+  await admin
+    .from("shopping_items")
+    .delete()
+    .eq("id", itemIdRaw)
+    .eq("family_id", context.familyId);
+
+  await writeAuditLog({
+    familyId: context.familyId,
+    actorProfileId: context.profileId,
+    eventType: "ITEM_DELETE",
+    entityType: "shopping_item",
+    entityId: itemIdRaw,
+  });
 
   revalidatePath("/app");
 }
@@ -358,6 +451,14 @@ export async function createInviteAction(
     return { ok: false, error: "Solo un admin può creare inviti." };
   }
 
+  const inviteLimit = enforceUserRateLimit(context, "create-invite", 20, 60 * 60 * 1000);
+  if (!inviteLimit.ok) {
+    return {
+      ok: false,
+      error: `Troppi inviti. Riprova tra ${inviteLimit.retryAfterSec} secondi.`,
+    };
+  }
+
   const token = createInviteToken();
   const tokenHash = hashInviteToken(token);
   const expiresAt = new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString();
@@ -373,6 +474,14 @@ export async function createInviteAction(
   if (insertResult.error) {
     return { ok: false, error: insertResult.error.message };
   }
+
+  await writeAuditLog({
+    familyId: context.familyId,
+    actorProfileId: context.profileId,
+    eventType: "INVITE_CREATE",
+    entityType: "invite",
+    metadata: { expiresAt },
+  });
 
   const invitePath = `/invite/${token}`;
   const origin = await getRequestOrigin();
@@ -398,6 +507,14 @@ export async function acceptInviteAction(
 
   if (context.familyId) {
     return { ok: false, error: "Sei già membro di una famiglia." };
+  }
+
+  const acceptLimit = enforceUserRateLimit(context, "accept-invite", 10, 10 * 60 * 1000);
+  if (!acceptLimit.ok) {
+    return {
+      ok: false,
+      error: `Troppi tentativi. Riprova tra ${acceptLimit.retryAfterSec} secondi.`,
+    };
   }
 
   const tokenHash = hashInviteToken(tokenRaw);
@@ -429,6 +546,14 @@ export async function acceptInviteAction(
   if (addMember.error) {
     return { ok: false, error: addMember.error.message };
   }
+
+  await writeAuditLog({
+    familyId: claimInvite.data.family_id,
+    actorProfileId: context.profileId,
+    eventType: "INVITE_ACCEPT",
+    entityType: "invite",
+    metadata: {},
+  });
 
   revalidatePath("/app");
   redirect("/app");

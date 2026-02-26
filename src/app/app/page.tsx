@@ -2,7 +2,11 @@ import { redirect } from "next/navigation";
 import { getSupabaseAdminClient } from "@/lib/supabase/admin";
 import { getSupabaseServerClient } from "@/lib/supabase/server";
 import { CreateFamilyForm } from "@/app/app/create-family-form";
-import { signOutAction, toggleShoppingItemAction } from "@/app/app/actions";
+import {
+  deleteShoppingItemAction,
+  signOutAction,
+  toggleShoppingItemAction,
+} from "@/app/app/actions";
 import { AddItemForm } from "@/app/app/add-item-form";
 import { ShoppingRealtimeListener } from "@/app/app/shopping-realtime-listener";
 import { CreateInviteForm } from "@/app/app/create-invite-form";
@@ -132,23 +136,23 @@ export default async function AppPage() {
   const boughtByCategory = groupByCategory(boughtItems);
 
   return (
-    <main className="mx-auto flex min-h-screen w-full max-w-3xl flex-col px-6 py-10">
-      <header className="flex items-center justify-between">
+    <main className="mx-auto flex min-h-screen w-full max-w-4xl flex-col px-4 py-5 sm:px-6 sm:py-8">
+      <header className="ios-card ios-fade-up sticky top-3 z-20 mb-5 flex items-center justify-between px-4 py-3">
         <div>
-          <p className="text-sm text-zinc-600">Connesso come</p>
-          <h1 className="text-2xl font-semibold">
+          <p className="text-xs text-zinc-500">Connesso come</p>
+          <h1 className="text-xl font-semibold">
             {profile?.display_name ?? user.email ?? "Utente"}
           </h1>
         </div>
         <form action={signOutAction}>
-          <button className="rounded-md border border-zinc-300 px-3 py-2 text-sm">
+          <button className="ios-btn-secondary">
             Logout
           </button>
         </form>
       </header>
 
       {!membership ? (
-        <section className="mt-10 rounded-lg border border-zinc-200 p-6">
+        <section className="ios-card ios-fade-up ios-fade-up-delay-1 mt-2 p-6">
           <h2 className="text-xl font-semibold">Crea la tua famiglia</h2>
           <p className="mt-2 text-sm text-zinc-600">
             Primo accesso rilevato: crea ora la famiglia per iniziare.
@@ -156,42 +160,43 @@ export default async function AppPage() {
           <CreateFamilyForm />
         </section>
       ) : (
-        <section className="mt-10 rounded-lg border border-zinc-200 p-6">
+        <section className="ios-card ios-fade-up ios-fade-up-delay-1 p-4 sm:p-6">
           <ShoppingRealtimeListener familyId={membership.family_id} />
-          <h2 className="text-xl font-semibold">
-            Famiglia: {membership.families?.name ?? membership.family_id}
-          </h2>
-          <p className="mt-2 text-sm text-zinc-600">
-            Ruolo: {membership.role}
+          <div className="flex items-start justify-between gap-3">
+            <h2 className="text-xl font-semibold">
+              Famiglia: {membership.families?.name ?? membership.family_id}
+            </h2>
+            <span className="ios-chip">{membership.role}</span>
+          </div>
+          <p className="mt-1 text-sm text-zinc-500">
+            Lista condivisa in tempo reale
           </p>
 
-          <div className="mt-6">
-            <h3 className="text-lg font-semibold">Aggiungi prodotto</h3>
+          <div className="mt-6 rounded-2xl bg-white/70 p-4 ring-1 ring-black/5">
+            <h3 className="ios-section-title">Aggiungi prodotto</h3>
             <AddItemForm />
           </div>
 
-          <div className="mt-8 grid gap-6 md:grid-cols-2">
-            <div>
-              <h3 className="text-lg font-semibold">Da comprare</h3>
+          <div className="mt-8 grid gap-5 md:grid-cols-2">
+            <div className="ios-fade-up ios-fade-up-delay-2 rounded-2xl bg-white/70 p-4 ring-1 ring-black/5">
+              <h3 className="ios-section-title">Da comprare</h3>
               <div className="mt-3 space-y-4">
                 {pendingByCategory.length === 0 ? (
                   <p className="text-sm text-zinc-500">Nessun prodotto.</p>
                 ) : (
                   pendingByCategory.map((group) => (
                     <div key={group.category}>
-                      <h4 className="mb-2 text-sm font-semibold uppercase tracking-wide text-zinc-600">
-                        {group.category}
-                      </h4>
-                      <ul className="space-y-2">
+                      <h4 className="ios-group-title mb-2">{group.category}</h4>
+                      <ul className="space-y-2.5">
                         {group.items.map((item) => (
                           <li
                             key={item.id}
-                            className="flex items-center justify-between rounded-md border border-zinc-200 px-3 py-2"
+                            className="flex items-center justify-between rounded-xl border border-zinc-200 bg-white px-3 py-2.5"
                           >
-                            <span>{item.text}</span>
+                            <span className="font-medium text-zinc-800">{item.text}</span>
                             <form action={toggleShoppingItemAction}>
                               <input type="hidden" name="item_id" value={item.id} />
-                              <button className="rounded-md border border-zinc-300 px-2 py-1 text-xs">
+                              <button className="ios-btn-secondary h-8 px-3 text-xs">
                                 Comprato
                               </button>
                             </form>
@@ -204,30 +209,36 @@ export default async function AppPage() {
               </div>
             </div>
 
-            <div>
-              <h3 className="text-lg font-semibold">Comprati</h3>
+            <div className="ios-fade-up ios-fade-up-delay-2 rounded-2xl bg-white/70 p-4 ring-1 ring-black/5">
+              <h3 className="ios-section-title">Comprati</h3>
               <div className="mt-3 space-y-4">
                 {boughtByCategory.length === 0 ? (
                   <p className="text-sm text-zinc-500">Nessun prodotto.</p>
                 ) : (
                   boughtByCategory.map((group) => (
                     <div key={group.category}>
-                      <h4 className="mb-2 text-sm font-semibold uppercase tracking-wide text-zinc-600">
-                        {group.category}
-                      </h4>
-                      <ul className="space-y-2">
+                      <h4 className="ios-group-title mb-2">{group.category}</h4>
+                      <ul className="space-y-2.5">
                         {group.items.map((item) => (
                           <li
                             key={item.id}
-                            className="flex items-center justify-between rounded-md border border-zinc-200 px-3 py-2"
+                            className="flex items-center justify-between rounded-xl border border-zinc-200 bg-white px-3 py-2.5"
                           >
                             <span className="text-zinc-500 line-through">{item.text}</span>
-                            <form action={toggleShoppingItemAction}>
-                              <input type="hidden" name="item_id" value={item.id} />
-                              <button className="rounded-md border border-zinc-300 px-2 py-1 text-xs">
-                                Ripristina
-                              </button>
-                            </form>
+                            <div className="flex items-center gap-2">
+                              <form action={toggleShoppingItemAction}>
+                                <input type="hidden" name="item_id" value={item.id} />
+                                <button className="ios-btn-secondary h-8 px-3 text-xs">
+                                  Compra
+                                </button>
+                              </form>
+                              <form action={deleteShoppingItemAction}>
+                                <input type="hidden" name="item_id" value={item.id} />
+                                <button className="ios-btn-danger">
+                                  Elimina
+                                </button>
+                              </form>
+                            </div>
                           </li>
                         ))}
                       </ul>
@@ -238,7 +249,11 @@ export default async function AppPage() {
             </div>
           </div>
 
-          {membership.role === "ADMIN" ? <CreateInviteForm /> : null}
+          {membership.role === "ADMIN" ? (
+            <div className="ios-fade-up ios-fade-up-delay-3 mt-7 rounded-2xl bg-white/70 p-4 ring-1 ring-black/5">
+              <CreateInviteForm />
+            </div>
+          ) : null}
         </section>
       )}
     </main>

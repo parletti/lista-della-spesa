@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { getSupabaseAdminClient } from "@/lib/supabase/admin";
 import { normalizeProductText } from "@/lib/catalog/normalize";
+import { consumeRateLimit } from "@/lib/security/rate-limit";
 
 type ProductRow = {
   id: string;
@@ -41,11 +42,31 @@ function computeScore(product: ProductRow, normalizedQuery: string, rawQuery: st
   return score;
 }
 
+function getClientIp(request: Request) {
+  const forwarded = request.headers.get("x-forwarded-for");
+  if (forwarded) {
+    return forwarded.split(",")[0]?.trim() ?? "unknown";
+  }
+  return "unknown";
+}
+
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
   const q = searchParams.get("q")?.trim() ?? "";
-  if (q.length < 1) {
+  if (q.length < 1 || q.length > 60) {
     return NextResponse.json({ suggestions: [] });
+  }
+
+  const ip = getClientIp(request);
+  const limit = consumeRateLimit(`autocomplete:${ip}`, 180, 60 * 1000);
+  if (!limit.ok) {
+    return NextResponse.json(
+      {
+        suggestions: [],
+        error: `Rate limit raggiunto. Riprova tra ${limit.retryAfterSec} secondi.`,
+      },
+      { status: 429 },
+    );
   }
 
   const normalizedQuery = normalizeProductText(q);

@@ -4,6 +4,8 @@ import { getSupabaseAdminClient } from "@/lib/supabase/admin";
 import { getSupabasePublicEnv } from "@/lib/env";
 import { hashInviteToken } from "@/lib/security/token";
 import { consumeRateLimit } from "@/lib/security/rate-limit";
+import { parseEmail, parseToken } from "@/lib/validation/input";
+import { writeAuditLog } from "@/lib/security/audit";
 
 type Body = {
   email?: string;
@@ -18,16 +20,12 @@ function getClientIp(request: Request) {
   return "unknown";
 }
 
-function isValidEmail(value: string) {
-  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
-}
-
 export async function POST(request: Request) {
   const body = (await request.json().catch(() => null)) as Body | null;
-  const email = body?.email?.trim().toLowerCase() ?? "";
-  const token = body?.token?.trim() ?? "";
+  const email = parseEmail(body?.email);
+  const token = parseToken(body?.token);
 
-  if (!email || !token || !isValidEmail(email) || token.length < 16) {
+  if (!email || !token) {
     return NextResponse.json(
       { ok: false, error: "Dati non validi." },
       { status: 400 },
@@ -51,7 +49,7 @@ export async function POST(request: Request) {
   const admin = getSupabaseAdminClient();
   const invite = await admin
     .from("invites")
-    .select("id")
+    .select("id, family_id")
     .eq("token_hash", tokenHash)
     .is("used_at", null)
     .gt("expires_at", nowIso)
@@ -86,6 +84,14 @@ export async function POST(request: Request) {
   if (error) {
     return NextResponse.json({ ok: false, error: error.message }, { status: 400 });
   }
+
+  await writeAuditLog({
+    familyId: invite.data.family_id ?? null,
+    actorProfileId: null,
+    eventType: "MAGIC_LINK_REQUEST",
+    entityType: "auth",
+    metadata: { ip, emailMasked: email.replace(/(.{2}).+(@.+)/, "$1***$2") },
+  });
 
   return NextResponse.json({ ok: true });
 }

@@ -67,13 +67,13 @@ export function InviteLoginForm({ token }: Props) {
         autoComplete="email"
         value={email}
         onChange={(event) => setEmail(event.target.value)}
-        className="h-11 rounded-md border border-zinc-300 px-3"
+        className="h-11 rounded-2xl border border-zinc-300 bg-white px-4 text-[15px] outline-none focus:border-[#007AFF]"
         placeholder="nome@famiglia.it"
       />
       <button
         type="submit"
         disabled={status === "loading"}
-        className="h-11 rounded-md bg-black px-4 text-white disabled:cursor-not-allowed disabled:opacity-60"
+        className="ios-btn-primary disabled:cursor-not-allowed disabled:opacity-60"
       >
         {status === "loading" ? "Invio..." : "Invia magic link"}
       </button>

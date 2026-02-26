@@ -22,7 +22,7 @@ export function AcceptInviteForm({ token }: Props) {
       <button
         type="submit"
         disabled={pending}
-        className="h-11 rounded-md bg-black px-4 text-white disabled:cursor-not-allowed disabled:opacity-60"
+        className="ios-btn-primary disabled:cursor-not-allowed disabled:opacity-60"
       >
         {pending ? "Conferma..." : "Accetta invito"}
       </button>

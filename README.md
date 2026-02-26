@@ -5,6 +5,7 @@ App web (Next.js + Supabase) per lista spesa condivisa famigliare con:
 - sincronizzazione realtime
 - autocomplete prodotti/categorie
 - raggruppamento prodotti per categoria
+- PWA installabile con supporto offline base
 
 ## Requisiti
 - Node.js >= 20
@@ -66,6 +67,12 @@ Autocomplete test:
 ```bash
 curl "http://127.0.0.1:3000/api/autocomplete?q=lat"
 ```
+
+## PWA/Offline
+- Manifest disponibile su `/manifest.webmanifest`
+- Service worker: `public/sw.js`
+- Pagina fallback offline: `/offline`
+- Queue offline minima: aggiunta prodotti accodata e sincronizzata quando torna la connessione
 
 ## Flusso utente
 1. Admin crea famiglia.
