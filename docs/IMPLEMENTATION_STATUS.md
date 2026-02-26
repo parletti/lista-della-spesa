@@ -21,6 +21,8 @@
 - Pagina protetta `/app`
 - Creazione famiglia primo accesso
 - Logout
+- Evoluzione: login principale migrato a email/password
+- Flusso magic link mantenuto per onboarding via invito
 
 ### Step 4 - Lista spesa core
 - Tabella `shopping_items`
@@ -56,7 +58,7 @@
 
 ### Step 9 - Offline base + PWA
 - Manifest PWA attivo
-- Service worker registrato con app shell cache
+- Service worker implementato ma temporaneamente disattivato in runtime (unregister forzato) per eliminare cache stale durante debug/layout
 - Pagina offline `/offline`
 - Coda offline minima per aggiunta prodotti
 - Sync automatico queue add al reconnect (`online`)
@@ -72,6 +74,13 @@
 - Preview environment
 - Production environment
 - Smoke test post deploy
+
+## Aggiornamenti recenti (post-step incrementali)
+1. Auth callback resa compatibile con formati Supabase multipli (`code`, `token_hash`, hash token).
+2. Aggiunta pagina `/auth/confirm` per finalizzazione sessione.
+3. Login `/login` convertito a email/password.
+4. Endpoint `POST /api/auth/sync-profile` per allineamento profilo dopo autenticazione.
+5. CSP aggiornata per websocket realtime sicuri.
 
 ## Test minimi regressione (attuali)
 1. Login via invito

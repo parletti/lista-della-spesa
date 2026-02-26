@@ -1,7 +1,7 @@
 # Architettura - Lista della Spesa
 
 ## Obiettivo
-Applicazione web/PWA per gestione lista spesa condivisa in famiglia, con sincronizzazione realtime e onboarding tramite inviti monouso.
+Applicazione web/PWA per gestione lista spesa condivisa in famiglia, con sincronizzazione realtime, login email/password e onboarding nuovi utenti tramite inviti monouso.
 
 ## Stack
 - Frontend: Next.js (App Router) + TypeScript
@@ -12,10 +12,11 @@ Applicazione web/PWA per gestione lista spesa condivisa in famiglia, con sincron
 ## Struttura applicativa
 - `src/app/`
   - `page.tsx`: landing
-  - `login/page.tsx`: pagina informativa (no form pubblico)
+  - `login/page.tsx`: login email/password
   - `app/page.tsx`: dashboard protetta (lista + inviti admin)
   - `invite/[token]/page.tsx`: onboarding via invito
-  - `auth/callback/route.ts`: callback magic link
+  - `auth/callback/route.ts`: callback compatibilità link Supabase
+  - `auth/confirm/page.tsx`: finalizzazione sessione auth lato client
   - `api/`: endpoint applicativi
 - `src/lib/`
   - `supabase/`: client browser/server/admin
@@ -26,16 +27,15 @@ Applicazione web/PWA per gestione lista spesa condivisa in famiglia, con sincron
 ## Flussi principali
 
 ### 1) Autenticazione
-1. Utente apre link invito `/invite/[token]`.
-2. Se non autenticato, inserisce email nel form invito.
-3. Endpoint server `/api/auth/request-magic-link` valida invito e applica rate-limit.
-4. Supabase invia magic link, callback su `/auth/callback`.
-5. Callback crea/aggiorna `profiles` e reindirizza al percorso richiesto.
+1. Membro esistente esegue login con email/password su `/login`.
+2. Supabase Auth crea sessione cookie.
+3. Dashboard `/app` valida sessione server-side.
+4. Se non autenticato, redirect a `/login`.
 
 ### 2) Onboarding invito
 1. Admin genera invito in dashboard.
 2. Sistema salva solo `token_hash` (non token in chiaro), scadenza 24h.
-3. Utente autenticato conferma invito.
+3. Nuovo utente apre link invito, effettua autenticazione e conferma.
 4. `acceptInviteAction` marca invito usato e crea membership `MEMBER`.
 
 ### 3) Lista spesa
@@ -62,6 +62,11 @@ Applicazione web/PWA per gestione lista spesa condivisa in famiglia, con sincron
 ## Realtime
 - Listener client su `shopping_items` filtrato per `family_id`.
 - Ogni evento DB triggera `router.refresh()`.
+
+## PWA e cache
+- Manifest e offline route presenti.
+- Service Worker registrato in precedenza per cache shell.
+- Attualmente registrazione SW disattivata (unregister forzato) per prevenire cache stale durante iterazioni UI/debug.
 
 ## Considerazioni su scalabilità
 - Rate-limit attuale in-memory (istanza singola).

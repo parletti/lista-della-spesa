@@ -5,8 +5,8 @@
 - `service_role` usata solo server-side
 - Accesso dati governato da RLS Supabase
 - Onboarding tramite inviti monouso con scadenza
-- Login pubblico disabilitato (solo invito)
-- Rate-limit sul flusso richiesta magic link
+- Login utenti esistenti con email/password
+- Rate-limit su endpoint auth sensibili
 
 ## Gestione credenziali
 - File locale: `.env.local`
@@ -38,12 +38,13 @@ Policy implementate per:
   - non scaduto
   - non usato
 
-## Anti-flood magic link
+## Anti-flood auth
 - Endpoint server: `/api/auth/request-magic-link`
 - Controlli:
-  - payload valido (`email`, `token`)
-  - invito esistente/valido
-  - rate-limit `5 req / 10 min` per `IP+token`
+  - payload valido
+  - invito esistente/valido (quando presente token)
+  - utente auth esistente (flow login standard)
+  - rate-limit `5 req / 10 min` per `IP+token` e `IP+email`
 
 Nota:
 - rate-limit attuale è in-memory, quindi locale/singola istanza.
@@ -52,6 +53,7 @@ Nota:
 ## Audit log
 Eventi tracciati (principali):
 - `MAGIC_LINK_REQUEST`
+- `PASSWORD_LOGIN` (previsto da introdurre nel prossimo incremento)
 - `INVITE_CREATE`
 - `INVITE_ACCEPT`
 - `ITEM_ADD`
@@ -70,6 +72,10 @@ Header globali impostati in `next.config.ts`:
 - `X-Content-Type-Options`
 - `Referrer-Policy`
 - `Permissions-Policy`
+
+Nota CSP:
+- `connect-src` include `wss://*.supabase.co` per realtime.
+- In development sono consentiti anche `ws://localhost:*` e `ws://127.0.0.1:*`.
 
 ## Azioni raccomandate periodiche
 1. Ruotare `service_role` in caso di esposizione.

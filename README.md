@@ -1,7 +1,8 @@
 # Lista della Spesa
 
 App web (Next.js + Supabase) per lista spesa condivisa famigliare con:
-- accesso via inviti monouso
+- accesso via email/password (membri esistenti)
+- onboarding nuovi utenti via inviti monouso
 - sincronizzazione realtime
 - autocomplete prodotti/categorie
 - raggruppamento prodotti per categoria
@@ -36,7 +37,7 @@ SUPABASE_SERVICE_ROLE_KEY=...
 4. Configura Supabase Auth:
 - `Authentication` -> `URL Configuration`
 - `Site URL`: `http://127.0.0.1:3000`
-- `Redirect URL`: `http://127.0.0.1:3000/auth/callback`
+- `Redirect URL`: `http://127.0.0.1:3000/auth/confirm`
 
 5. Avvia in locale:
 
@@ -73,20 +74,27 @@ curl "http://127.0.0.1:3000/api/autocomplete?q=lat"
 - Service worker: `public/sw.js`
 - Pagina fallback offline: `/offline`
 - Queue offline minima: aggiunta prodotti accodata e sincronizzata quando torna la connessione
+- Nota: registrazione service worker temporaneamente disattivata in runtime per evitare cache stale durante debug UI.
 
 ## Flusso utente
 1. Admin crea famiglia.
-2. Admin genera invito (valido 24h, monouso).
-3. Nuovo utente apre link invito e richiede magic link da lì.
-4. Utente accetta invito.
+2. Utente esistente accede da `/login` con email/password.
+3. Admin genera invito (valido 24h, monouso) per nuovi membri.
+4. Nuovo utente apre link invito e completa onboarding.
 5. Membri aggiungono/spuntano prodotti in realtime.
 
 ## Sicurezza (attuale)
-- Login pubblico disattivato (solo onboarding via invito).
+- Login principale con email/password.
+- Creazione nuovi utenti vincolata a invito.
 - Token invito salvato hashato (mai in chiaro).
 - RLS attiva sulle tabelle family-scoped.
-- Rate-limit endpoint richiesta magic link (`IP+token`).
+- Rate-limit endpoint auth sensibili (`IP+token` e `IP+email`).
 - `SUPABASE_SERVICE_ROLE_KEY` usata solo server-side.
+
+## Note operative recenti
+- Callback auth robusta per diversi formati link Supabase (`code`, `token_hash`, hash token).
+- Pagina `/auth/confirm` dedicata al completamento sessione.
+- Service Worker temporaneamente disattivato per evitare UI stale da cache durante sviluppo/debug.
 
 ## Documentazione completa
 - Architettura: [docs/ARCHITECTURE.md](/Users/parletti/chagpt%20codex%20progetti/Lista%20della%20Spesa/docs/ARCHITECTURE.md)

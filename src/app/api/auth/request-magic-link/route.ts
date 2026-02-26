@@ -25,20 +25,85 @@ export async function POST(request: Request) {
   const email = parseEmail(body?.email);
   const token = parseToken(body?.token);
 
-  if (!email || !token) {
+  if (!email) {
     return NextResponse.json(
       { ok: false, error: "Dati non validi." },
       { status: 400 },
     );
   }
 
+  const origin = new URL(request.url).origin;
+  const env = getSupabasePublicEnv();
+  if (!env) {
+    return NextResponse.json(
+      { ok: false, error: "Configurazione Supabase incompleta." },
+      { status: 503 },
+    );
+  }
+  const authClient = createClient(env.url, env.anonKey);
+
   const ip = getClientIp(request);
-  const limit = consumeRateLimit(`invite-magic-link:${ip}:${token}`, 5, 10 * 60 * 1000);
-  if (!limit.ok) {
+  if (!token) {
+    const limit = consumeRateLimit(`existing-magic-link:${ip}:${email}`, 5, 10 * 60 * 1000);
+    if (!limit.ok) {
+      return NextResponse.json(
+        {
+          ok: false,
+          error: `Troppi tentativi. Riprova tra ${limit.retryAfterSec} secondi.`,
+        },
+        { status: 429 },
+      );
+    }
+
+    const admin = getSupabaseAdminClient();
+    const { data: usersData, error: usersError } = await admin.auth.admin.listUsers({
+      page: 1,
+      perPage: 1000,
+    });
+    if (usersError) {
+      return NextResponse.json(
+        { ok: false, error: "Impossibile verificare l'utente in questo momento." },
+        { status: 503 },
+      );
+    }
+
+    const normalizedEmail = email.toLowerCase();
+    const authUser = usersData.users.find(
+      (user) => (user.email ?? "").toLowerCase() === normalizedEmail,
+    );
+    if (!authUser) {
+      return NextResponse.json(
+        {
+          ok: false,
+          error:
+            "Email non abilitata. Usa un link invito oppure chiedi all'admin di invitarti di nuovo.",
+        },
+        { status: 400 },
+      );
+    }
+
+    const redirectTo = `${origin}/auth/confirm?next=${encodeURIComponent("/app")}`;
+    const { error } = await authClient.auth.signInWithOtp({
+      email,
+      options: {
+        emailRedirectTo: redirectTo,
+        shouldCreateUser: false,
+      },
+    });
+
+    if (error) {
+      return NextResponse.json({ ok: false, error: error.message }, { status: 400 });
+    }
+
+    return NextResponse.json({ ok: true });
+  }
+
+  const inviteLimit = consumeRateLimit(`invite-magic-link:${ip}:${token}`, 5, 10 * 60 * 1000);
+  if (!inviteLimit.ok) {
     return NextResponse.json(
       {
         ok: false,
-        error: `Troppi tentativi. Riprova tra ${limit.retryAfterSec} secondi.`,
+        error: `Troppi tentativi. Riprova tra ${inviteLimit.retryAfterSec} secondi.`,
       },
       { status: 429 },
     );
@@ -62,22 +127,11 @@ export async function POST(request: Request) {
     );
   }
 
-  const env = getSupabasePublicEnv();
-  if (!env) {
-    return NextResponse.json(
-      { ok: false, error: "Configurazione Supabase incompleta." },
-      { status: 503 },
-    );
-  }
-
-  const authClient = createClient(env.url, env.anonKey);
-  const origin = new URL(request.url).origin;
-  const redirectTo = `${origin}/auth/callback?next=${encodeURIComponent(`/invite/${token}`)}`;
-
+  const inviteRedirectTo = `${origin}/auth/confirm?next=${encodeURIComponent(`/invite/${token}`)}`;
   const { error } = await authClient.auth.signInWithOtp({
     email,
     options: {
-      emailRedirectTo: redirectTo,
+      emailRedirectTo: inviteRedirectTo,
     },
   });
 
