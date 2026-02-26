@@ -1,0 +1,79 @@
+# Stato Implementazione
+
+## Completati
+
+### Step 0 - Bootstrap
+- Next.js + TypeScript + ESLint
+- Script qualità (`lint`, `typecheck`)
+- Build locale verificata
+
+### Step 1 - Supabase base
+- Config env + client/server/admin Supabase
+- Health check DB: `/api/health/db`
+
+### Step 2 - Schema base + RLS minima
+- Tabelle: `families`, `profiles`, `family_members`
+- Trigger `updated_at`
+- Policy RLS base
+
+### Step 3 - Auth magic link + ingresso famiglia
+- Callback auth
+- Pagina protetta `/app`
+- Creazione famiglia primo accesso
+- Logout
+
+### Step 4 - Lista spesa core
+- Tabella `shopping_items`
+- Aggiunta item
+- Toggle `PENDING/BOUGHT`
+- Persistenza dati
+
+### Step 5 - Realtime multiutente
+- Subscription su `shopping_items`
+- Refresh automatico UI
+
+### Step 6 - Inviti sicuri 24h
+- Tabella `invites`
+- Creazione inviti admin-only
+- Accettazione monouso + scadenza
+- Flusso onboarding via link invito
+
+### Step 7 - Categorie + catalogo + autocomplete
+- Tabelle `categories`, `products_catalog`, `product_aliases`
+- Seed iniziale IT
+- Endpoint autocomplete fuzzy
+- Auto-assegnazione categoria
+- UI raggruppata per categoria
+- No duplicati tra `Da comprare` e `Comprati`
+
+## In corso / da fare
+
+### Step 8 - Voce assistita
+- Pulsante microfono
+- Trascrizione + conferma
+- Fallback input manuale
+
+### Step 9 - Offline base + PWA
+- Manifest + service worker
+- Cache shell
+- Sync base al reconnect
+
+### Step 10 - Hardening sicurezza
+- Rate-limit persistente distribuito
+- Audit log eventi critici
+- Security headers completi
+- Validazione input server-side estesa
+
+### Step 11 - Deploy progressivo
+- Preview environment
+- Production environment
+- Smoke test post deploy
+
+## Test minimi regressione (attuali)
+1. Login via invito
+2. Generazione invito admin
+3. Accept invito (valido/scaduto/riusato)
+4. Aggiunta prodotto manuale e da suggerimento
+5. Toggle stato prodotto
+6. Assenza duplicati cross-gruppo
+7. Sync realtime tra due sessioni
