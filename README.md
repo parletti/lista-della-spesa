@@ -51,6 +51,7 @@ Esegui in ordine i file in `supabase/migrations/`:
 2. `20260226180000_step4_shopping_items.sql`
 3. `20260226191000_step6_invites.sql`
 4. `20260226195000_step7_catalog_autocomplete.sql`
+5. `20260226232051_step7_catalog_expand_foods.sql`
 
 ## Comandi utili
 ```bash

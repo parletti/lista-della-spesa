@@ -28,18 +28,69 @@ type Suggestion = {
   confidence: number;
 };
 
+function compactText(value: string) {
+  return value.replace(/\s+/g, "");
+}
+
+function isSubsequence(query: string, target: string) {
+  if (!query) return false;
+  let qi = 0;
+  for (let ti = 0; ti < target.length && qi < query.length; ti += 1) {
+    if (target[ti] === query[qi]) {
+      qi += 1;
+    }
+  }
+  return qi === query.length;
+}
+
 function computeScore(product: ProductRow, normalizedQuery: string, rawQuery: string) {
   let score = product.popularity_score / 100;
   const normalizedDisplay = normalizeProductText(product.display_name);
   const rawLower = rawQuery.toLowerCase();
   const displayLower = product.display_name.toLowerCase();
+  const compactQuery = compactText(normalizedQuery);
+  const compactNormalizedName = compactText(product.normalized_name);
+  const compactDisplay = compactText(normalizedDisplay);
 
   if (product.normalized_name.startsWith(normalizedQuery)) score += 300;
   if (normalizedDisplay.includes(normalizedQuery)) score += 200;
   if (displayLower.startsWith(rawLower)) score += 180;
   if (displayLower.includes(rawLower)) score += 120;
+  if (compactQuery.length >= 2 && isSubsequence(compactQuery, compactNormalizedName)) {
+    score += 150;
+  }
+  if (compactQuery.length >= 2 && isSubsequence(compactQuery, compactDisplay)) {
+    score += 120;
+  }
 
   return score;
+}
+
+function hasStrongTextMatch(
+  product: ProductRow,
+  normalizedQuery: string,
+  rawQuery: string,
+  aliases: string[],
+) {
+  const normalizedDisplay = normalizeProductText(product.display_name);
+  const rawLower = rawQuery.toLowerCase();
+  const displayLower = product.display_name.toLowerCase();
+  const compactQuery = compactText(normalizedQuery);
+
+  if (product.normalized_name.startsWith(normalizedQuery)) return true;
+  if (normalizedDisplay.includes(normalizedQuery)) return true;
+  if (displayLower.startsWith(rawLower)) return true;
+  if (displayLower.includes(rawLower)) return true;
+  if (aliases.some((alias) => alias.startsWith(normalizedQuery))) return true;
+  if (aliases.some((alias) => alias.includes(normalizedQuery))) return true;
+  if (compactQuery.length >= 3 && isSubsequence(compactQuery, compactText(product.normalized_name))) {
+    return true;
+  }
+  if (compactQuery.length >= 3 && aliases.some((alias) => isSubsequence(compactQuery, compactText(alias)))) {
+    return true;
+  }
+
+  return false;
 }
 
 function getClientIp(request: Request) {
@@ -81,17 +132,17 @@ export async function GET(request: Request) {
       .from("products_catalog")
       .select("id, display_name, normalized_name, category_id, popularity_score")
       .ilike("normalized_name", `%${normalizedQuery}%`)
-      .limit(12),
+      .limit(30),
     admin
       .from("products_catalog")
       .select("id, display_name, normalized_name, category_id, popularity_score")
       .ilike("display_name", `%${q}%`)
-      .limit(12),
+      .limit(30),
     admin
       .from("product_aliases")
       .select("alias_normalized, product_id")
       .ilike("alias_normalized", `%${normalizedQuery}%`)
-      .limit(12),
+      .limit(30),
   ]);
 
   const productsMap = new Map<string, ProductRow>();
@@ -102,7 +153,6 @@ export async function GET(request: Request) {
   for (const row of (byDisplay.data ?? []) as ProductRow[]) {
     productsMap.set(row.id, row);
   }
-
   const aliasRows = (aliasMatches.data ?? []) as AliasRow[];
   if (aliasRows.length > 0) {
     const aliasProductIds = [...new Set(aliasRows.map((row) => row.product_id))];
@@ -142,6 +192,13 @@ export async function GET(request: Request) {
       const aliases = aliasByProduct.get(product.id) ?? [];
       if (aliases.some((alias) => alias.startsWith(normalizedQuery))) score += 160;
       if (aliases.some((alias) => alias.includes(normalizedQuery))) score += 110;
+      const compactQuery = compactText(normalizedQuery);
+      if (
+        compactQuery.length >= 2 &&
+        aliases.some((alias) => isSubsequence(compactQuery, compactText(alias)))
+      ) {
+        score += 100;
+      }
 
       return {
         productId: product.id,
@@ -150,8 +207,17 @@ export async function GET(request: Request) {
         confidence: score,
       } satisfies Suggestion;
     })
+    .filter((suggestion) => {
+      const product = productsMap.get(suggestion.productId);
+      if (!product) return false;
+      const aliases = aliasByProduct.get(suggestion.productId) ?? [];
+      if (!hasStrongTextMatch(product, normalizedQuery, q, aliases)) return false;
+
+      const minConfidence = normalizedQuery.length >= 4 ? 150 : 120;
+      return suggestion.confidence >= minConfidence;
+    })
     .sort((a, b) => b.confidence - a.confidence || a.label.localeCompare(b.label, "it"))
-    .slice(0, 8);
+    .slice(0, 6);
 
   return NextResponse.json({ suggestions });
 }

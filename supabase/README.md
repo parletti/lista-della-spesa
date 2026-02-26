@@ -62,6 +62,7 @@ File migration:
 
 File migration:
 - `supabase/migrations/20260226195000_step7_catalog_autocomplete.sql`
+- `supabase/migrations/20260226232051_step7_catalog_expand_foods.sql`
 
 ### Come applicarla
 1. Apri Supabase Dashboard.
@@ -71,8 +72,9 @@ File migration:
 ### Verifica rapida
 1. Tabelle create: `categories`, `products_catalog`, `product_aliases`.
 2. Seed presente con categorie e prodotti iniziali.
-3. Endpoint `GET /api/autocomplete?q=lat` restituisce suggerimenti pertinenti.
-4. Aggiungendo un prodotto noto (es. `latte`) viene valorizzata la categoria su `shopping_items`.
+3. Seed espanso con prodotti aggiuntivi (es. `cocco`, `ciliegia`, ecc.).
+4. Endpoint `GET /api/autocomplete?q=lat` restituisce suggerimenti pertinenti.
+5. Aggiungendo un prodotto noto (es. `latte`) viene valorizzata la categoria su `shopping_items`.
 
 ## Step 10 - Security hardening + audit
 
