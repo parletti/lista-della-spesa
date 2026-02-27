@@ -19,9 +19,14 @@
 ### Step 3 - Auth email/password + ingresso famiglia
 - Login principale via email/password (`/login`)
 - Callback auth/confirm per completamento sessione
+- Flusso reset password (`/login/reset-request` -> `/login/reset`)
+- Validazione policy password (min 10, upper/lower/numero, blacklist deboli)
+- Conferma password obbligatoria in reset
 - Pagina protetta `/app`
 - Creazione famiglia primo accesso
 - Logout
+- Sessione massima 30 giorni con logout forzato
+- Onboarding invito con step password obbligatoria post-accept
 - Flusso onboarding nuovi utenti via invito monouso
 
 ### Step 4 - Lista spesa core
@@ -117,6 +122,10 @@
     - tipografia e controlli leggermente ridotti
     - spaziature verticali compattate per mostrare più contenuto
     - toni/gerarchie cromatiche mantenuti (pannelli pending/bought + badge categoria)
+17. Security UX auth:
+    - link `Password dimenticata?` in login
+    - reset password completo con conferma e policy
+    - avviso dedicato quando sessione scade oltre 30 giorni
 
 ## Test minimi regressione (attuali)
 1. Login email/password

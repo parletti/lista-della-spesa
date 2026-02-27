@@ -27,7 +27,7 @@ export default async function InvitePage({ params }: PageProps) {
         ) : (
           <>
             <p className="mt-2 text-sm text-zinc-600">
-              Conferma per unirti alla lista spesa condivisa.
+              Conferma per unirti alla lista spesa condivisa. Dopo la conferma imposterai la password.
             </p>
             <AcceptInviteForm token={token} />
           </>

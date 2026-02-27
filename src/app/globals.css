@@ -63,8 +63,8 @@ body {
 }
 
 .ios-list-bought .ios-item-row {
-  background: rgba(236, 253, 245, 0.75);
-  border: 1px solid rgba(52, 199, 89, 0.24);
+  background: #ffffff;
+  border: 1px solid rgba(148, 163, 184, 0.3);
 }
 
 .ios-category-badge {
@@ -82,8 +82,9 @@ body {
 }
 
 .ios-list-bought .ios-category-badge {
-  border-color: rgba(22, 163, 74, 0.6);
-  background: linear-gradient(180deg, rgba(187, 247, 208, 1), rgba(134, 239, 172, 0.95));
+  border-color: rgba(249, 115, 22, 0.75);
+  background: linear-gradient(180deg, rgba(254, 215, 170, 1), rgba(251, 146, 60, 0.95));
+  color: #7c2d12;
 }
 
 .ios-list-pending .ios-group-title {

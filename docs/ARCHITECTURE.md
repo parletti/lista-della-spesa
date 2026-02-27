@@ -29,14 +29,22 @@ Applicazione web/PWA per gestione lista spesa condivisa in famiglia, con sincron
 ### 1) Autenticazione
 1. Membro esistente esegue login con email/password su `/login`.
 2. Supabase Auth crea sessione cookie.
-3. Dashboard `/app` valida sessione server-side.
-4. Se non autenticato, redirect a `/login`.
+3. Guard client applica durata massima sessione di 30 giorni.
+4. Dashboard `/app` valida sessione server-side.
+5. Se non autenticato, redirect a `/login`.
 
 ### 2) Onboarding invito
 1. Admin genera invito in dashboard.
 2. Sistema salva solo `token_hash` (non token in chiaro), scadenza 24h.
 3. Nuovo utente apre link invito, effettua autenticazione e conferma.
 4. `acceptInviteAction` marca invito usato e crea membership `MEMBER`.
+5. Redirect forzato su `/login/reset?required=1&next=/app` per impostazione password obbligatoria.
+
+### 2-bis) Reset password
+1. Utente apre `/login/reset-request` e invia email.
+2. Supabase invia link recovery verso `/auth/confirm?next=/login/reset`.
+3. In `/login/reset` imposta nuova password + conferma.
+4. Se il reset è richiesto dopo invito (`required=1`), il redirect finale va su `/app`.
 
 ### 3) Lista spesa
 1. Inserimento manuale o da suggerimento autocomplete (attivo da almeno 3 caratteri digitati, lista estesa ordinata per categoria/prodotto).
@@ -87,6 +95,12 @@ Applicazione web/PWA per gestione lista spesa condivisa in famiglia, con sincron
   - lista suggerimenti raggruppata e ordinata per categoria -> prodotto
   - lieve rientro elementi prodotto per migliorare scansione visiva
   - chiusura automatica dei suggerimenti con click/tap fuori dall'area input+suggerimenti
+
+## Policy Password
+- Minimo 10 caratteri.
+- Almeno una lettera maiuscola, una minuscola e un numero.
+- Nessun carattere speciale obbligatorio.
+- Blocco password deboli (blacklist) e password che contengono parti dell'email utente.
 
 ## PWA e cache
 - Manifest e offline route presenti.

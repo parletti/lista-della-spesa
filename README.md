@@ -3,6 +3,8 @@
 App web (Next.js + Supabase) per lista spesa condivisa famigliare con:
 - accesso via email/password (membri esistenti)
 - onboarding nuovi utenti via inviti monouso
+- impostazione password obbligatoria dopo accettazione invito
+- reset password via email
 - sincronizzazione realtime
 - autocomplete prodotti/categorie
 - raggruppamento prodotti per categoria
@@ -95,17 +97,20 @@ curl "http://127.0.0.1:3000/api/autocomplete?q=lat"
 1. Admin crea famiglia.
 2. Utente esistente accede da `/login` con email/password.
 3. Admin genera invito (valido 24h, monouso) per nuovi membri.
-4. Nuovo utente apre link invito e completa onboarding.
-5. Membri aggiungono/spuntano prodotti in realtime.
-6. Da menu `...`, i membri possono assegnare/modificare la categoria di un item (persistente su DB item).
+4. Nuovo utente apre link invito, effettua login via magic link e accetta invito.
+5. Dopo accettazione invito, imposta password obbligatoriamente su `/login/reset`.
+6. Membri aggiungono/spuntano prodotti in realtime.
+7. Da menu `...`, i membri possono assegnare/modificare la categoria di un item (persistente su DB item).
 
 ## Sicurezza (attuale)
 - Login principale con email/password.
+- Password policy: minimo 10 caratteri, almeno maiuscola/minuscola/numero, blocco password deboli.
 - Creazione nuovi utenti vincolata a invito.
 - Token invito salvato hashato (mai in chiaro).
 - RLS attiva sulle tabelle family-scoped.
 - Rate-limit endpoint auth sensibili (`IP+token` e `IP+email`).
 - `SUPABASE_SERVICE_ROLE_KEY` usata solo server-side.
+- Sessione applicativa massima 30 giorni con logout forzato oltre soglia.
 
 ## Note operative recenti
 - Callback auth robusta per diversi formati link Supabase (`code`, `token_hash`, hash token).
