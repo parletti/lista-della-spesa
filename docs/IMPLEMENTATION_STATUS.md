@@ -44,6 +44,7 @@
 - Tabelle `categories`, `products_catalog`, `product_aliases`
 - Seed iniziale IT
 - Seed espanso con prodotti aggiuntivi (es. cocco/ciliegia e altri)
+- Seed latticini esteso con 30+ prodotti validati (formaggi/yogurt/latte speciali)
 - Endpoint autocomplete fuzzy
 - Auto-assegnazione categoria
 - UI raggruppata per categoria

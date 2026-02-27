@@ -53,6 +53,7 @@ Esegui in ordine i file in `supabase/migrations/`:
 3. `20260226191000_step6_invites.sql`
 4. `20260226195000_step7_catalog_autocomplete.sql`
 5. `20260226232051_step7_catalog_expand_foods.sql`
+6. `20260227082223_step7_catalog_latticini_expand.sql`
 
 ## Comandi utili
 ```bash
