@@ -57,6 +57,7 @@ Applicazione web/PWA per gestione lista spesa condivisa in famiglia, con sincron
 4. UI mostra due sezioni: `Da comprare` e `Comprati`, entrambe raggruppate per categoria.
 5. Menu `...` per item:
    - `Categoria`: assegnazione immediata (persistente su `shopping_items.category_id`)
+   - `Rinomina`: update condiviso del campo `shopping_items.text`
    - `Elimina`
 6. Toggle stato `Comprato/Compra` ottimistico lato client per feedback immediato.
 7. Update realtime tramite subscription Supabase.

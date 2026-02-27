@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import {
   deleteShoppingItemAction,
+  updateShoppingItemTextAction,
   updateShoppingItemCategoryAction,
 } from "@/app/app/actions";
 
@@ -14,6 +15,7 @@ type CategoryOption = {
 
 type Props = {
   itemId: string;
+  currentText: string;
   currentCategoryId: string | null;
   categories: CategoryOption[];
 };
@@ -23,9 +25,9 @@ type MenuPosition = {
   left: number;
 };
 
-const MENU_WIDTH = 224;
+const MENU_WIDTH = 260;
 
-export function ItemActionsMenu({ itemId, currentCategoryId, categories }: Props) {
+export function ItemActionsMenu({ itemId, currentText, currentCategoryId, categories }: Props) {
   const triggerRef = useRef<HTMLButtonElement>(null);
   const panelRef = useRef<HTMLDivElement>(null);
   const categoryFormRef = useRef<HTMLFormElement>(null);
@@ -142,6 +144,29 @@ export function ItemActionsMenu({ itemId, currentCategoryId, categories }: Props
                     </option>
                   ))}
                 </select>
+              </form>
+              <div className="my-2 border-t border-zinc-200" />
+              <form
+                action={updateShoppingItemTextAction}
+                className="flex flex-col gap-2"
+                onSubmit={() => {
+                  setIsOpen(false);
+                }}
+              >
+                <input type="hidden" name="item_id" value={itemId} />
+                <label className="text-xs font-medium text-zinc-600">Rinomina</label>
+                <input
+                  type="text"
+                  name="text"
+                  required
+                  minLength={1}
+                  maxLength={120}
+                  defaultValue={currentText}
+                  className="h-8 rounded-lg border border-zinc-300 bg-white/95 px-2 text-[11px]"
+                />
+                <button className="ios-btn-secondary h-7 text-[11px]">
+                  Salva nome
+                </button>
               </form>
               <div className="my-2 border-t border-zinc-200" />
               <form action={deleteShoppingItemAction}>

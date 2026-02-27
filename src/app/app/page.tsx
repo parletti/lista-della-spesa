@@ -220,6 +220,7 @@ export default async function AppPage() {
                               <OptimisticToggleButton itemId={item.id} label="Comprato" />
                               <ItemActionsMenu
                                 itemId={item.id}
+                                currentText={item.text}
                                 currentCategoryId={item.category_id}
                                 categories={categories}
                               />
@@ -256,6 +257,7 @@ export default async function AppPage() {
                               <OptimisticToggleButton itemId={item.id} label="Compra" />
                               <ItemActionsMenu
                                 itemId={item.id}
+                                currentText={item.text}
                                 currentCategoryId={item.category_id}
                                 categories={categories}
                               />

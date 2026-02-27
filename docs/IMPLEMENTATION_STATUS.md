@@ -68,6 +68,7 @@
 - No duplicati tra `Da comprare` e `Comprati`
 - Menu azioni `...` per item:
   - Assegnazione categoria immediata e persistente su item
+  - Rinomina condivisa e persistente del nome item
   - Eliminazione item
   - Apertura menu robusta (portal, chiusura click-outside/Esc, posizione dinamica)
 
@@ -127,6 +128,8 @@
     - link `Password dimenticata?` in login
     - reset password completo con conferma e policy
     - avviso dedicato quando sessione scade oltre 30 giorni
+18. UX item actions:
+    - aggiunta funzione `Rinomina` su menu `...` con update realtime condiviso
 
 ## Test minimi regressione (attuali)
 1. Login email/password

@@ -485,6 +485,56 @@ export async function updateShoppingItemCategoryAction(formData: FormData) {
   revalidatePath("/app");
 }
 
+export async function updateShoppingItemTextAction(formData: FormData) {
+  const itemIdRaw = formData.get("item_id");
+  const text = parseItemText(formData.get("text"));
+  if (typeof itemIdRaw !== "string" || itemIdRaw.length < 10 || !text) {
+    return;
+  }
+
+  const context = await getUserContext();
+  if (!context || !context.familyId) {
+    return;
+  }
+
+  const renameLimit = enforceUserRateLimit(context, "rename-item", 90, 60 * 1000);
+  if (!renameLimit.ok) {
+    return;
+  }
+
+  const admin = getSupabaseAdminClient();
+  const item = await admin
+    .from("shopping_items")
+    .select("id, product_id")
+    .eq("id", itemIdRaw)
+    .eq("family_id", context.familyId)
+    .maybeSingle();
+
+  if (item.error || !item.data) {
+    return;
+  }
+
+  await admin
+    .from("shopping_items")
+    .update({
+      text,
+      normalized_text: item.data.product_id ? null : normalizeProductText(text),
+    })
+    .eq("id", itemIdRaw)
+    .eq("family_id", context.familyId);
+
+  await writeAuditLog({
+    familyId: context.familyId,
+    actorProfileId: context.profileId,
+    eventType: "ITEM_RENAME",
+    entityType: "shopping_item",
+    entityId: itemIdRaw,
+    metadata: { text },
+  });
+
+  revalidatePath("/app");
+}
+
 type InviteActionState =
   | {
       ok: boolean;

@@ -9,6 +9,7 @@ App web (Next.js + Supabase) per lista spesa condivisa famigliare con:
 - autocomplete prodotti/categorie
 - raggruppamento prodotti per categoria
 - menu azioni item (`...`) con assegnazione categoria persistente
+- rinomina condivisa del nome item da menu `...` (persistente su DB)
 - UI iOS-like con palette soft e separazione visiva tra `Da comprare` e `Comprati`
 - PWA installabile con supporto offline base
 
@@ -101,7 +102,7 @@ curl "http://127.0.0.1:3000/api/autocomplete?q=lat"
 4. Nuovo utente apre link invito, effettua login via magic link e accetta invito.
 5. Dopo accettazione invito, imposta password obbligatoriamente su `/login/reset`.
 6. Membri aggiungono/spuntano prodotti in realtime.
-7. Da menu `...`, i membri possono assegnare/modificare la categoria di un item (persistente su DB item).
+7. Da menu `...`, i membri possono assegnare/modificare categoria e rinominare un item (persistente su DB item).
 
 ## Sicurezza (attuale)
 - Login principale con email/password.
