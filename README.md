@@ -105,6 +105,7 @@ curl "http://127.0.0.1:3000/api/autocomplete?q=lat"
 - Toggle `Comprato/Compra` ottimizzato lato UI con comportamento ottimistico (feedback immediato).
 - Autocomplete UI attivato solo da 3 caratteri per ridurre chiamate e migliorare reattività.
 - Suggerimenti autocomplete mostrati in lista estesa, ordinati per categoria e poi per prodotto.
+- Suggerimenti prodotto con leggero rientro sotto la categoria per migliorare la leggibilità.
 
 ## Documentazione completa
 - Architettura: [docs/ARCHITECTURE.md](/Users/parletti/chagpt%20codex%20progetti/Lista%20della%20Spesa/docs/ARCHITECTURE.md)

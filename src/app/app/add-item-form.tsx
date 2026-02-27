@@ -266,7 +266,7 @@ export function AddItemForm() {
                     <li key={suggestion.productId}>
                       <button
                         type="button"
-                        className="flex w-full items-center justify-between px-3 py-2.5 text-left text-sm hover:bg-zinc-50"
+                        className="flex w-full items-center justify-between py-2.5 pr-3 pl-6 text-left text-sm hover:bg-zinc-50"
                         onClick={() => {
                           setQuery(suggestion.label);
                           setSelectedProductId(suggestion.productId);
