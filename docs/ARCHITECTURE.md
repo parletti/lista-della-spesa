@@ -47,7 +47,10 @@ Applicazione web/PWA per gestione lista spesa condivisa in famiglia, con sincron
    - se item uguale già `PENDING`: nessun duplicato
    - se uguale già `BOUGHT`: viene riattivato `PENDING`
 4. UI mostra due sezioni: `Da comprare` e `Comprati`, entrambe raggruppate per categoria.
-5. Update realtime tramite subscription Supabase.
+5. Menu `...` per item:
+   - `Categoria`: assegnazione immediata (persistente su `shopping_items.category_id`)
+   - `Elimina`
+6. Update realtime tramite subscription Supabase.
 
 ## Data model (attuale)
 - `families`
@@ -62,6 +65,14 @@ Applicazione web/PWA per gestione lista spesa condivisa in famiglia, con sincron
 ## Realtime
 - Listener client su `shopping_items` filtrato per `family_id`.
 - Ogni evento DB triggera `router.refresh()`.
+
+## UX menu azioni item
+- Menu renderizzato via portal su `document.body` per evitare problemi di stacking/z-index.
+- Apertura dinamica sopra/sotto in base allo spazio disponibile in viewport.
+- Chiusura automatica:
+  - click/tap fuori menu
+  - tasto `Esc`
+  - apertura di un altro menu item
 
 ## PWA e cache
 - Manifest e offline route presenti.

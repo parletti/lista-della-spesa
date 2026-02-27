@@ -60,6 +60,7 @@ Eventi tracciati (principali):
 - `ITEM_ADD_DEDUP`
 - `ITEM_REACTIVATE`
 - `ITEM_TOGGLE`
+- `ITEM_CATEGORY_SET`
 - `ITEM_DELETE`
 
 Tabella: `audit_logs` con metadata JSON, timestamp e contesto famiglia/attore.

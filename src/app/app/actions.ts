@@ -417,6 +417,70 @@ export async function deleteShoppingItemAction(formData: FormData) {
   revalidatePath("/app");
 }
 
+export async function updateShoppingItemCategoryAction(formData: FormData) {
+  const itemIdRaw = formData.get("item_id");
+  const categoryIdRaw = formData.get("category_id");
+  if (typeof itemIdRaw !== "string" || itemIdRaw.length < 10) {
+    return;
+  }
+
+  const context = await getUserContext();
+  if (!context || !context.familyId) {
+    return;
+  }
+
+  const categoryLimit = enforceUserRateLimit(context, "set-item-category", 120, 60 * 1000);
+  if (!categoryLimit.ok) {
+    return;
+  }
+
+  const categoryId =
+    typeof categoryIdRaw === "string" && categoryIdRaw.length >= 10 ? categoryIdRaw : null;
+
+  const admin = getSupabaseAdminClient();
+  const item = await admin
+    .from("shopping_items")
+    .select("id")
+    .eq("id", itemIdRaw)
+    .eq("family_id", context.familyId)
+    .maybeSingle();
+
+  if (item.error || !item.data) {
+    return;
+  }
+
+  if (categoryId) {
+    const category = await admin
+      .from("categories")
+      .select("id, label")
+      .eq("id", categoryId)
+      .maybeSingle();
+
+    if (category.error || !category.data) {
+      return;
+    }
+  }
+
+  await admin
+    .from("shopping_items")
+    .update({
+      category_id: categoryId,
+    })
+    .eq("id", itemIdRaw)
+    .eq("family_id", context.familyId);
+
+  await writeAuditLog({
+    familyId: context.familyId,
+    actorProfileId: context.profileId,
+    eventType: "ITEM_CATEGORY_SET",
+    entityType: "shopping_item",
+    entityId: itemIdRaw,
+    metadata: { categoryId },
+  });
+
+  revalidatePath("/app");
+}
+
 type InviteActionState =
   | {
       ok: boolean;

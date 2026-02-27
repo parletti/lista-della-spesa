@@ -3,13 +3,13 @@ import { getSupabaseAdminClient } from "@/lib/supabase/admin";
 import { getSupabaseServerClient } from "@/lib/supabase/server";
 import { CreateFamilyForm } from "@/app/app/create-family-form";
 import {
-  deleteShoppingItemAction,
   signOutAction,
   toggleShoppingItemAction,
 } from "@/app/app/actions";
 import { AddItemForm } from "@/app/app/add-item-form";
 import { ShoppingRealtimeListener } from "@/app/app/shopping-realtime-listener";
 import { CreateInviteForm } from "@/app/app/create-invite-form";
+import { ItemActionsMenu } from "@/app/app/item-actions-menu";
 
 type ProfileRow = {
   id: string;
@@ -29,7 +29,13 @@ type ShoppingItemRow = {
   created_at: string;
   normalized_text: string | null;
   product_id: string | null;
+  category_id: string | null;
   categories: { label: string } | { label: string }[] | null;
+};
+
+type CategoryRow = {
+  id: string;
+  label: string;
 };
 
 type GroupedItems = {
@@ -58,6 +64,7 @@ export default async function AppPage() {
 
   let membership: MembershipRow | null = null;
   let items: ShoppingItemRow[] = [];
+  let categories: CategoryRow[] = [];
   if (profile) {
     const membershipQuery = await admin
       .from("family_members")
@@ -70,12 +77,20 @@ export default async function AppPage() {
     if (membership) {
       const itemsQuery = await admin
         .from("shopping_items")
-        .select("id, text, status, created_at, normalized_text, product_id, categories(label)")
+        .select("id, text, status, created_at, normalized_text, product_id, category_id, categories(label)")
         .eq("family_id", membership.family_id)
         .order("created_at", { ascending: false });
 
       if (!itemsQuery.error) {
         items = (itemsQuery.data ?? []) as ShoppingItemRow[];
+      }
+
+      const categoriesQuery = await admin
+        .from("categories")
+        .select("id, label")
+        .order("sort_order", { ascending: true });
+      if (!categoriesQuery.error) {
+        categories = (categoriesQuery.data ?? []) as CategoryRow[];
       }
     }
   }
@@ -194,12 +209,19 @@ export default async function AppPage() {
                             className="flex items-center justify-between rounded-xl border border-zinc-200 bg-white px-3 py-2.5"
                           >
                             <span className="font-medium text-zinc-800">{item.text}</span>
-                            <form action={toggleShoppingItemAction}>
-                              <input type="hidden" name="item_id" value={item.id} />
-                              <button className="ios-btn-secondary h-8 px-3 text-xs">
-                                Comprato
-                              </button>
-                            </form>
+                            <div className="flex items-center gap-2">
+                              <form action={toggleShoppingItemAction}>
+                                <input type="hidden" name="item_id" value={item.id} />
+                                <button className="ios-btn-secondary h-8 px-3 text-xs">
+                                  Comprato
+                                </button>
+                              </form>
+                              <ItemActionsMenu
+                                itemId={item.id}
+                                currentCategoryId={item.category_id}
+                                categories={categories}
+                              />
+                            </div>
                           </li>
                         ))}
                       </ul>
@@ -232,12 +254,11 @@ export default async function AppPage() {
                                   Compra
                                 </button>
                               </form>
-                              <form action={deleteShoppingItemAction}>
-                                <input type="hidden" name="item_id" value={item.id} />
-                                <button className="ios-btn-danger">
-                                  Elimina
-                                </button>
-                              </form>
+                              <ItemActionsMenu
+                                itemId={item.id}
+                                currentCategoryId={item.category_id}
+                                categories={categories}
+                              />
                             </div>
                           </li>
                         ))}

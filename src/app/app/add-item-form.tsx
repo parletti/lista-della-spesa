@@ -1,6 +1,6 @@
 "use client";
 
-import { FormEvent, useEffect, useMemo, useRef, useState } from "react";
+import { FormEvent, useEffect, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
 
 type Suggestion = {
@@ -14,36 +14,6 @@ type QueueItem = {
   selectedProductId: string | null;
   queuedAt: number;
 };
-
-type SpeechRecognitionAlternativeLite = {
-  transcript: string;
-};
-
-type SpeechRecognitionResultLite = {
-  0: SpeechRecognitionAlternativeLite;
-};
-
-type SpeechRecognitionEventLite = {
-  results: ArrayLike<SpeechRecognitionResultLite>;
-};
-
-type SpeechRecognitionErrorEventLite = {
-  error: string;
-};
-
-type SpeechRecognitionLite = {
-  lang: string;
-  interimResults: boolean;
-  maxAlternatives: number;
-  continuous: boolean;
-  start: () => void;
-  stop: () => void;
-  onresult: ((event: SpeechRecognitionEventLite) => void) | null;
-  onerror: ((event: SpeechRecognitionErrorEventLite) => void) | null;
-  onend: (() => void) | null;
-};
-
-type SpeechRecognitionCtor = new () => SpeechRecognitionLite;
 
 const OFFLINE_QUEUE_KEY = "shopping_add_queue_v1";
 
@@ -66,17 +36,13 @@ function writeQueue(items: QueueItem[]) {
 
 export function AddItemForm() {
   const router = useRouter();
-  const textInputRef = useRef<HTMLInputElement>(null);
-  const recognitionRef = useRef<SpeechRecognitionLite | null>(null);
   const [query, setQuery] = useState("");
   const [selectedProductId, setSelectedProductId] = useState<string | null>(null);
   const [suggestions, setSuggestions] = useState<Suggestion[]>([]);
   const [loadingSuggestions, setLoadingSuggestions] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [formError, setFormError] = useState("");
-  const [voiceSupported, setVoiceSupported] = useState(false);
-  const [isListening, setIsListening] = useState(false);
-  const [voiceMessage, setVoiceMessage] = useState("");
+  const [statusMessage, setStatusMessage] = useState("");
   const [offlineQueueSize, setOfflineQueueSize] = useState(0);
 
   async function submitItem(
@@ -94,7 +60,7 @@ export function AddItemForm() {
       writeQueue(queue);
       setOfflineQueueSize(queue.length);
       setFormError("");
-      setVoiceMessage("Salvato offline. Verrà sincronizzato al ritorno online.");
+      setStatusMessage("Salvato offline. Verrà sincronizzato al ritorno online.");
       setQuery("");
       setSelectedProductId(null);
       setSuggestions([]);
@@ -122,7 +88,7 @@ export function AddItemForm() {
           queue.push({ text: clean, selectedProductId: selectedId, queuedAt: Date.now() });
           writeQueue(queue);
           setOfflineQueueSize(queue.length);
-          setVoiceMessage("Connessione assente: aggiunta messa in coda.");
+          setStatusMessage("Connessione assente: aggiunta messa in coda.");
           return true;
         }
         if (!fromQueue) {
@@ -145,7 +111,7 @@ export function AddItemForm() {
         queue.push({ text: clean, selectedProductId: selectedId, queuedAt: Date.now() });
         writeQueue(queue);
         setOfflineQueueSize(queue.length);
-        setVoiceMessage("Errore rete: aggiunta messa in coda offline.");
+        setStatusMessage("Errore rete: aggiunta messa in coda offline.");
       }
       return false;
     } finally {
@@ -172,7 +138,7 @@ export function AddItemForm() {
     writeQueue(remaining);
     setOfflineQueueSize(remaining.length);
     if (remaining.length === 0) {
-      setVoiceMessage("Sincronizzazione offline completata.");
+      setStatusMessage("Sincronizzazione offline completata.");
     }
   }
 
@@ -188,31 +154,6 @@ export function AddItemForm() {
       window.removeEventListener("online", onOnline);
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
-  useEffect(() => {
-    if (typeof window === "undefined") {
-      return;
-    }
-
-    const maybeCtor = (
-      window as Window & {
-        SpeechRecognition?: SpeechRecognitionCtor;
-        webkitSpeechRecognition?: SpeechRecognitionCtor;
-      }
-    ).SpeechRecognition ??
-      (
-        window as Window & {
-          webkitSpeechRecognition?: SpeechRecognitionCtor;
-        }
-      ).webkitSpeechRecognition;
-
-    setVoiceSupported(Boolean(maybeCtor));
-
-    return () => {
-      recognitionRef.current?.stop();
-      recognitionRef.current = null;
-    };
   }, []);
 
   useEffect(() => {
@@ -261,75 +202,9 @@ export function AddItemForm() {
     await submitItem(query, selectedProductId);
   }
 
-  function startVoiceInput() {
-    if (typeof window === "undefined") {
-      return;
-    }
-
-    const RecognitionCtor = (
-      window as Window & {
-        SpeechRecognition?: SpeechRecognitionCtor;
-        webkitSpeechRecognition?: SpeechRecognitionCtor;
-      }
-    ).SpeechRecognition ??
-      (
-        window as Window & {
-          webkitSpeechRecognition?: SpeechRecognitionCtor;
-        }
-      ).webkitSpeechRecognition;
-
-    if (!RecognitionCtor) {
-      setVoiceMessage("Comandi vocali non supportati su questo browser.");
-      return;
-    }
-
-    if (isListening) {
-      recognitionRef.current?.stop();
-      return;
-    }
-
-    const recognition = new RecognitionCtor();
-    recognition.lang = "it-IT";
-    recognition.interimResults = false;
-    recognition.maxAlternatives = 1;
-    recognition.continuous = false;
-
-    recognition.onresult = (event) => {
-      const transcript = event.results[0]?.[0]?.transcript?.trim() ?? "";
-      if (!transcript) {
-        setVoiceMessage("Nessuna trascrizione ricevuta.");
-        return;
-      }
-
-      setSelectedProductId(null);
-      setQuery(transcript);
-      setSuggestions([]);
-      setVoiceMessage("Trascrizione pronta. Conferma con Aggiungi.");
-    };
-
-    recognition.onerror = (event) => {
-      if (event.error === "not-allowed" || event.error === "service-not-allowed") {
-        setVoiceMessage("Permesso microfono negato. Usa la tastiera.");
-      } else {
-        setVoiceMessage("Errore nella dettatura. Riprova o usa la tastiera.");
-      }
-      setIsListening(false);
-    };
-
-    recognition.onend = () => {
-      setIsListening(false);
-    };
-
-    recognitionRef.current = recognition;
-    setVoiceMessage("Ascolto in corso...");
-    setIsListening(true);
-    recognition.start();
-  }
-
   return (
     <form onSubmit={onSubmit} className="mt-4 flex flex-col gap-3">
       <input
-        ref={textInputRef}
         name="text"
         required
         minLength={1}
@@ -350,20 +225,11 @@ export function AddItemForm() {
         >
           {submitting ? "Aggiunta..." : "Aggiungi"}
         </button>
-
-        <button
-          type="button"
-          onClick={startVoiceInput}
-          disabled={!voiceSupported}
-          className="ios-btn-secondary disabled:cursor-not-allowed disabled:opacity-50"
-        >
-          {isListening ? "Ascolto..." : "Voce"}
-        </button>
       </div>
 
       <div className="w-full">
         <p className="text-xs text-zinc-500">{hint}</p>
-        {voiceMessage ? <p className="mt-1 text-xs text-zinc-600">{voiceMessage}</p> : null}
+        {statusMessage ? <p className="mt-1 text-xs text-zinc-600">{statusMessage}</p> : null}
         {offlineQueueSize > 0 ? (
           <p className="mt-1 text-xs text-amber-700">
             Operazioni offline in coda: {offlineQueueSize}

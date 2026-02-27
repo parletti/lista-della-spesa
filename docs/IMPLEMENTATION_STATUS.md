@@ -43,18 +43,20 @@
 ### Step 7 - Categorie + catalogo + autocomplete
 - Tabelle `categories`, `products_catalog`, `product_aliases`
 - Seed iniziale IT
+- Seed espanso con prodotti aggiuntivi (es. cocco/ciliegia e altri)
 - Endpoint autocomplete fuzzy
 - Auto-assegnazione categoria
 - UI raggruppata per categoria
 - No duplicati tra `Da comprare` e `Comprati`
+- Menu azioni `...` per item:
+  - Assegnazione categoria immediata e persistente su item
+  - Eliminazione item
+  - Apertura menu robusta (portal, chiusura click-outside/Esc, posizione dinamica)
 
 ## In corso / da fare
 
 ### Step 8 - Voce assistita
-- Pulsante microfono nel form aggiunta prodotto
-- Trascrizione Web Speech API (it-IT)
-- Conferma esplicita utente tramite click su `Aggiungi` (no autosave)
-- Fallback tastiera in caso di browser non supportato o permessi negati
+- Fuori scope per questa release (feature rimossa su richiesta prodotto).
 
 ### Step 9 - Offline base + PWA
 - Manifest PWA attivo
@@ -81,12 +83,15 @@
 3. Login `/login` convertito a email/password.
 4. Endpoint `POST /api/auth/sync-profile` per allineamento profilo dopo autenticazione.
 5. CSP aggiornata per websocket realtime sicuri.
+6. Rimozione completa interfaccia/logica input vocale.
+7. Aggiunto menu `...` con categoria persistente per item.
 
 ## Test minimi regressione (attuali)
-1. Login via invito
+1. Login email/password
 2. Generazione invito admin
 3. Accept invito (valido/scaduto/riusato)
 4. Aggiunta prodotto manuale e da suggerimento
 5. Toggle stato prodotto
 6. Assenza duplicati cross-gruppo
-7. Sync realtime tra due sessioni
+7. Assegnazione categoria da menu `...` e persistenza dopo toggle stato
+8. Sync realtime tra due sessioni
