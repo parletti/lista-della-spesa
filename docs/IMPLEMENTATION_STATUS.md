@@ -51,6 +51,7 @@
 - Split categoria carne/pesce in tre categorie distinte: `Carne`, `Pesce`, `Affettati` con seed dedicati
 - Nuova categoria `Pasta e Riso` con 30 prodotti validati
 - Cleanup catalogo: rimossa voce generica `Riso` da `Dispensa` per evitare duplicazione semantica con `Pasta e Riso`
+- Nuova categoria `Frutta secca` con 21 prodotti validati
 - Endpoint autocomplete fuzzy
 - Auto-assegnazione categoria
 - UI raggruppata per categoria

@@ -61,6 +61,7 @@ Esegui in ordine i file in `supabase/migrations/`:
 10. `20260227093030_step7_catalog_split_carne_pesce_affettati.sql`
 11. `20260227103000_step7_catalog_pasta_riso.sql`
 12. `20260227112000_step7_catalog_remove_generic_riso_from_dispensa.sql`
+13. `20260227130000_step7_catalog_frutta_secca.sql`
 
 ## Comandi utili
 ```bash
