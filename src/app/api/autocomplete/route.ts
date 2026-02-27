@@ -213,11 +213,17 @@ export async function GET(request: Request) {
       const aliases = aliasByProduct.get(suggestion.productId) ?? [];
       if (!hasStrongTextMatch(product, normalizedQuery, q, aliases)) return false;
 
-      const minConfidence = normalizedQuery.length >= 4 ? 150 : 120;
+      const minConfidence = normalizedQuery.length >= 4 ? 125 : 100;
       return suggestion.confidence >= minConfidence;
     })
-    .sort((a, b) => b.confidence - a.confidence || a.label.localeCompare(b.label, "it"))
-    .slice(0, 6);
+    .sort((a, b) => {
+      const categoryA = a.categoryLabel ?? "Senza categoria";
+      const categoryB = b.categoryLabel ?? "Senza categoria";
+      const byCategory = categoryA.localeCompare(categoryB, "it", { sensitivity: "base" });
+      if (byCategory !== 0) return byCategory;
+      return a.label.localeCompare(b.label, "it", { sensitivity: "base" });
+    })
+    .slice(0, 18);
 
   return NextResponse.json({ suggestions });
 }

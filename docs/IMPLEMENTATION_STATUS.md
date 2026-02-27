@@ -92,6 +92,7 @@
 8. Fix azione `Elimina` dal menu `...` (submit affidabile anche con menu renderizzato via portal).
 9. Toggle `Comprato/Compra` ottimistico lato client per ridurre latenza percepita sui bottoni.
 10. Autocomplete UI limitato a input di almeno 3 caratteri per migliorare performance percepita.
+11. Suggerimenti autocomplete estesi e ordinati per categoria -> prodotto in UI.
 
 ## Test minimi regressione (attuali)
 1. Login email/password

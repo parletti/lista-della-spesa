@@ -199,6 +199,23 @@ export function AddItemForm() {
     return "Seleziona un suggerimento oppure invia testo libero.";
   }, [loadingSuggestions, query, suggestions.length]);
 
+  const groupedSuggestions = useMemo(() => {
+    const buckets = new Map<string, Suggestion[]>();
+    for (const suggestion of suggestions) {
+      const category = suggestion.categoryLabel ?? "Senza categoria";
+      const list = buckets.get(category) ?? [];
+      list.push(suggestion);
+      buckets.set(category, list);
+    }
+
+    return [...buckets.entries()]
+      .sort((a, b) => a[0].localeCompare(b[0], "it", { sensitivity: "base" }))
+      .map(([category, items]) => ({
+        category,
+        items: items.sort((a, b) => a.label.localeCompare(b.label, "it", { sensitivity: "base" })),
+      }));
+  }, [suggestions]);
+
   async function onSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     await submitItem(query, selectedProductId);
@@ -237,25 +254,31 @@ export function AddItemForm() {
             Operazioni offline in coda: {offlineQueueSize}
           </p>
         ) : null}
-        {suggestions.length > 0 ? (
+        {groupedSuggestions.length > 0 ? (
           <ul className="mt-2 max-h-44 overflow-auto rounded-2xl border border-zinc-200 bg-white">
-            {suggestions.map((suggestion) => (
-              <li key={suggestion.productId}>
-                <button
-                  type="button"
-                  className="flex w-full items-center justify-between px-3 py-2.5 text-left text-sm hover:bg-zinc-50"
-                  onClick={() => {
-                    setQuery(suggestion.label);
-                    setSelectedProductId(suggestion.productId);
-                    setSuggestions([]);
-                    void submitItem(suggestion.label, suggestion.productId);
-                  }}
-                >
-                  <span>{suggestion.label}</span>
-                  <span className="text-xs text-zinc-500">
-                    {suggestion.categoryLabel ?? "Senza categoria"}
-                  </span>
-                </button>
+            {groupedSuggestions.map((group) => (
+              <li key={group.category} className="border-b border-zinc-100 last:border-b-0">
+                <p className="px-3 pt-2 pb-1 text-[10px] font-semibold uppercase tracking-[0.08em] text-zinc-500">
+                  {group.category}
+                </p>
+                <ul>
+                  {group.items.map((suggestion) => (
+                    <li key={suggestion.productId}>
+                      <button
+                        type="button"
+                        className="flex w-full items-center justify-between px-3 py-2.5 text-left text-sm hover:bg-zinc-50"
+                        onClick={() => {
+                          setQuery(suggestion.label);
+                          setSelectedProductId(suggestion.productId);
+                          setSuggestions([]);
+                          void submitItem(suggestion.label, suggestion.productId);
+                        }}
+                      >
+                        <span>{suggestion.label}</span>
+                      </button>
+                    </li>
+                  ))}
+                </ul>
               </li>
             ))}
           </ul>
