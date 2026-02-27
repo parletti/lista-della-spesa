@@ -47,6 +47,7 @@
 - Seed latticini esteso con 30+ prodotti validati (formaggi/yogurt/latte speciali)
 - Seed latticini integrato con formaggi per tipologia latte (capra/pecora/mucca)
 - Seed frutta esteso con 20+ prodotti validati (inclusi frutti di bosco e cocomero)
+- Nuova categoria `Caffè, Tè, Infusi` con 29 prodotti validati (incluso `gocce di cioccolato`)
 - Endpoint autocomplete fuzzy
 - Auto-assegnazione categoria
 - UI raggruppata per categoria

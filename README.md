@@ -56,6 +56,7 @@ Esegui in ordine i file in `supabase/migrations/`:
 6. `20260227082223_step7_catalog_latticini_expand.sql`
 7. `20260227083735_step7_catalog_latticini_formaggi_milk_type.sql`
 8. `20260227084647_step7_catalog_frutta_expand.sql`
+9. `20260227085735_step7_catalog_caffe_te_infusi.sql`
 
 ## Comandi utili
 ```bash
