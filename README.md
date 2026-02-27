@@ -115,6 +115,10 @@ curl "http://127.0.0.1:3000/api/autocomplete?q=lat"
   - categorie mostrate come badge visuali
   - item pending/bought con contrasto coerente e non aggressivo
   - pannello suggerimenti con header categoria evidenziati
+- Tuning compatto layout:
+  - font e controlli leggermente ridotti
+  - spaziature ottimizzate per mostrare più contenuto
+  - gerarchia cromatica mantenuta (pannelli e badge categoria)
 
 ## Documentazione completa
 - Architettura: [docs/ARCHITECTURE.md](/Users/parletti/chagpt%20codex%20progetti/Lista%20della%20Spesa/docs/ARCHITECTURE.md)

@@ -16,13 +16,13 @@
 - Trigger `updated_at`
 - Policy RLS base
 
-### Step 3 - Auth magic link + ingresso famiglia
-- Callback auth
+### Step 3 - Auth email/password + ingresso famiglia
+- Login principale via email/password (`/login`)
+- Callback auth/confirm per completamento sessione
 - Pagina protetta `/app`
 - Creazione famiglia primo accesso
 - Logout
-- Evoluzione: login principale migrato a email/password
-- Flusso magic link mantenuto per onboarding via invito
+- Flusso onboarding nuovi utenti via invito monouso
 
 ### Step 4 - Lista spesa core
 - Tabella `shopping_items`

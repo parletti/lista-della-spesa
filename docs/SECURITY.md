@@ -39,12 +39,13 @@ Policy implementate per:
   - non usato
 
 ## Anti-flood auth
-- Endpoint server: `/api/auth/request-magic-link`
+- Endpoint server sensibili:
+  - `/api/auth/request-magic-link` (flow invito/legacy)
+  - endpoint/login action correnti via email/password
 - Controlli:
   - payload valido
   - invito esistente/valido (quando presente token)
-  - utente auth esistente (flow login standard)
-  - rate-limit `5 req / 10 min` per `IP+token` e `IP+email`
+  - rate-limit per combinazioni `IP+token` e `IP+email`
 
 Nota:
 - rate-limit attuale è in-memory, quindi locale/singola istanza.
@@ -53,7 +54,7 @@ Nota:
 ## Audit log
 Eventi tracciati (principali):
 - `MAGIC_LINK_REQUEST`
-- `PASSWORD_LOGIN` (previsto da introdurre nel prossimo incremento)
+- `PASSWORD_LOGIN`
 - `INVITE_CREATE`
 - `INVITE_ACCEPT`
 - `ITEM_ADD`
