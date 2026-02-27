@@ -95,6 +95,11 @@
 10. Autocomplete UI limitato a input di almeno 3 caratteri per migliorare performance percepita.
 11. Suggerimenti autocomplete estesi e ordinati per categoria -> prodotto in UI.
 12. Suggerimenti prodotto con rientro visivo sotto il titolo categoria per leggibilità.
+13. Restyling UI iOS-like con palette soft multisezione e gerarchia visiva migliorata:
+    - pannello `Da comprare` con tema dedicato
+    - pannello `Comprati` con tema dedicato
+    - badge categoria più leggibili
+    - contrasto item pending/bought più chiaro senza colori aggressivi
 
 ## Test minimi regressione (attuali)
 1. Login email/password

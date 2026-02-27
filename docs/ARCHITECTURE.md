@@ -75,6 +75,17 @@ Applicazione web/PWA per gestione lista spesa condivisa in famiglia, con sincron
   - tasto `Esc`
   - apertura di un altro menu item
 
+## UX e Design System
+- Tema visivo iOS-like con palette soft su base neutra.
+- Gerarchia cromatica:
+  - `Da comprare` e `Comprati` hanno pannelli con tonalità diverse ma armoniche.
+  - Categorie evidenziate tramite badge dedicati.
+  - Righe item pending/bought con differenze di contrasto coerenti.
+- Autocomplete:
+  - attivo da 3 caratteri
+  - lista suggerimenti raggruppata e ordinata per categoria -> prodotto
+  - lieve rientro elementi prodotto per migliorare scansione visiva
+
 ## PWA e cache
 - Manifest e offline route presenti.
 - Service Worker registrato in precedenza per cache shell.

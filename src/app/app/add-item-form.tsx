@@ -228,7 +228,7 @@ export function AddItemForm() {
         required
         minLength={1}
         maxLength={120}
-        className="h-11 rounded-2xl border border-zinc-300 bg-white px-4 text-[15px] outline-none ring-0 focus:border-[#007AFF]"
+        className="h-11 rounded-2xl border border-zinc-300 bg-white/95 px-4 text-[15px] outline-none ring-0 focus:border-[#007AFF]"
         placeholder="Es. latte, pane, mele..."
         value={query}
         onChange={(event) => {
@@ -255,10 +255,10 @@ export function AddItemForm() {
           </p>
         ) : null}
         {groupedSuggestions.length > 0 ? (
-          <ul className="mt-2 max-h-44 overflow-auto rounded-2xl border border-zinc-200 bg-white">
+          <ul className="ios-suggestions mt-2 max-h-56 overflow-auto rounded-2xl">
             {groupedSuggestions.map((group) => (
               <li key={group.category} className="border-b border-zinc-100 last:border-b-0">
-                <p className="px-3 pt-2 pb-1 text-[10px] font-semibold uppercase tracking-[0.08em] text-zinc-500">
+                <p className="suggestion-category px-3 pt-2 pb-1 text-[10px] font-semibold uppercase tracking-[0.08em]">
                   {group.category}
                 </p>
                 <ul>
@@ -266,7 +266,7 @@ export function AddItemForm() {
                     <li key={suggestion.productId}>
                       <button
                         type="button"
-                        className="flex w-full items-center justify-between py-2.5 pr-3 pl-6 text-left text-sm hover:bg-zinc-50"
+                        className="suggestion-item flex w-full items-center justify-between py-2.5 pr-3 pl-7 text-left text-sm"
                         onClick={() => {
                           setQuery(suggestion.label);
                           setSelectedProductId(suggestion.productId);

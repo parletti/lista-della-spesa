@@ -181,19 +181,21 @@ export default async function AppPage() {
             <h2 className="text-xl font-semibold">
               Famiglia: {membership.families?.name ?? membership.family_id}
             </h2>
-            <span className="ios-chip">{membership.role}</span>
+            <span className={`ios-chip ${membership.role === "ADMIN" ? "ios-chip-admin" : ""}`}>
+              {membership.role}
+            </span>
           </div>
           <p className="mt-1 text-sm text-zinc-500">
             Lista condivisa in tempo reale
           </p>
 
-          <div className="mt-6 rounded-2xl bg-white/70 p-4 ring-1 ring-black/5">
+          <div className="mt-6 rounded-2xl bg-white/80 p-4 ring-1 ring-black/5">
             <h3 className="ios-section-title">Aggiungi prodotto</h3>
             <AddItemForm />
           </div>
 
           <div className="mt-8 grid gap-5 md:grid-cols-2">
-            <div className="ios-fade-up ios-fade-up-delay-2 rounded-2xl bg-white/70 p-4 ring-1 ring-black/5">
+            <div className="ios-list-pending ios-panel-pending ios-fade-up ios-fade-up-delay-2 rounded-2xl p-4 shadow-sm">
               <h3 className="ios-section-title">Da comprare</h3>
               <div className="mt-3 space-y-4">
                 {pendingByCategory.length === 0 ? (
@@ -201,13 +203,15 @@ export default async function AppPage() {
                 ) : (
                   pendingByCategory.map((group) => (
                     <div key={group.category}>
-                      <h4 className="ios-group-title mb-2">{group.category}</h4>
+                      <h4 className="ios-group-title mb-2">
+                        <span className="ios-category-badge">{group.category}</span>
+                      </h4>
                       <ul className="space-y-2.5">
                         {group.items.map((item) => (
                           <li
                             key={item.id}
                             data-item-row-id={item.id}
-                            className="flex items-center justify-between rounded-xl border border-zinc-200 bg-white px-3 py-2.5"
+                            className="ios-item-row flex items-center justify-between rounded-xl px-3 py-2.5"
                           >
                             <span className="font-medium text-zinc-800">{item.text}</span>
                             <div className="flex items-center gap-2">
@@ -227,7 +231,7 @@ export default async function AppPage() {
               </div>
             </div>
 
-            <div className="ios-fade-up ios-fade-up-delay-2 rounded-2xl bg-white/70 p-4 ring-1 ring-black/5">
+            <div className="ios-list-bought ios-panel-bought ios-fade-up ios-fade-up-delay-2 rounded-2xl p-4 shadow-sm">
               <h3 className="ios-section-title">Comprati</h3>
               <div className="mt-3 space-y-4">
                 {boughtByCategory.length === 0 ? (
@@ -235,13 +239,15 @@ export default async function AppPage() {
                 ) : (
                   boughtByCategory.map((group) => (
                     <div key={group.category}>
-                      <h4 className="ios-group-title mb-2">{group.category}</h4>
+                      <h4 className="ios-group-title mb-2">
+                        <span className="ios-category-badge">{group.category}</span>
+                      </h4>
                       <ul className="space-y-2.5">
                         {group.items.map((item) => (
                           <li
                             key={item.id}
                             data-item-row-id={item.id}
-                            className="flex items-center justify-between rounded-xl border border-zinc-200 bg-white px-3 py-2.5"
+                            className="ios-item-row flex items-center justify-between rounded-xl px-3 py-2.5"
                           >
                             <span className="text-zinc-500 line-through">{item.text}</span>
                             <div className="flex items-center gap-2">

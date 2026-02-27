@@ -129,7 +129,7 @@ export function ItemActionsMenu({ itemId, currentCategoryId, categories }: Props
                 <select
                   name="category_id"
                   defaultValue={currentCategoryId ?? ""}
-                  className="h-9 rounded-lg border border-zinc-300 bg-white px-2 text-sm"
+                  className="h-9 rounded-lg border border-zinc-300 bg-white/95 px-2 text-sm"
                   onChange={() => {
                     categoryFormRef.current?.requestSubmit();
                     setIsOpen(false);

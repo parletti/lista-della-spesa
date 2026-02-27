@@ -8,7 +8,11 @@
   --line: #d1d1d6;
   --muted: #6e6e73;
   --accent: #007aff;
+  --accent-soft: rgba(0, 122, 255, 0.12);
   --success: #34c759;
+  --success-soft: rgba(52, 199, 89, 0.13);
+  --lavender-soft: rgba(99, 102, 241, 0.09);
+  --orange-soft: rgba(251, 146, 60, 0.13);
   --danger: #ff3b30;
   --shadow-soft: 0 10px 30px rgba(15, 23, 42, 0.08);
 }
@@ -38,6 +42,52 @@ body {
   border: 1px solid rgba(209, 209, 214, 0.75);
   border-radius: 20px;
   box-shadow: var(--shadow-soft);
+}
+
+.ios-panel-pending {
+  background: linear-gradient(180deg, rgba(14, 165, 233, 0.07), rgba(14, 165, 233, 0.015));
+  border: 1px solid rgba(14, 165, 233, 0.2);
+}
+
+.ios-panel-bought {
+  background: linear-gradient(180deg, rgba(34, 197, 94, 0.08), rgba(34, 197, 94, 0.02));
+  border: 1px solid rgba(34, 197, 94, 0.22);
+}
+
+.ios-list-pending .ios-item-row {
+  background: #ffffff;
+  border: 1px solid rgba(148, 163, 184, 0.3);
+}
+
+.ios-list-bought .ios-item-row {
+  background: rgba(236, 253, 245, 0.75);
+  border: 1px solid rgba(52, 199, 89, 0.24);
+}
+
+.ios-category-badge {
+  display: inline-block;
+  padding: 5px 10px;
+  border-radius: 999px;
+  border: 1px solid rgba(113, 113, 122, 0.2);
+  background: linear-gradient(180deg, #fff, #f4f4f6);
+}
+
+.ios-list-pending .ios-category-badge {
+  border-color: rgba(59, 130, 246, 0.2);
+  background: linear-gradient(180deg, rgba(239, 246, 255, 1), rgba(235, 245, 255, 0.85));
+}
+
+.ios-list-bought .ios-category-badge {
+  border-color: rgba(34, 197, 94, 0.25);
+  background: linear-gradient(180deg, rgba(236, 253, 245, 1), rgba(220, 252, 231, 0.9));
+}
+
+.ios-list-pending .ios-group-title {
+  color: #166534;
+}
+
+.ios-list-bought .ios-group-title {
+  color: #0f766e;
 }
 
 .ios-fade-up {
@@ -84,7 +134,7 @@ body {
 .ios-btn-primary {
   height: 42px;
   border-radius: 14px;
-  background: var(--accent);
+  background: linear-gradient(180deg, #1692ff, #007aff);
   color: #fff;
   padding: 0 14px;
   font-size: 0.84rem;
@@ -95,8 +145,8 @@ body {
 .ios-btn-secondary {
   height: 42px;
   border-radius: 14px;
-  background: var(--surface-secondary);
-  border: 1px solid var(--line);
+  background: linear-gradient(180deg, #fff, #f6f7fb);
+  border: 1px solid rgba(148, 163, 184, 0.35);
   color: var(--foreground);
   padding: 0 14px;
   font-size: 0.84rem;
@@ -117,12 +167,32 @@ body {
 }
 
 .ios-chip {
-  background: rgba(0, 122, 255, 0.12);
+  background: var(--accent-soft);
   color: var(--accent);
   border-radius: 999px;
   padding: 3px 10px;
   font-size: 0.72rem;
   font-weight: 600;
+}
+
+.ios-chip-admin {
+  background: var(--lavender-soft);
+  color: #4338ca;
+}
+
+.ios-suggestions {
+  background: linear-gradient(180deg, #fff, #fbfdff);
+  border: 1px solid rgba(148, 163, 184, 0.28);
+}
+
+.ios-suggestions .suggestion-category {
+  background: linear-gradient(180deg, rgba(251, 146, 60, 0.16), rgba(251, 146, 60, 0.06));
+  color: #9a3412;
+  border-top: 1px solid rgba(251, 146, 60, 0.18);
+}
+
+.ios-suggestions .suggestion-item:hover {
+  background: rgba(0, 122, 255, 0.07);
 }
 
 .ios-btn-primary:hover,

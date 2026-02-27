@@ -7,6 +7,7 @@ App web (Next.js + Supabase) per lista spesa condivisa famigliare con:
 - autocomplete prodotti/categorie
 - raggruppamento prodotti per categoria
 - menu azioni item (`...`) con assegnazione categoria persistente
+- UI iOS-like con palette soft e separazione visiva tra `Da comprare` e `Comprati`
 - PWA installabile con supporto offline base
 
 ## Requisiti
@@ -107,6 +108,11 @@ curl "http://127.0.0.1:3000/api/autocomplete?q=lat"
 - Autocomplete UI attivato solo da 3 caratteri per ridurre chiamate e migliorare reattività.
 - Suggerimenti autocomplete mostrati in lista estesa, ordinati per categoria e poi per prodotto.
 - Suggerimenti prodotto con leggero rientro sotto la categoria per migliorare la leggibilità.
+- Restyling cromatico dashboard:
+  - pannelli `Da comprare`/`Comprati` differenziati con tonalità dedicate
+  - categorie mostrate come badge visuali
+  - item pending/bought con contrasto coerente e non aggressivo
+  - pannello suggerimenti con header categoria evidenziati
 
 ## Documentazione completa
 - Architettura: [docs/ARCHITECTURE.md](/Users/parletti/chagpt%20codex%20progetti/Lista%20della%20Spesa/docs/ARCHITECTURE.md)
