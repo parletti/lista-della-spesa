@@ -72,6 +72,8 @@ File migration:
 - `supabase/migrations/20260227112000_step7_catalog_remove_generic_riso_from_dispensa.sql`
 - `supabase/migrations/20260227130000_step7_catalog_frutta_secca.sql`
 - `supabase/migrations/20260227134000_step7_catalog_dolci.sql`
+- `supabase/migrations/20260227135500_step7_catalog_add_funghi_to_verdura.sql`
+- `supabase/migrations/20260227141000_step7_catalog_legumi.sql`
 
 ### Come applicarla
 1. Apri Supabase Dashboard.
@@ -91,8 +93,10 @@ File migration:
 10. Rimozione voce generica `Riso` dalla categoria `Dispensa` per evitare conflitti con `Pasta e Riso`.
 11. Nuova categoria `Frutta secca` con prodotti dedicati.
 12. Nuova categoria `Dolci` con 24 prodotti dedicati.
-13. Endpoint `GET /api/autocomplete?q=lat` restituisce suggerimenti pertinenti.
-14. Aggiungendo un prodotto noto (es. `latte`) viene valorizzata la categoria su `shopping_items`.
+13. Aggiunta voce `Funghi` nella categoria `Verdura`.
+14. Nuova categoria `Legumi` con 20 prodotti dedicati.
+15. Endpoint `GET /api/autocomplete?q=lat` restituisce suggerimenti pertinenti.
+16. Aggiungendo un prodotto noto (es. `latte`) viene valorizzata la categoria su `shopping_items`.
 
 ## Step 10 - Security hardening + audit
 

@@ -53,6 +53,8 @@
 - Cleanup catalogo: rimossa voce generica `Riso` da `Dispensa` per evitare duplicazione semantica con `Pasta e Riso`
 - Nuova categoria `Frutta secca` con 21 prodotti validati
 - Nuova categoria `Dolci` con 24 prodotti validati
+- Aggiunta voce `Funghi` in categoria `Verdura`
+- Nuova categoria `Legumi` con 20 prodotti validati
 - Endpoint autocomplete fuzzy
 - Auto-assegnazione categoria
 - UI raggruppata per categoria
