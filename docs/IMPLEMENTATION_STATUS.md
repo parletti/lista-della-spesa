@@ -46,6 +46,7 @@
 - Seed espanso con prodotti aggiuntivi (es. cocco/ciliegia e altri)
 - Seed latticini esteso con 30+ prodotti validati (formaggi/yogurt/latte speciali)
 - Seed latticini integrato con formaggi per tipologia latte (capra/pecora/mucca)
+- Seed frutta esteso con 20+ prodotti validati (inclusi frutti di bosco e cocomero)
 - Endpoint autocomplete fuzzy
 - Auto-assegnazione categoria
 - UI raggruppata per categoria
