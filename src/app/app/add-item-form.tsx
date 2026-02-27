@@ -1,6 +1,6 @@
 "use client";
 
-import { FormEvent, useEffect, useMemo, useState } from "react";
+import { FormEvent, useEffect, useMemo, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 
 type Suggestion = {
@@ -36,6 +36,7 @@ function writeQueue(items: QueueItem[]) {
 
 export function AddItemForm() {
   const router = useRouter();
+  const suggestionsContainerRef = useRef<HTMLDivElement>(null);
   const [query, setQuery] = useState("");
   const [selectedProductId, setSelectedProductId] = useState<string | null>(null);
   const [suggestions, setSuggestions] = useState<Suggestion[]>([]);
@@ -157,6 +158,22 @@ export function AddItemForm() {
   }, []);
 
   useEffect(() => {
+    if (suggestions.length === 0) return;
+
+    const onPointerDown = (event: PointerEvent) => {
+      const target = event.target;
+      if (!(target instanceof Node)) return;
+      if (suggestionsContainerRef.current?.contains(target)) return;
+      setSuggestions([]);
+    };
+
+    document.addEventListener("pointerdown", onPointerDown);
+    return () => {
+      document.removeEventListener("pointerdown", onPointerDown);
+    };
+  }, [suggestions.length]);
+
+  useEffect(() => {
     let isCancelled = false;
     const trimmed = query.trim();
 
@@ -246,7 +263,7 @@ export function AddItemForm() {
         </button>
       </div>
 
-      <div className="w-full">
+      <div ref={suggestionsContainerRef} className="w-full">
         <p className="text-xs text-zinc-500">{hint}</p>
         {statusMessage ? <p className="mt-1 text-xs text-zinc-600">{statusMessage}</p> : null}
         {offlineQueueSize > 0 ? (

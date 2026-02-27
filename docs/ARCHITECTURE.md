@@ -85,6 +85,7 @@ Applicazione web/PWA per gestione lista spesa condivisa in famiglia, con sincron
   - attivo da 3 caratteri
   - lista suggerimenti raggruppata e ordinata per categoria -> prodotto
   - lieve rientro elementi prodotto per migliorare scansione visiva
+  - chiusura automatica dei suggerimenti con click/tap fuori dall'area input+suggerimenti
 
 ## PWA e cache
 - Manifest e offline route presenti.

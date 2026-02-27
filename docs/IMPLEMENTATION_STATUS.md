@@ -106,6 +106,8 @@
     - pannelli `Da comprare` e `Comprati` riportati a sfondo bianco
     - separazione visiva mantenuta via contorni colorati
     - badge categoria con verde più acceso
+15. UX autocomplete:
+    - dropdown suggerimenti chiuso automaticamente al click/tap fuori area input+suggerimenti
 
 ## Test minimi regressione (attuali)
 1. Login email/password
