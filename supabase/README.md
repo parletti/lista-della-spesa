@@ -74,6 +74,7 @@ File migration:
 - `supabase/migrations/20260227134000_step7_catalog_dolci.sql`
 - `supabase/migrations/20260227135500_step7_catalog_add_funghi_to_verdura.sql`
 - `supabase/migrations/20260227141000_step7_catalog_legumi.sql`
+- `supabase/migrations/20260227143000_step7_catalog_add_salsa_di_soia_to_dispensa.sql`
 
 ### Come applicarla
 1. Apri Supabase Dashboard.
@@ -95,8 +96,9 @@ File migration:
 12. Nuova categoria `Dolci` con 24 prodotti dedicati.
 13. Aggiunta voce `Funghi` nella categoria `Verdura`.
 14. Nuova categoria `Legumi` con 20 prodotti dedicati.
-15. Endpoint `GET /api/autocomplete?q=lat` restituisce suggerimenti pertinenti.
-16. Aggiungendo un prodotto noto (es. `latte`) viene valorizzata la categoria su `shopping_items`.
+15. Aggiunta voce `Salsa di soia` nella categoria `Dispensa`.
+16. Endpoint `GET /api/autocomplete?q=lat` restituisce suggerimenti pertinenti.
+17. Aggiungendo un prodotto noto (es. `latte`) viene valorizzata la categoria su `shopping_items`.
 
 ## Step 10 - Security hardening + audit
 

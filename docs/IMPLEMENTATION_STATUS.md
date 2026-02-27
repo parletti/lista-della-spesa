@@ -55,6 +55,7 @@
 - Nuova categoria `Dolci` con 24 prodotti validati
 - Aggiunta voce `Funghi` in categoria `Verdura`
 - Nuova categoria `Legumi` con 20 prodotti validati
+- Aggiunta voce `Salsa di soia` in categoria `Dispensa`
 - Endpoint autocomplete fuzzy
 - Auto-assegnazione categoria
 - UI raggruppata per categoria
