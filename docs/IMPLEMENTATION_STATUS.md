@@ -100,6 +100,10 @@
     - pannello `Comprati` con tema dedicato
     - badge categoria più leggibili
     - contrasto item pending/bought più chiaro senza colori aggressivi
+14. Tuning UI:
+    - pannelli `Da comprare` e `Comprati` riportati a sfondo bianco
+    - separazione visiva mantenuta via contorni colorati
+    - badge categoria con verde più acceso
 
 ## Test minimi regressione (attuali)
 1. Login email/password
