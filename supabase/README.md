@@ -69,6 +69,7 @@ File migration:
 - `supabase/migrations/20260227085735_step7_catalog_caffe_te_infusi.sql`
 - `supabase/migrations/20260227093030_step7_catalog_split_carne_pesce_affettati.sql`
 - `supabase/migrations/20260227103000_step7_catalog_pasta_riso.sql`
+- `supabase/migrations/20260227112000_step7_catalog_remove_generic_riso_from_dispensa.sql`
 
 ### Come applicarla
 1. Apri Supabase Dashboard.
@@ -85,8 +86,9 @@ File migration:
 7. Nuova categoria `Caffè, Tè, Infusi` con prodotti dedicati (caffè/tè/tisane/infusi e correlati).
 8. Split categoria carne/pesce in tre categorie dedicate: `Carne`, `Pesce`, `Affettati`.
 9. Nuova categoria `Pasta e Riso` con 30 prodotti dedicati.
-10. Endpoint `GET /api/autocomplete?q=lat` restituisce suggerimenti pertinenti.
-11. Aggiungendo un prodotto noto (es. `latte`) viene valorizzata la categoria su `shopping_items`.
+10. Rimozione voce generica `Riso` dalla categoria `Dispensa` per evitare conflitti con `Pasta e Riso`.
+11. Endpoint `GET /api/autocomplete?q=lat` restituisce suggerimenti pertinenti.
+12. Aggiungendo un prodotto noto (es. `latte`) viene valorizzata la categoria su `shopping_items`.
 
 ## Step 10 - Security hardening + audit
 

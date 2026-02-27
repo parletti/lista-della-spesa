@@ -50,6 +50,7 @@
 - Nuova categoria `Caffè, Tè, Infusi` con 29 prodotti validati (incluso `gocce di cioccolato`)
 - Split categoria carne/pesce in tre categorie distinte: `Carne`, `Pesce`, `Affettati` con seed dedicati
 - Nuova categoria `Pasta e Riso` con 30 prodotti validati
+- Cleanup catalogo: rimossa voce generica `Riso` da `Dispensa` per evitare duplicazione semantica con `Pasta e Riso`
 - Endpoint autocomplete fuzzy
 - Auto-assegnazione categoria
 - UI raggruppata per categoria
