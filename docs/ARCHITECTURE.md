@@ -29,8 +29,15 @@ Applicazione web/PWA per gestione lista spesa condivisa in famiglia, con sincron
 ### 1) Autenticazione
 1. Membro esistente esegue login con email/password su `/login`.
 2. Supabase Auth crea sessione cookie.
-3. Dashboard `/app` valida sessione server-side.
-4. Se non autenticato, redirect a `/login`.
+3. Guard client applica durata massima sessione 30 giorni.
+4. Dashboard `/app` valida sessione server-side.
+5. Se non autenticato, redirect a `/login`.
+
+### 1-bis) Reset password
+1. Utente apre `/login/reset-request` e invia email.
+2. Supabase invia link recovery verso `/auth/confirm?next=/login/reset`.
+3. In `/login/reset` l'utente imposta nuova password + conferma.
+4. Validazione policy password applicata lato client.
 
 ### 2) Onboarding invito
 1. Admin genera invito in dashboard.
@@ -87,6 +94,12 @@ Applicazione web/PWA per gestione lista spesa condivisa in famiglia, con sincron
   - lista suggerimenti raggruppata e ordinata per categoria -> prodotto
   - lieve rientro elementi prodotto per migliorare scansione visiva
   - chiusura automatica dei suggerimenti con click/tap fuori dall'area input+suggerimenti
+
+## Policy Password
+- Minimo 10 caratteri.
+- Almeno una lettera maiuscola, una minuscola e un numero.
+- Nessun carattere speciale obbligatorio.
+- Blocco password deboli (blacklist) e password che contengono parti dell'email utente.
 
 ## PWA e cache
 - Manifest e offline route presenti.
