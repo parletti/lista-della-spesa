@@ -1,7 +1,6 @@
 "use server";
 
 import { headers } from "next/headers";
-import { cookies } from "next/headers";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { getSupabaseAdminClient } from "@/lib/supabase/admin";
@@ -14,7 +13,6 @@ import {
 import { normalizeProductText } from "@/lib/catalog/normalize";
 import { consumeRateLimit } from "@/lib/security/rate-limit";
 import { writeAuditLog } from "@/lib/security/audit";
-import { SESSION_STARTED_AT_COOKIE } from "@/lib/auth/session-lifetime";
 
 function parseFamilyName(raw: FormDataEntryValue | null) {
   if (typeof raw !== "string") {
@@ -162,8 +160,6 @@ export async function createFamilyAction(
 export async function signOutAction() {
   const supabase = await getSupabaseServerClient();
   await supabase.auth.signOut();
-  const cookieStore = await cookies();
-  cookieStore.delete(SESSION_STARTED_AT_COOKIE);
   redirect("/login");
 }
 

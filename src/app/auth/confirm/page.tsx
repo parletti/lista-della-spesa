@@ -5,7 +5,6 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import type { EmailOtpType } from "@supabase/supabase-js";
 import { getSupabaseBrowserClient } from "@/lib/supabase/client";
-import { setSessionStartedCookie } from "@/lib/auth/session-lifetime";
 
 const allowedTypes: ReadonlySet<string> = new Set([
   "signup",
@@ -73,7 +72,6 @@ export default function AuthConfirmPage() {
         });
 
         if (!cancelled) {
-          setSessionStartedCookie();
           router.replace(next);
         }
       } catch (authError) {

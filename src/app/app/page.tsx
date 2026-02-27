@@ -10,7 +10,6 @@ import { ShoppingRealtimeListener } from "@/app/app/shopping-realtime-listener";
 import { CreateInviteForm } from "@/app/app/create-invite-form";
 import { ItemActionsMenu } from "@/app/app/item-actions-menu";
 import { OptimisticToggleButton } from "@/app/app/optimistic-toggle-button";
-import { SessionLifetimeGuard } from "@/app/app/session-lifetime-guard";
 
 type ProfileRow = {
   id: string;
@@ -177,7 +176,6 @@ export default async function AppPage() {
         </section>
       ) : (
         <section className="ios-card ios-fade-up ios-fade-up-delay-1 p-3 sm:p-4">
-          <SessionLifetimeGuard />
           <ShoppingRealtimeListener familyId={membership.family_id} />
           <div className="flex items-start justify-between gap-3">
             <h2 className="text-base font-semibold leading-tight">

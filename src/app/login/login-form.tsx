@@ -1,10 +1,8 @@
 "use client";
 
 import { FormEvent, useState } from "react";
-import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { getSupabaseBrowserClient } from "@/lib/supabase/client";
-import { setSessionStartedCookie } from "@/lib/auth/session-lifetime";
 
 export function LoginForm() {
   const router = useRouter();
@@ -31,7 +29,6 @@ export function LoginForm() {
         return;
       }
 
-      setSessionStartedCookie();
       router.replace("/app");
       router.refresh();
     } catch (error) {
@@ -80,9 +77,6 @@ export function LoginForm() {
           {message}
         </p>
       ) : null}
-      <Link href="/login/reset-request" className="text-xs text-[#007AFF] hover:underline">
-        Password dimenticata?
-      </Link>
     </form>
   );
 }

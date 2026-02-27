@@ -6,16 +6,7 @@
 - Accesso dati governato da RLS Supabase
 - Onboarding tramite inviti monouso con scadenza
 - Login utenti esistenti con email/password
-- Reset password con flusso recovery via email
 - Rate-limit su endpoint auth sensibili
-- Sessione applicativa massima: 30 giorni
-
-## Policy password
-- Minimo 10 caratteri.
-- Obbligo di almeno: maiuscola, minuscola, numero.
-- Nessun carattere speciale obbligatorio.
-- Blocco password deboli (blacklist).
-- Blocco password contenenti parti dell'email utente.
 
 ## Gestione credenziali
 - File locale: `.env.local`
@@ -51,7 +42,6 @@ Policy implementate per:
 - Endpoint server sensibili:
   - `/api/auth/request-magic-link` (flow invito/legacy)
   - endpoint/login action correnti via email/password
-  - endpoint recovery/reset password Supabase
 - Controlli:
   - payload valido
   - invito esistente/valido (quando presente token)
