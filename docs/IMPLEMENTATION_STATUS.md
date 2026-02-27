@@ -48,6 +48,7 @@
 - Seed latticini integrato con formaggi per tipologia latte (capra/pecora/mucca)
 - Seed frutta esteso con 20+ prodotti validati (inclusi frutti di bosco e cocomero)
 - Nuova categoria `Caffè, Tè, Infusi` con 29 prodotti validati (incluso `gocce di cioccolato`)
+- Split categoria carne/pesce in tre categorie distinte: `Carne`, `Pesce`, `Affettati` con seed dedicati
 - Endpoint autocomplete fuzzy
 - Auto-assegnazione categoria
 - UI raggruppata per categoria

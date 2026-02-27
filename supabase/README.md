@@ -67,6 +67,7 @@ File migration:
 - `supabase/migrations/20260227083735_step7_catalog_latticini_formaggi_milk_type.sql`
 - `supabase/migrations/20260227084647_step7_catalog_frutta_expand.sql`
 - `supabase/migrations/20260227085735_step7_catalog_caffe_te_infusi.sql`
+- `supabase/migrations/20260227093030_step7_catalog_split_carne_pesce_affettati.sql`
 
 ### Come applicarla
 1. Apri Supabase Dashboard.
@@ -81,8 +82,9 @@ File migration:
 5. Seed latticini esteso con formaggi per tipo di latte (`formaggio di capra/pecora/mucca`).
 6. Seed frutta esteso (20+ prodotti, inclusi frutti di bosco e `cocomero`).
 7. Nuova categoria `Caffè, Tè, Infusi` con prodotti dedicati (caffè/tè/tisane/infusi e correlati).
-8. Endpoint `GET /api/autocomplete?q=lat` restituisce suggerimenti pertinenti.
-9. Aggiungendo un prodotto noto (es. `latte`) viene valorizzata la categoria su `shopping_items`.
+8. Split categoria carne/pesce in tre categorie dedicate: `Carne`, `Pesce`, `Affettati`.
+9. Endpoint `GET /api/autocomplete?q=lat` restituisce suggerimenti pertinenti.
+10. Aggiungendo un prodotto noto (es. `latte`) viene valorizzata la categoria su `shopping_items`.
 
 ## Step 10 - Security hardening + audit
 
