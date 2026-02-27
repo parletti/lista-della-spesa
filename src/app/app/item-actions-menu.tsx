@@ -146,12 +146,7 @@ export function ItemActionsMenu({ itemId, currentCategoryId, categories }: Props
               <div className="my-2 border-t border-zinc-200" />
               <form action={deleteShoppingItemAction}>
                 <input type="hidden" name="item_id" value={itemId} />
-                <button
-                  className="ios-btn-danger w-full"
-                  onClick={() => {
-                    setIsOpen(false);
-                  }}
-                >
+                <button className="ios-btn-danger w-full">
                   Elimina
                 </button>
               </form>

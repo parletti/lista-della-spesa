@@ -85,6 +85,7 @@
 5. CSP aggiornata per websocket realtime sicuri.
 6. Rimozione completa interfaccia/logica input vocale.
 7. Aggiunto menu `...` con categoria persistente per item.
+8. Fix azione `Elimina` dal menu `...` (submit affidabile anche con menu renderizzato via portal).
 
 ## Test minimi regressione (attuali)
 1. Login email/password
