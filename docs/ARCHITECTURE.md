@@ -39,7 +39,7 @@ Applicazione web/PWA per gestione lista spesa condivisa in famiglia, con sincron
 4. `acceptInviteAction` marca invito usato e crea membership `MEMBER`.
 
 ### 3) Lista spesa
-1. Inserimento manuale o da suggerimento autocomplete.
+1. Inserimento manuale o da suggerimento autocomplete (attivo da almeno 3 caratteri digitati).
 2. Risoluzione catalogo:
    - match `product_id/category_id` da catalogo o alias
    - normalizzazione testo

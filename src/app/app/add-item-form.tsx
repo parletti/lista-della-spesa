@@ -158,8 +158,9 @@ export function AddItemForm() {
 
   useEffect(() => {
     let isCancelled = false;
+    const trimmed = query.trim();
 
-    if (!query.trim()) {
+    if (trimmed.length < 3) {
       setSuggestions([]);
       setLoadingSuggestions(false);
       return;
@@ -169,7 +170,7 @@ export function AddItemForm() {
       setLoadingSuggestions(true);
       try {
         const response = await fetch(
-          `/api/autocomplete?q=${encodeURIComponent(query.trim())}`,
+          `/api/autocomplete?q=${encodeURIComponent(trimmed)}`,
         );
         const payload = (await response.json().catch(() => null)) as
           | { suggestions?: Suggestion[] }
@@ -193,6 +194,7 @@ export function AddItemForm() {
   const hint = useMemo(() => {
     if (loadingSuggestions) return "Ricerca in corso...";
     if (!query.trim()) return "Inizia a scrivere per ricevere suggerimenti.";
+    if (query.trim().length < 3) return "Digita almeno 3 caratteri per i suggerimenti.";
     if (suggestions.length === 0) return "Nessun suggerimento trovato.";
     return "Seleziona un suggerimento oppure invia testo libero.";
   }, [loadingSuggestions, query, suggestions.length]);

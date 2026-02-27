@@ -103,6 +103,7 @@ curl "http://127.0.0.1:3000/api/autocomplete?q=lat"
 - Pagina `/auth/confirm` dedicata al completamento sessione.
 - Service Worker temporaneamente disattivato per evitare UI stale da cache durante sviluppo/debug.
 - Toggle `Comprato/Compra` ottimizzato lato UI con comportamento ottimistico (feedback immediato).
+- Autocomplete UI attivato solo da 3 caratteri per ridurre chiamate e migliorare reattività.
 
 ## Documentazione completa
 - Architettura: [docs/ARCHITECTURE.md](/Users/parletti/chagpt%20codex%20progetti/Lista%20della%20Spesa/docs/ARCHITECTURE.md)
