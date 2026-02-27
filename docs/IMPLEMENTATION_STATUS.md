@@ -108,6 +108,10 @@
     - badge categoria con verde più acceso
 15. UX autocomplete:
     - dropdown suggerimenti chiuso automaticamente al click/tap fuori area input+suggerimenti
+16. Compact layout tuning:
+    - tipografia e controlli leggermente ridotti
+    - spaziature verticali compattate per mostrare più contenuto
+    - toni/gerarchie cromatiche mantenuti (pannelli pending/bought + badge categoria)
 
 ## Test minimi regressione (attuali)
 1. Login email/password

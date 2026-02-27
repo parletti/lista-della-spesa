@@ -28,6 +28,7 @@ body {
   background: var(--background);
   color: var(--foreground);
   font-family: "Helvetica Neue", Arial, sans-serif;
+  font-size: 15px;
   min-height: 100vh;
   background-image: radial-gradient(
       1200px 500px at -5% -10%,
@@ -40,18 +41,20 @@ body {
 .ios-card {
   background: var(--surface);
   border: 1px solid rgba(209, 209, 214, 0.75);
-  border-radius: 20px;
+  border-radius: 18px;
   box-shadow: var(--shadow-soft);
 }
 
 .ios-panel-pending {
   background: #ffffff;
-  border: 1px solid rgba(14, 165, 233, 0.35);
+  border: 1.5px solid rgba(14, 165, 233, 0.45);
+  box-shadow: inset 0 0 0 1px rgba(14, 165, 233, 0.08);
 }
 
 .ios-panel-bought {
   background: #ffffff;
-  border: 1px solid rgba(34, 197, 94, 0.34);
+  border: 1.5px solid rgba(34, 197, 94, 0.45);
+  box-shadow: inset 0 0 0 1px rgba(34, 197, 94, 0.1);
 }
 
 .ios-list-pending .ios-item-row {
@@ -66,28 +69,29 @@ body {
 
 .ios-category-badge {
   display: inline-block;
-  padding: 5px 10px;
+  padding: 4px 9px;
   border-radius: 999px;
-  border: 1px solid rgba(22, 163, 74, 0.38);
-  background: linear-gradient(180deg, rgba(220, 252, 231, 1), rgba(187, 247, 208, 0.98));
+  border: 1px solid rgba(22, 163, 74, 0.55);
+  background: linear-gradient(180deg, rgba(187, 247, 208, 1), rgba(134, 239, 172, 0.95));
+  color: #14532d;
 }
 
 .ios-list-pending .ios-category-badge {
-  border-color: rgba(22, 163, 74, 0.45);
-  background: linear-gradient(180deg, rgba(220, 252, 231, 1), rgba(187, 247, 208, 0.98));
+  border-color: rgba(22, 163, 74, 0.6);
+  background: linear-gradient(180deg, rgba(187, 247, 208, 1), rgba(134, 239, 172, 0.95));
 }
 
 .ios-list-bought .ios-category-badge {
-  border-color: rgba(22, 163, 74, 0.45);
-  background: linear-gradient(180deg, rgba(220, 252, 231, 1), rgba(187, 247, 208, 0.98));
+  border-color: rgba(22, 163, 74, 0.6);
+  background: linear-gradient(180deg, rgba(187, 247, 208, 1), rgba(134, 239, 172, 0.95));
 }
 
 .ios-list-pending .ios-group-title {
-  color: #15803d;
+  color: #166534;
 }
 
 .ios-list-bought .ios-group-title {
-  color: #15803d;
+  color: #166534;
 }
 
 .ios-fade-up {
@@ -118,50 +122,50 @@ body {
 }
 
 .ios-section-title {
-  font-size: 1.05rem;
+  font-size: 0.9rem;
   font-weight: 700;
   color: var(--foreground);
 }
 
 .ios-group-title {
-  font-size: 0.72rem;
-  letter-spacing: 0.08em;
+  font-size: 0.62rem;
+  letter-spacing: 0.07em;
   text-transform: uppercase;
   font-weight: 700;
   color: var(--muted);
 }
 
 .ios-btn-primary {
-  height: 42px;
-  border-radius: 14px;
+  height: 34px;
+  border-radius: 11px;
   background: linear-gradient(180deg, #1692ff, #007aff);
   color: #fff;
-  padding: 0 14px;
-  font-size: 0.84rem;
+  padding: 0 10px;
+  font-size: 0.75rem;
   font-weight: 600;
   transition: transform 140ms ease, filter 140ms ease, box-shadow 140ms ease;
 }
 
 .ios-btn-secondary {
-  height: 42px;
-  border-radius: 14px;
+  height: 34px;
+  border-radius: 11px;
   background: linear-gradient(180deg, #fff, #f6f7fb);
   border: 1px solid rgba(148, 163, 184, 0.35);
   color: var(--foreground);
-  padding: 0 14px;
-  font-size: 0.84rem;
+  padding: 0 10px;
+  font-size: 0.75rem;
   font-weight: 600;
   transition: transform 140ms ease, background-color 140ms ease, border-color 140ms ease;
 }
 
 .ios-btn-danger {
-  border-radius: 12px;
+  border-radius: 10px;
   border: 1px solid rgba(255, 59, 48, 0.5);
   color: var(--danger);
   background: #fff;
-  padding: 0 10px;
-  font-size: 0.72rem;
-  height: 32px;
+  padding: 0 9px;
+  font-size: 0.64rem;
+  height: 28px;
   font-weight: 600;
   transition: transform 140ms ease, background-color 140ms ease;
 }
@@ -170,8 +174,8 @@ body {
   background: var(--accent-soft);
   color: var(--accent);
   border-radius: 999px;
-  padding: 3px 10px;
-  font-size: 0.72rem;
+  padding: 2px 8px;
+  font-size: 0.64rem;
   font-weight: 600;
 }
 

@@ -151,11 +151,11 @@ export default async function AppPage() {
   const boughtByCategory = groupByCategory(boughtItems);
 
   return (
-    <main className="mx-auto flex min-h-screen w-full max-w-4xl flex-col px-4 py-5 sm:px-6 sm:py-8">
-      <header className="ios-card ios-fade-up sticky top-3 z-20 mb-5 flex items-center justify-between px-4 py-3">
+    <main className="mx-auto flex min-h-screen w-full max-w-4xl flex-col px-3 py-3 sm:px-4 sm:py-5">
+      <header className="ios-card ios-fade-up sticky top-2 z-20 mb-3 flex items-center justify-between px-3 py-2">
         <div>
           <p className="text-xs text-zinc-500">Connesso come</p>
-          <h1 className="text-xl font-semibold">
+          <h1 className="text-base font-semibold leading-tight">
             {profile?.display_name ?? user.email ?? "Utente"}
           </h1>
         </div>
@@ -167,53 +167,53 @@ export default async function AppPage() {
       </header>
 
       {!membership ? (
-        <section className="ios-card ios-fade-up ios-fade-up-delay-1 mt-2 p-6">
-          <h2 className="text-xl font-semibold">Crea la tua famiglia</h2>
+        <section className="ios-card ios-fade-up ios-fade-up-delay-1 mt-2 p-5">
+          <h2 className="text-lg font-semibold">Crea la tua famiglia</h2>
           <p className="mt-2 text-sm text-zinc-600">
             Primo accesso rilevato: crea ora la famiglia per iniziare.
           </p>
           <CreateFamilyForm />
         </section>
       ) : (
-        <section className="ios-card ios-fade-up ios-fade-up-delay-1 p-4 sm:p-6">
+        <section className="ios-card ios-fade-up ios-fade-up-delay-1 p-3 sm:p-4">
           <ShoppingRealtimeListener familyId={membership.family_id} />
           <div className="flex items-start justify-between gap-3">
-            <h2 className="text-xl font-semibold">
+            <h2 className="text-base font-semibold leading-tight">
               Famiglia: {membership.families?.name ?? membership.family_id}
             </h2>
             <span className={`ios-chip ${membership.role === "ADMIN" ? "ios-chip-admin" : ""}`}>
               {membership.role}
             </span>
           </div>
-          <p className="mt-1 text-sm text-zinc-500">
+          <p className="mt-1 text-xs text-zinc-500">
             Lista condivisa in tempo reale
           </p>
 
-          <div className="mt-6 rounded-2xl bg-white/80 p-4 ring-1 ring-black/5">
+          <div className="mt-3 rounded-2xl bg-white/80 p-2.5 ring-1 ring-black/5">
             <h3 className="ios-section-title">Aggiungi prodotto</h3>
             <AddItemForm />
           </div>
 
-          <div className="mt-8 grid gap-5 md:grid-cols-2">
-            <div className="ios-list-pending ios-panel-pending ios-fade-up ios-fade-up-delay-2 rounded-2xl p-4 shadow-sm">
+          <div className="mt-4 grid gap-3 md:grid-cols-2">
+            <div className="ios-list-pending ios-panel-pending ios-fade-up ios-fade-up-delay-2 rounded-2xl p-2.5 shadow-sm">
               <h3 className="ios-section-title">Da comprare</h3>
-              <div className="mt-3 space-y-4">
+              <div className="mt-2 space-y-2.5">
                 {pendingByCategory.length === 0 ? (
-                  <p className="text-sm text-zinc-500">Nessun prodotto.</p>
+                  <p className="text-xs text-zinc-500">Nessun prodotto.</p>
                 ) : (
                   pendingByCategory.map((group) => (
                     <div key={group.category}>
-                      <h4 className="ios-group-title mb-2">
+                      <h4 className="ios-group-title mb-1">
                         <span className="ios-category-badge">{group.category}</span>
                       </h4>
-                      <ul className="space-y-2.5">
+                      <ul className="space-y-1.5">
                         {group.items.map((item) => (
                           <li
                             key={item.id}
                             data-item-row-id={item.id}
-                            className="ios-item-row flex items-center justify-between rounded-xl px-3 py-2.5"
+                            className="ios-item-row flex items-center justify-between rounded-xl px-2 py-1.5"
                           >
-                            <span className="font-medium text-zinc-800">{item.text}</span>
+                            <span className="text-[15px] font-medium text-zinc-800">{item.text}</span>
                             <div className="flex items-center gap-2">
                               <OptimisticToggleButton itemId={item.id} label="Comprato" />
                               <ItemActionsMenu
@@ -231,25 +231,25 @@ export default async function AppPage() {
               </div>
             </div>
 
-            <div className="ios-list-bought ios-panel-bought ios-fade-up ios-fade-up-delay-2 rounded-2xl p-4 shadow-sm">
+            <div className="ios-list-bought ios-panel-bought ios-fade-up ios-fade-up-delay-2 rounded-2xl p-2.5 shadow-sm">
               <h3 className="ios-section-title">Comprati</h3>
-              <div className="mt-3 space-y-4">
+              <div className="mt-2 space-y-2.5">
                 {boughtByCategory.length === 0 ? (
-                  <p className="text-sm text-zinc-500">Nessun prodotto.</p>
+                  <p className="text-xs text-zinc-500">Nessun prodotto.</p>
                 ) : (
                   boughtByCategory.map((group) => (
                     <div key={group.category}>
-                      <h4 className="ios-group-title mb-2">
+                      <h4 className="ios-group-title mb-1">
                         <span className="ios-category-badge">{group.category}</span>
                       </h4>
-                      <ul className="space-y-2.5">
+                      <ul className="space-y-1.5">
                         {group.items.map((item) => (
                           <li
                             key={item.id}
                             data-item-row-id={item.id}
-                            className="ios-item-row flex items-center justify-between rounded-xl px-3 py-2.5"
+                            className="ios-item-row flex items-center justify-between rounded-xl px-2 py-1.5"
                           >
-                            <span className="text-zinc-500 line-through">{item.text}</span>
+                            <span className="text-[15px] text-zinc-500 line-through">{item.text}</span>
                             <div className="flex items-center gap-2">
                               <OptimisticToggleButton itemId={item.id} label="Compra" />
                               <ItemActionsMenu
@@ -269,7 +269,7 @@ export default async function AppPage() {
           </div>
 
           {membership.role === "ADMIN" ? (
-            <div className="ios-fade-up ios-fade-up-delay-3 mt-7 rounded-2xl bg-white/70 p-4 ring-1 ring-black/5">
+            <div className="ios-fade-up ios-fade-up-delay-3 mt-4 rounded-2xl bg-white/70 p-2.5 ring-1 ring-black/5">
               <CreateInviteForm />
             </div>
           ) : null}

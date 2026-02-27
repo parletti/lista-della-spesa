@@ -55,7 +55,7 @@ export function OptimisticToggleButton({ itemId, label }: Props) {
         type="button"
         onClick={onToggle}
         disabled={pending}
-        className="ios-btn-secondary h-8 px-3 text-xs disabled:cursor-not-allowed disabled:opacity-60"
+        className="ios-btn-secondary h-6 px-2 text-[10px] disabled:cursor-not-allowed disabled:opacity-60"
       >
         {pending ? "..." : label}
       </button>

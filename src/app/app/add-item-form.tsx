@@ -239,13 +239,13 @@ export function AddItemForm() {
   }
 
   return (
-    <form onSubmit={onSubmit} className="mt-4 flex flex-col gap-3">
+    <form onSubmit={onSubmit} className="mt-3 flex flex-col gap-2.5">
       <input
         name="text"
         required
         minLength={1}
         maxLength={120}
-        className="h-11 rounded-2xl border border-zinc-300 bg-white/95 px-4 text-[15px] outline-none ring-0 focus:border-[#007AFF]"
+        className="h-10 rounded-2xl border border-zinc-300 bg-white/95 px-3.5 text-[14px] outline-none ring-0 focus:border-[#007AFF]"
         placeholder="Es. latte, pane, mele..."
         value={query}
         onChange={(event) => {
@@ -264,7 +264,7 @@ export function AddItemForm() {
       </div>
 
       <div ref={suggestionsContainerRef} className="w-full">
-        <p className="text-xs text-zinc-500">{hint}</p>
+        <p className="text-[11px] text-zinc-500">{hint}</p>
         {statusMessage ? <p className="mt-1 text-xs text-zinc-600">{statusMessage}</p> : null}
         {offlineQueueSize > 0 ? (
           <p className="mt-1 text-xs text-amber-700">
@@ -272,7 +272,7 @@ export function AddItemForm() {
           </p>
         ) : null}
         {groupedSuggestions.length > 0 ? (
-          <ul className="ios-suggestions mt-2 max-h-56 overflow-auto rounded-2xl">
+          <ul className="ios-suggestions mt-2 max-h-52 overflow-auto rounded-2xl">
             {groupedSuggestions.map((group) => (
               <li key={group.category} className="border-b border-zinc-100 last:border-b-0">
                 <p className="suggestion-category px-3 pt-2 pb-1 text-[10px] font-semibold uppercase tracking-[0.08em]">
@@ -283,7 +283,7 @@ export function AddItemForm() {
                     <li key={suggestion.productId}>
                       <button
                         type="button"
-                        className="suggestion-item flex w-full items-center justify-between py-2.5 pr-3 pl-7 text-left text-sm"
+                        className="suggestion-item flex w-full items-center justify-between py-2 pr-3 pl-7 text-left text-[13px]"
                         onClick={() => {
                           setQuery(suggestion.label);
                           setSelectedProductId(suggestion.productId);

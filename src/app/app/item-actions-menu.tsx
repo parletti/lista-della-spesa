@@ -96,7 +96,7 @@ export function ItemActionsMenu({ itemId, currentCategoryId, categories }: Props
       <button
         ref={triggerRef}
         type="button"
-        className="ios-btn-secondary flex h-8 w-8 items-center justify-center px-0 text-sm"
+        className="ios-btn-secondary flex h-6 w-6 items-center justify-center px-0 text-[10px]"
         aria-expanded={isOpen}
         aria-haspopup="menu"
         onClick={() => {
@@ -117,7 +117,7 @@ export function ItemActionsMenu({ itemId, currentCategoryId, categories }: Props
                 width: MENU_WIDTH,
                 zIndex: 2147483647,
               }}
-              className="rounded-xl border border-zinc-200 bg-white p-3 shadow-xl"
+              className="rounded-xl border border-zinc-200 bg-white p-2.5 shadow-xl"
             >
               <form
                 ref={categoryFormRef}
@@ -129,7 +129,7 @@ export function ItemActionsMenu({ itemId, currentCategoryId, categories }: Props
                 <select
                   name="category_id"
                   defaultValue={currentCategoryId ?? ""}
-                  className="h-9 rounded-lg border border-zinc-300 bg-white/95 px-2 text-sm"
+                  className="h-7 rounded-lg border border-zinc-300 bg-white/95 px-2 text-[11px]"
                   onChange={() => {
                     categoryFormRef.current?.requestSubmit();
                     setIsOpen(false);
