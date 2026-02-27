@@ -4,12 +4,12 @@ import { getSupabaseServerClient } from "@/lib/supabase/server";
 import { CreateFamilyForm } from "@/app/app/create-family-form";
 import {
   signOutAction,
-  toggleShoppingItemAction,
 } from "@/app/app/actions";
 import { AddItemForm } from "@/app/app/add-item-form";
 import { ShoppingRealtimeListener } from "@/app/app/shopping-realtime-listener";
 import { CreateInviteForm } from "@/app/app/create-invite-form";
 import { ItemActionsMenu } from "@/app/app/item-actions-menu";
+import { OptimisticToggleButton } from "@/app/app/optimistic-toggle-button";
 
 type ProfileRow = {
   id: string;
@@ -206,16 +206,12 @@ export default async function AppPage() {
                         {group.items.map((item) => (
                           <li
                             key={item.id}
+                            data-item-row-id={item.id}
                             className="flex items-center justify-between rounded-xl border border-zinc-200 bg-white px-3 py-2.5"
                           >
                             <span className="font-medium text-zinc-800">{item.text}</span>
                             <div className="flex items-center gap-2">
-                              <form action={toggleShoppingItemAction}>
-                                <input type="hidden" name="item_id" value={item.id} />
-                                <button className="ios-btn-secondary h-8 px-3 text-xs">
-                                  Comprato
-                                </button>
-                              </form>
+                              <OptimisticToggleButton itemId={item.id} label="Comprato" />
                               <ItemActionsMenu
                                 itemId={item.id}
                                 currentCategoryId={item.category_id}
@@ -244,16 +240,12 @@ export default async function AppPage() {
                         {group.items.map((item) => (
                           <li
                             key={item.id}
+                            data-item-row-id={item.id}
                             className="flex items-center justify-between rounded-xl border border-zinc-200 bg-white px-3 py-2.5"
                           >
                             <span className="text-zinc-500 line-through">{item.text}</span>
                             <div className="flex items-center gap-2">
-                              <form action={toggleShoppingItemAction}>
-                                <input type="hidden" name="item_id" value={item.id} />
-                                <button className="ios-btn-secondary h-8 px-3 text-xs">
-                                  Compra
-                                </button>
-                              </form>
+                              <OptimisticToggleButton itemId={item.id} label="Compra" />
                               <ItemActionsMenu
                                 itemId={item.id}
                                 currentCategoryId={item.category_id}

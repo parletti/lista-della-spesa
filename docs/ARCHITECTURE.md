@@ -50,7 +50,8 @@ Applicazione web/PWA per gestione lista spesa condivisa in famiglia, con sincron
 5. Menu `...` per item:
    - `Categoria`: assegnazione immediata (persistente su `shopping_items.category_id`)
    - `Elimina`
-6. Update realtime tramite subscription Supabase.
+6. Toggle stato `Comprato/Compra` ottimistico lato client per feedback immediato.
+7. Update realtime tramite subscription Supabase.
 
 ## Data model (attuale)
 - `families`

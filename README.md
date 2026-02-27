@@ -54,6 +54,7 @@ Esegui in ordine i file in `supabase/migrations/`:
 4. `20260226195000_step7_catalog_autocomplete.sql`
 5. `20260226232051_step7_catalog_expand_foods.sql`
 6. `20260227082223_step7_catalog_latticini_expand.sql`
+7. `20260227083735_step7_catalog_latticini_formaggi_milk_type.sql`
 
 ## Comandi utili
 ```bash
@@ -99,6 +100,7 @@ curl "http://127.0.0.1:3000/api/autocomplete?q=lat"
 - Callback auth robusta per diversi formati link Supabase (`code`, `token_hash`, hash token).
 - Pagina `/auth/confirm` dedicata al completamento sessione.
 - Service Worker temporaneamente disattivato per evitare UI stale da cache durante sviluppo/debug.
+- Toggle `Comprato/Compra` ottimizzato lato UI con comportamento ottimistico (feedback immediato).
 
 ## Documentazione completa
 - Architettura: [docs/ARCHITECTURE.md](/Users/parletti/chagpt%20codex%20progetti/Lista%20della%20Spesa/docs/ARCHITECTURE.md)

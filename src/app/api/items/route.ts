@@ -15,6 +15,10 @@ type Body = {
   selectedProductId?: string | null;
 };
 
+type PatchBody = {
+  itemId?: string;
+};
+
 async function ensureProfile(authUserId: string, fallbackDisplayName: string) {
   const admin = getSupabaseAdminClient();
   const upsertResult = await admin
@@ -221,4 +225,65 @@ export async function POST(request: Request) {
   });
 
   return NextResponse.json({ ok: true });
+}
+
+export async function PATCH(request: Request) {
+  const body = (await request.json().catch(() => null)) as PatchBody | null;
+  const itemId = typeof body?.itemId === "string" && body.itemId.length > 10 ? body.itemId : null;
+  if (!itemId) {
+    return NextResponse.json({ ok: false, error: "itemId non valido." }, { status: 400 });
+  }
+
+  const context = await getUserContext();
+  if (!context || !context.familyId) {
+    return NextResponse.json({ ok: false, error: "Sessione non valida." }, { status: 401 });
+  }
+
+  const ip = getClientIp(request);
+  const limit = consumeRateLimit(`api-items-toggle:${context.authUserId}:${ip}`, 180, 60 * 1000);
+  if (!limit.ok) {
+    return NextResponse.json(
+      { ok: false, error: `Troppi toggle. Riprova tra ${limit.retryAfterSec} secondi.` },
+      { status: 429 },
+    );
+  }
+
+  const admin = getSupabaseAdminClient();
+  const currentItem = await admin
+    .from("shopping_items")
+    .select("id, status, family_id")
+    .eq("id", itemId)
+    .eq("family_id", context.familyId)
+    .single();
+
+  if (currentItem.error || !currentItem.data) {
+    return NextResponse.json({ ok: false, error: "Prodotto non trovato." }, { status: 404 });
+  }
+
+  const nextStatus = currentItem.data.status === "PENDING" ? "BOUGHT" : "PENDING";
+  const updatePayload =
+    nextStatus === "BOUGHT"
+      ? { status: "BOUGHT", bought_by: context.profileId, bought_at: new Date().toISOString() }
+      : { status: "PENDING", bought_by: null, bought_at: null };
+
+  const update = await admin
+    .from("shopping_items")
+    .update(updatePayload)
+    .eq("id", currentItem.data.id)
+    .eq("family_id", context.familyId);
+
+  if (update.error) {
+    return NextResponse.json({ ok: false, error: update.error.message }, { status: 500 });
+  }
+
+  await writeAuditLog({
+    familyId: context.familyId,
+    actorProfileId: context.profileId,
+    eventType: "ITEM_TOGGLE",
+    entityType: "shopping_item",
+    entityId: currentItem.data.id,
+    metadata: { source: "api", nextStatus },
+  });
+
+  return NextResponse.json({ ok: true, nextStatus });
 }

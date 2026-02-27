@@ -45,6 +45,7 @@
 - Seed iniziale IT
 - Seed espanso con prodotti aggiuntivi (es. cocco/ciliegia e altri)
 - Seed latticini esteso con 30+ prodotti validati (formaggi/yogurt/latte speciali)
+- Seed latticini integrato con formaggi per tipologia latte (capra/pecora/mucca)
 - Endpoint autocomplete fuzzy
 - Auto-assegnazione categoria
 - UI raggruppata per categoria
@@ -87,6 +88,7 @@
 6. Rimozione completa interfaccia/logica input vocale.
 7. Aggiunto menu `...` con categoria persistente per item.
 8. Fix azione `Elimina` dal menu `...` (submit affidabile anche con menu renderizzato via portal).
+9. Toggle `Comprato/Compra` ottimistico lato client per ridurre latenza percepita sui bottoni.
 
 ## Test minimi regressione (attuali)
 1. Login email/password
