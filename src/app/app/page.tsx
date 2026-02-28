@@ -12,6 +12,8 @@ import { ItemActionsMenu } from "@/app/app/item-actions-menu";
 import { OptimisticToggleButton } from "@/app/app/optimistic-toggle-button";
 import { SessionLifetimeGuard } from "@/app/app/session-lifetime-guard";
 
+export const dynamic = "force-dynamic";
+
 type ProfileRow = {
   id: string;
   display_name: string;

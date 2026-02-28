@@ -131,6 +131,8 @@
     - avviso dedicato quando sessione scade oltre 30 giorni
 18. UX item actions:
     - aggiunta funzione `Rinomina` su menu `...` con update realtime condiviso
+19. Deploy hardening:
+    - `/app` forzata come route dinamica (`force-dynamic`) per evitare errori di prerender in build Vercel quando mancano env pubbliche durante static analysis.
 
 ## Test minimi regressione (attuali)
 1. Login email/password
