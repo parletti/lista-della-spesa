@@ -77,6 +77,7 @@ File migration:
 - `supabase/migrations/20260227143000_step7_catalog_add_salsa_di_soia_to_dispensa.sql`
 - `supabase/migrations/20260227150000_step7_catalog_condimenti.sql`
 - `supabase/migrations/20260228114000_step7_catalog_latticini_add_items.sql`
+- `supabase/migrations/20260228162000_step7_catalog_condimenti_add_olive.sql`
 
 ### Come applicarla
 1. Apri Supabase Dashboard.
@@ -99,11 +100,12 @@ File migration:
 13. Aggiunta voce `Funghi` nella categoria `Verdura`.
 14. Nuova categoria `Legumi` con 20 prodotti dedicati.
 15. Aggiunta voce `Salsa di soia` nella categoria `Dispensa`.
-16. Nuova categoria `Condimenti` con 33 prodotti dedicati.
+16. Nuova categoria `Condimenti` con 36 prodotti dedicati.
 17. Eventuali prodotti duplicati già presenti vengono riclassificati in `Condimenti` tramite upsert.
-18. Seed latticini integrato con nuove voci (mozzarella pizza, caprini specifici, formaggi a fette, grattugiati/cubetti).
-19. Endpoint `GET /api/autocomplete?q=lat` restituisce suggerimenti pertinenti.
-20. Aggiungendo un prodotto noto (es. `latte`) viene valorizzata la categoria su `shopping_items`.
+18. Aggiunte varianti olive (`olive verdi intere`, `olive verdi denocciolate`, `olive taggiasche`) in `Condimenti`.
+19. Seed latticini integrato con nuove voci (mozzarella pizza, caprini specifici, formaggi a fette, grattugiati/cubetti).
+20. Endpoint `GET /api/autocomplete?q=lat` restituisce suggerimenti pertinenti.
+21. Aggiungendo un prodotto noto (es. `latte`) viene valorizzata la categoria su `shopping_items`.
 
 ## Step 10 - Security hardening + audit
 

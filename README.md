@@ -71,6 +71,7 @@ Esegui in ordine i file in `supabase/migrations/`:
 17. `20260227143000_step7_catalog_add_salsa_di_soia_to_dispensa.sql`
 18. `20260227150000_step7_catalog_condimenti.sql`
 19. `20260228114000_step7_catalog_latticini_add_items.sql`
+20. `20260228162000_step7_catalog_condimenti_add_olive.sql`
 
 ## Comandi utili
 ```bash
