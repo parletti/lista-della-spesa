@@ -135,10 +135,10 @@ curl "http://127.0.0.1:3000/api/autocomplete?q=lat"
   - gerarchia cromatica mantenuta (pannelli e badge categoria)
 
 ## Documentazione completa
-- Architettura: [docs/ARCHITECTURE.md](/Users/parletti/chagpt%20codex%20progetti/Lista%20della%20Spesa/docs/ARCHITECTURE.md)
-- Sicurezza: [docs/SECURITY.md](/Users/parletti/chagpt%20codex%20progetti/Lista%20della%20Spesa/docs/SECURITY.md)
-- Stato implementazione: [docs/IMPLEMENTATION_STATUS.md](/Users/parletti/chagpt%20codex%20progetti/Lista%20della%20Spesa/docs/IMPLEMENTATION_STATUS.md)
-- Note migration Supabase: [supabase/README.md](/Users/parletti/chagpt%20codex%20progetti/Lista%20della%20Spesa/supabase/README.md)
+- Architettura: [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md)
+- Sicurezza: [docs/SECURITY.md](docs/SECURITY.md)
+- Stato implementazione: [docs/IMPLEMENTATION_STATUS.md](docs/IMPLEMENTATION_STATUS.md)
+- Note migration Supabase: [supabase/README.md](supabase/README.md)
 
 ## Deploy on Vercel
 
