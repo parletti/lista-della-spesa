@@ -135,6 +135,7 @@ curl "http://127.0.0.1:3000/api/autocomplete?q=lat"
   - gerarchia cromatica mantenuta (pannelli e badge categoria)
 
 ## Documentazione completa
+- Documento progetto (obiettivo, requisiti, flussi): [docs/PRODUCT_SPEC.md](docs/PRODUCT_SPEC.md)
 - Architettura: [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md)
 - Sicurezza: [docs/SECURITY.md](docs/SECURITY.md)
 - Stato implementazione: [docs/IMPLEMENTATION_STATUS.md](docs/IMPLEMENTATION_STATUS.md)
