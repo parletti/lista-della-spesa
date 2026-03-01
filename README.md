@@ -5,6 +5,7 @@ App web (Next.js + Supabase) per lista spesa condivisa famigliare con:
 - onboarding nuovi utenti via inviti monouso
 - impostazione password obbligatoria dopo accettazione invito
 - reset password via email
+- segnalazione realtime "in spesa" (start/stop manuale con auto-scadenza 60 minuti)
 - sincronizzazione realtime
 - autocomplete prodotti/categorie
 - raggruppamento prodotti per categoria
@@ -73,6 +74,7 @@ Esegui in ordine i file in `supabase/migrations/`:
 19. `20260228114000_step7_catalog_latticini_add_items.sql`
 20. `20260228162000_step7_catalog_condimenti_add_olive.sql`
 21. `20260301100500_step7_catalog_carne_add_fegato_vitello.sql`
+22. `20260301103000_step5_shopping_presence_sessions.sql`
 
 ## Comandi utili
 ```bash
@@ -105,7 +107,8 @@ curl "http://127.0.0.1:3000/api/autocomplete?q=lat"
 4. Nuovo utente apre link invito, effettua login via magic link e accetta invito.
 5. Dopo accettazione invito, imposta password obbligatoriamente su `/login/reset`.
 6. Membri aggiungono/spuntano prodotti in realtime.
-7. Da menu `...`, i membri possono assegnare/modificare categoria e rinominare un item (persistente su DB item).
+7. Un membro può attivare `Sto facendo la spesa`; tutti vedono il banner realtime in dashboard.
+8. Da menu `...`, i membri possono assegnare/modificare categoria e rinominare un item (persistente su DB item).
 
 ## Sicurezza (attuale)
 - Login principale con email/password.

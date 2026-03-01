@@ -1,6 +1,6 @@
 # Product Spec - Lista della Spesa
 
-Ultimo aggiornamento: 28 febbraio 2026
+Ultimo aggiornamento: 1 marzo 2026
 
 ## 1) Scopo del progetto
 Applicazione web/PWA per gestire una lista della spesa condivisa tra membri della stessa famiglia, con aggiornamento realtime, uso semplice da mobile/desktop e gestione prodotti per categoria.
@@ -23,6 +23,7 @@ Obiettivo pratico:
 - Impostazione password obbligatoria dopo accettazione invito
 - Reset password via email
 - Lista spesa condivisa in realtime
+- Presenza realtime `in spesa` condivisa in famiglia (start/stop manuale)
 - Due stati item: `Da comprare` / `Comprati`
 - Raggruppamento per categoria in entrambe le sezioni
 - Autocomplete prodotti/categorie da catalogo
@@ -63,6 +64,14 @@ Dal pulsante `...`:
 - rinomina condivisa (persistente su DB item)
 - eliminazione item
 
+### 4.5 Segnalazione "in spesa"
+1. Utente in dashboard clicca `Sto facendo la spesa`
+2. Tutti i familiari vedono un banner `In spesa ora: ...`
+3. Più utenti possono risultare attivi contemporaneamente
+4. Utente può chiudere con `Termina spesa`
+5. La sessione viene chiusa automaticamente in logout
+6. Sessioni oltre 60 minuti non vengono più mostrate come attive
+
 ## 5) Requisiti funzionali
 - Isolamento dati per famiglia (multi-tenant)
 - Nessun accesso cross-family
@@ -70,6 +79,7 @@ Dal pulsante `...`:
 - Ordinamento e leggibilita lista (categoria + nome)
 - Suggerimenti coerenti da catalogo
 - Supporto uso da browser desktop e mobile (iPhone incluso via browser/PWA)
+- Segnalazione presenza realtime a livello famiglia durante la spesa
 
 ## 6) Requisiti non funzionali
 - Sicurezza credenziali e sessioni
@@ -97,6 +107,7 @@ Dal pulsante `...`:
 ## 9) Modello dati (alto livello)
 - `families`, `profiles`, `family_members`
 - `shopping_items`
+- `shopping_presence_sessions`
 - `invites`
 - `categories`, `products_catalog`, `product_aliases`
 - `audit_logs`
@@ -105,6 +116,7 @@ Dal pulsante `...`:
 Stato corrente:
 - core applicativo completato e operativo in produzione
 - catalogo alimenti esteso su categorie principali
+- presenza `in spesa` attiva con banner realtime e timeout logico 60 minuti
 
 Gap / prossimi step:
 - Step 9: rifinitura offline/PWA (riattivazione SW con strategia cache stabile)
@@ -122,6 +134,7 @@ Gap / prossimi step:
    - login
    - add item
    - toggle comprato/compra
+   - attivazione/disattivazione stato `in spesa`
    - realtime su due sessioni
 
 ## 12) Mappa documentazione collegata

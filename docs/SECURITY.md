@@ -34,6 +34,7 @@ Policy implementate per:
 - `profiles`: accesso al solo profilo proprio
 - `family_members`: select limitato alla famiglia dell'utente
 - `shopping_items`: select/insert/update solo nella propria famiglia
+- `shopping_presence_sessions`: select/insert/update confinati alla propria famiglia e al proprio profilo
 - `invites`: select membri famiglia, insert/update solo admin famiglia
 - `categories/products_catalog/product_aliases`: select authenticated
 - `audit_logs`: select solo membri della stessa famiglia
@@ -75,6 +76,8 @@ Eventi tracciati (principali):
 - `ITEM_CATEGORY_SET`
 - `ITEM_RENAME`
 - `ITEM_DELETE`
+- `SHOPPING_PRESENCE_START`
+- `SHOPPING_PRESENCE_STOP`
 
 Tabella: `audit_logs` con metadata JSON, timestamp e contesto famiglia/attore.
 

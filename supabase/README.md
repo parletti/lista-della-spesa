@@ -42,6 +42,22 @@ File migration:
 2. RLS è attivo su `shopping_items`.
 3. Un membro famiglia può inserire item nella propria famiglia.
 
+## Step 5 - Presenza realtime "in spesa"
+
+File migration:
+- `supabase/migrations/20260301103000_step5_shopping_presence_sessions.sql`
+
+### Come applicarla
+1. Apri Supabase Dashboard.
+2. Vai su `SQL Editor`.
+3. Esegui il contenuto della migration.
+
+### Verifica rapida
+1. La tabella `shopping_presence_sessions` esiste.
+2. RLS è attivo su `shopping_presence_sessions`.
+3. Un membro famiglia vede solo sessioni presenza della propria famiglia.
+4. Un membro può inserire/chiudere solo le proprie sessioni presenza.
+
 ## Step 6 - Inviti sicuri (24h monouso)
 
 File migration:

@@ -57,6 +57,8 @@ type UserContext = {
   familyRole: "ADMIN" | "MEMBER" | null;
 };
 
+type PresenceEndReason = "MANUAL" | "SIGNOUT";
+
 async function getUserContext(): Promise<UserContext | null> {
   const supabase = await getSupabaseServerClient();
   const {
@@ -99,6 +101,39 @@ function enforceUserRateLimit(
   windowMs: number,
 ) {
   return consumeRateLimit(`action:${action}:${context.authUserId}`, limit, windowMs);
+}
+
+async function endActivePresenceSession(context: UserContext, reason: PresenceEndReason) {
+  if (!context.familyId) {
+    return null;
+  }
+
+  const admin = getSupabaseAdminClient();
+  const activeSession = await admin
+    .from("shopping_presence_sessions")
+    .select("id")
+    .eq("family_id", context.familyId)
+    .eq("profile_id", context.profileId)
+    .is("ended_at", null)
+    .order("started_at", { ascending: false })
+    .limit(1)
+    .maybeSingle<{ id: string }>();
+
+  if (activeSession.error || !activeSession.data) {
+    return null;
+  }
+
+  await admin
+    .from("shopping_presence_sessions")
+    .update({
+      ended_at: new Date().toISOString(),
+      ended_reason: reason,
+    })
+    .eq("id", activeSession.data.id)
+    .eq("family_id", context.familyId)
+    .eq("profile_id", context.profileId);
+
+  return activeSession.data.id;
 }
 
 export async function createFamilyAction(
@@ -160,11 +195,100 @@ export async function createFamilyAction(
 }
 
 export async function signOutAction() {
+  const context = await getUserContext();
+  if (context?.familyId) {
+    try {
+      const stoppedSessionId = await endActivePresenceSession(context, "SIGNOUT");
+      if (stoppedSessionId) {
+        await writeAuditLog({
+          familyId: context.familyId,
+          actorProfileId: context.profileId,
+          eventType: "SHOPPING_PRESENCE_STOP",
+          entityType: "shopping_presence_session",
+          entityId: stoppedSessionId,
+          metadata: { reason: "SIGNOUT" },
+        });
+      }
+    } catch {
+      // No-op: logout should not fail if presence close fails.
+    }
+  }
+
   const supabase = await getSupabaseServerClient();
   await supabase.auth.signOut();
   const cookieStore = await cookies();
   cookieStore.delete(SESSION_STARTED_AT_COOKIE);
   redirect("/login");
+}
+
+export async function startShoppingPresenceAction() {
+  const context = await getUserContext();
+  if (!context || !context.familyId) {
+    return;
+  }
+
+  const startLimit = enforceUserRateLimit(context, "start-presence", 20, 60 * 60 * 1000);
+  if (!startLimit.ok) {
+    return;
+  }
+
+  const admin = getSupabaseAdminClient();
+  const nowIso = new Date().toISOString();
+  await admin
+    .from("shopping_presence_sessions")
+    .update({ ended_at: nowIso, ended_reason: "MANUAL" })
+    .eq("family_id", context.familyId)
+    .eq("profile_id", context.profileId)
+    .is("ended_at", null);
+
+  const created = await admin
+    .from("shopping_presence_sessions")
+    .insert({
+      family_id: context.familyId,
+      profile_id: context.profileId,
+      started_at: nowIso,
+    })
+    .select("id")
+    .single<{ id: string }>();
+
+  if (!created.error && created.data) {
+    await writeAuditLog({
+      familyId: context.familyId,
+      actorProfileId: context.profileId,
+      eventType: "SHOPPING_PRESENCE_START",
+      entityType: "shopping_presence_session",
+      entityId: created.data.id,
+      metadata: {},
+    });
+  }
+
+  revalidatePath("/app");
+}
+
+export async function stopShoppingPresenceAction() {
+  const context = await getUserContext();
+  if (!context || !context.familyId) {
+    return;
+  }
+
+  const stopLimit = enforceUserRateLimit(context, "stop-presence", 40, 60 * 60 * 1000);
+  if (!stopLimit.ok) {
+    return;
+  }
+
+  const stoppedSessionId = await endActivePresenceSession(context, "MANUAL");
+  if (stoppedSessionId) {
+    await writeAuditLog({
+      familyId: context.familyId,
+      actorProfileId: context.profileId,
+      eventType: "SHOPPING_PRESENCE_STOP",
+      entityType: "shopping_presence_session",
+      entityId: stoppedSessionId,
+      metadata: { reason: "MANUAL" },
+    });
+  }
+
+  revalidatePath("/app");
 }
 
 function parseItemText(raw: FormDataEntryValue | null) {

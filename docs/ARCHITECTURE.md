@@ -2,6 +2,7 @@
 
 ## Obiettivo
 Applicazione web/PWA per gestione lista spesa condivisa in famiglia, con sincronizzazione realtime, login email/password e onboarding nuovi utenti tramite inviti monouso.
+Include inoltre una presenza realtime `in spesa` per segnalare ai familiari quando qualcuno e' al supermercato.
 
 ## Stack
 - Frontend: Next.js (App Router) + TypeScript
@@ -62,11 +63,20 @@ Applicazione web/PWA per gestione lista spesa condivisa in famiglia, con sincron
 6. Toggle stato `Comprato/Compra` ottimistico lato client per feedback immediato.
 7. Update realtime tramite subscription Supabase.
 
+### 4) Presenza "in spesa"
+1. Utente attiva `Sto facendo la spesa` dalla dashboard.
+2. Server Action crea sessione in `shopping_presence_sessions`.
+3. Tutti i membri vedono banner realtime con i nomi attivi.
+4. Utente puo' terminare manualmente con `Termina spesa`.
+5. Su logout, eventuale sessione attiva viene chiusa automaticamente.
+6. Sessioni senza `ended_at` oltre 60 minuti non sono considerate attive in UI.
+
 ## Data model (attuale)
 - `families`
 - `profiles`
 - `family_members`
 - `shopping_items`
+- `shopping_presence_sessions`
 - `invites`
 - `categories`
 - `products_catalog`
@@ -74,7 +84,9 @@ Applicazione web/PWA per gestione lista spesa condivisa in famiglia, con sincron
 
 ## Realtime
 - Listener client su `shopping_items` filtrato per `family_id`.
+- Listener client su `shopping_presence_sessions` filtrato per `family_id`.
 - Ogni evento DB triggera `router.refresh()`.
+- Se ci sono sessioni presenza attive, refresh periodico ogni 60s per applicare timeout logico senza job server.
 
 ## UX menu azioni item
 - Menu renderizzato via portal su `document.body` per evitare problemi di stacking/z-index.

@@ -38,6 +38,9 @@
 ### Step 5 - Realtime multiutente
 - Subscription su `shopping_items`
 - Refresh automatico UI
+- Presenza realtime `in spesa` con tabella `shopping_presence_sessions`
+- Banner condiviso con nomi membri attivi
+- Auto-scadenza logica sessione presenza dopo 60 minuti
 
 ### Step 6 - Inviti sicuri 24h
 - Tabella `invites`
@@ -134,6 +137,11 @@
     - aggiunta funzione `Rinomina` su menu `...` con update realtime condiviso
 19. Deploy hardening:
     - `/app` forzata come route dinamica (`force-dynamic`) per evitare errori di prerender in build Vercel quando mancano env pubbliche durante static analysis.
+20. Presenza famiglia "in spesa":
+    - pulsante `Sto facendo la spesa` / `Termina spesa`
+    - stato condiviso realtime con supporto multi-attivo
+    - chiusura presenza automatica su logout
+    - timeout logico 60 minuti lato dashboard
 
 ## Test minimi regressione (attuali)
 1. Login email/password

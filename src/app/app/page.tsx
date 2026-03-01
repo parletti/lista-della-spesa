@@ -3,6 +3,8 @@ import { getSupabaseAdminClient } from "@/lib/supabase/admin";
 import { getSupabaseServerClient } from "@/lib/supabase/server";
 import { CreateFamilyForm } from "@/app/app/create-family-form";
 import {
+  startShoppingPresenceAction,
+  stopShoppingPresenceAction,
   signOutAction,
 } from "@/app/app/actions";
 import { AddItemForm } from "@/app/app/add-item-form";
@@ -41,6 +43,14 @@ type CategoryRow = {
   label: string;
 };
 
+type PresenceSessionRow = {
+  id: string;
+  profile_id: string;
+  started_at: string;
+  display_name: string;
+  minutes_active: number;
+};
+
 type GroupedItems = {
   category: string;
   items: ShoppingItemRow[];
@@ -68,6 +78,7 @@ export default async function AppPage() {
   let membership: MembershipRow | null = null;
   let items: ShoppingItemRow[] = [];
   let categories: CategoryRow[] = [];
+  let activePresenceSessions: PresenceSessionRow[] = [];
   if (profile) {
     const membershipQuery = await admin
       .from("family_members")
@@ -94,6 +105,13 @@ export default async function AppPage() {
         .order("sort_order", { ascending: true });
       if (!categoriesQuery.error) {
         categories = (categoriesQuery.data ?? []) as CategoryRow[];
+      }
+
+      const presenceQuery = await admin
+        .rpc("get_active_shopping_presence_sessions", { p_family_id: membership.family_id });
+
+      if (!presenceQuery.error) {
+        activePresenceSessions = (presenceQuery.data ?? []) as PresenceSessionRow[];
       }
     }
   }
@@ -152,6 +170,12 @@ export default async function AppPage() {
 
   const pendingByCategory = groupByCategory(pendingItems);
   const boughtByCategory = groupByCategory(boughtItems);
+  const displayNameForPresence = (session: PresenceSessionRow) =>
+    session.display_name || "Membro famiglia";
+  const currentUserPresenceActive = Boolean(
+    profile?.id &&
+      activePresenceSessions.some((session) => session.profile_id === profile.id),
+  );
 
   return (
     <main className="mx-auto flex min-h-screen w-full max-w-4xl flex-col px-3 py-3 sm:px-4 sm:py-5">
@@ -180,7 +204,10 @@ export default async function AppPage() {
       ) : (
         <section className="ios-card ios-fade-up ios-fade-up-delay-1 p-3 sm:p-4">
           <SessionLifetimeGuard />
-          <ShoppingRealtimeListener familyId={membership.family_id} />
+          <ShoppingRealtimeListener
+            familyId={membership.family_id}
+            hasActivePresence={activePresenceSessions.length > 0}
+          />
           <div className="flex items-start justify-between gap-3">
             <h2 className="text-base font-semibold leading-tight">
               Famiglia: {membership.families?.name ?? membership.family_id}
@@ -192,6 +219,33 @@ export default async function AppPage() {
           <p className="mt-1 text-xs text-zinc-500">
             Lista condivisa in tempo reale
           </p>
+
+          <div className="mt-2 flex flex-wrap items-center gap-2">
+            <form action={currentUserPresenceActive ? stopShoppingPresenceAction : startShoppingPresenceAction}>
+              <button className={currentUserPresenceActive ? "ios-btn-secondary" : "ios-btn-primary"}>
+                {currentUserPresenceActive ? "Termina spesa" : "Sto facendo la spesa"}
+              </button>
+            </form>
+          </div>
+
+          {activePresenceSessions.length > 0 ? (
+            <div className="ios-presence-banner mt-2 rounded-xl px-3 py-2">
+              <p className="text-xs font-semibold">
+                In spesa ora:{" "}
+                {activePresenceSessions
+                  .map((session) => displayNameForPresence(session))
+                  .join(", ")}
+              </p>
+              <p className="mt-0.5 text-[11px] text-zinc-700">
+                {activePresenceSessions
+                  .map(
+                    (session) =>
+                      `${displayNameForPresence(session)} attivo da ${session.minutes_active} min`,
+                  )
+                  .join(" • ")}
+              </p>
+            </div>
+          ) : null}
 
           <div className="mt-3 rounded-2xl bg-white/80 p-2.5 ring-1 ring-black/5">
             <h3 className="ios-section-title">Aggiungi prodotto</h3>
