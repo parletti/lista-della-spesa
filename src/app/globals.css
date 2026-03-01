@@ -96,9 +96,9 @@ body {
 }
 
 .ios-presence-banner {
-  background: linear-gradient(180deg, rgba(187, 247, 208, 0.95), rgba(134, 239, 172, 0.9));
-  border: 1px solid rgba(22, 163, 74, 0.55);
-  color: #14532d;
+  background: linear-gradient(180deg, rgba(254, 202, 202, 0.98), rgba(252, 165, 165, 0.94));
+  border: 1px solid rgba(220, 38, 38, 0.62);
+  color: #7f1d1d;
 }
 
 .ios-fade-up {
