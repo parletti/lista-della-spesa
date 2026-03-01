@@ -78,6 +78,7 @@ File migration:
 - `supabase/migrations/20260227150000_step7_catalog_condimenti.sql`
 - `supabase/migrations/20260228114000_step7_catalog_latticini_add_items.sql`
 - `supabase/migrations/20260228162000_step7_catalog_condimenti_add_olive.sql`
+- `supabase/migrations/20260301100500_step7_catalog_carne_add_fegato_vitello.sql`
 
 ### Come applicarla
 1. Apri Supabase Dashboard.
@@ -103,9 +104,10 @@ File migration:
 16. Nuova categoria `Condimenti` con 36 prodotti dedicati.
 17. Eventuali prodotti duplicati già presenti vengono riclassificati in `Condimenti` tramite upsert.
 18. Aggiunte varianti olive (`olive verdi intere`, `olive verdi denocciolate`, `olive taggiasche`) in `Condimenti`.
-19. Seed latticini integrato con nuove voci (mozzarella pizza, caprini specifici, formaggi a fette, grattugiati/cubetti).
-20. Endpoint `GET /api/autocomplete?q=lat` restituisce suggerimenti pertinenti.
-21. Aggiungendo un prodotto noto (es. `latte`) viene valorizzata la categoria su `shopping_items`.
+19. Aggiunta voce `Fegato di vitello` nella categoria `Carne`.
+20. Seed latticini integrato con nuove voci (mozzarella pizza, caprini specifici, formaggi a fette, grattugiati/cubetti).
+21. Endpoint `GET /api/autocomplete?q=lat` restituisce suggerimenti pertinenti.
+22. Aggiungendo un prodotto noto (es. `latte`) viene valorizzata la categoria su `shopping_items`.
 
 ## Step 10 - Security hardening + audit
 
