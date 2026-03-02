@@ -117,7 +117,7 @@ Stato corrente:
 - core applicativo completato e operativo in produzione
 - catalogo alimenti esteso su categorie principali
 - presenza `in spesa` attiva con banner realtime e timeout logico 60 minuti
-- catalogo aggiornato anche con varianti cocco/farine e kefir
+- catalogo aggiornato anche con varianti cocco/farine (incluse farine base) e kefir
 
 Gap / prossimi step:
 - Step 9: rifinitura offline/PWA (riattivazione SW con strategia cache stabile)

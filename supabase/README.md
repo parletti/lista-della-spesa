@@ -96,6 +96,7 @@ File migration:
 - `supabase/migrations/20260228162000_step7_catalog_condimenti_add_olive.sql`
 - `supabase/migrations/20260301100500_step7_catalog_carne_add_fegato_vitello.sql`
 - `supabase/migrations/20260302100000_step7_catalog_add_cocco_kefir_flours.sql`
+- `supabase/migrations/20260302102000_step7_catalog_add_flours_base.sql`
 
 ### Come applicarla
 1. Apri Supabase Dashboard.
@@ -123,9 +124,10 @@ File migration:
 18. Aggiunte varianti olive (`olive verdi intere`, `olive verdi denocciolate`, `olive taggiasche`) in `Condimenti`.
 19. Aggiunta voce `Fegato di vitello` nella categoria `Carne`.
 20. Aggiunte nuove voci: `olio di cocco` (Condimenti), `farina di cocco` e `farina di mandorle` (Dispensa), `kefir` e `kefir di capra` (Latticini).
-21. Seed latticini integrato con nuove voci (mozzarella pizza, caprini specifici, formaggi a fette, grattugiati/cubetti).
-22. Endpoint `GET /api/autocomplete?q=lat` restituisce suggerimenti pertinenti.
-23. Aggiungendo un prodotto noto (es. `latte`) viene valorizzata la categoria su `shopping_items`.
+21. Aggiunte nuove voci base farine in `Dispensa`: `farina`, `farina di farro`, `farina di riso`.
+22. Seed latticini integrato con nuove voci (mozzarella pizza, caprini specifici, formaggi a fette, grattugiati/cubetti).
+23. Endpoint `GET /api/autocomplete?q=lat` restituisce suggerimenti pertinenti.
+24. Aggiungendo un prodotto noto (es. `latte`) viene valorizzata la categoria su `shopping_items`.
 
 ## Step 10 - Security hardening + audit
 
