@@ -69,6 +69,7 @@
 - Seed latticini arricchito con nuove varianti (`mozzarella pizza`, caprini specifici, formaggi a fette, grattugiati/cubetti)
 - Catalogo aggiornato con: `olio di cocco` (Condimenti), `farina di cocco`/`farina di mandorle` (Dispensa), `kefir`/`kefir di capra` (Latticini)
 - Catalogo aggiornato con farine base in `Dispensa`: `farina`, `farina di farro`, `farina di riso`
+- Catalogo aggiornato con prodotti casa in `Dispensa`: `carta da forno`, `pellicola trasparente`, `pellicola alluminio`, `spugne lavello`, `pastiglie lavastoviglie`, `sale lavastoviglie`, `ammorbidente`
 - Endpoint autocomplete fuzzy
 - Auto-assegnazione categoria
 - UI raggruppata per categoria

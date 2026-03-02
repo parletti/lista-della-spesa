@@ -77,6 +77,7 @@ Esegui in ordine i file in `supabase/migrations/`:
 22. `20260301103000_step5_shopping_presence_sessions.sql`
 23. `20260302100000_step7_catalog_add_cocco_kefir_flours.sql`
 24. `20260302102000_step7_catalog_add_flours_base.sql`
+25. `20260302104000_step7_catalog_add_home_supplies.sql`
 
 ## Comandi utili
 ```bash
