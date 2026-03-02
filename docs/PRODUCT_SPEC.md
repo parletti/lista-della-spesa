@@ -1,6 +1,6 @@
 # Product Spec - Lista della Spesa
 
-Ultimo aggiornamento: 1 marzo 2026
+Ultimo aggiornamento: 2 marzo 2026
 
 ## 1) Scopo del progetto
 Applicazione web/PWA per gestire una lista della spesa condivisa tra membri della stessa famiglia, con aggiornamento realtime, uso semplice da mobile/desktop e gestione prodotti per categoria.
@@ -117,6 +117,7 @@ Stato corrente:
 - core applicativo completato e operativo in produzione
 - catalogo alimenti esteso su categorie principali
 - presenza `in spesa` attiva con banner realtime e timeout logico 60 minuti
+- catalogo aggiornato anche con varianti cocco/farine e kefir
 
 Gap / prossimi step:
 - Step 9: rifinitura offline/PWA (riattivazione SW con strategia cache stabile)

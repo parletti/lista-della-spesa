@@ -67,6 +67,7 @@
 - Aggiunta voce `Salsa di soia` in categoria `Dispensa`
 - Nuova categoria `Condimenti` con 36 prodotti validati (oli, aceti, sale, spezie, olive)
 - Seed latticini arricchito con nuove varianti (`mozzarella pizza`, caprini specifici, formaggi a fette, grattugiati/cubetti)
+- Catalogo aggiornato con: `olio di cocco` (Condimenti), `farina di cocco`/`farina di mandorle` (Dispensa), `kefir`/`kefir di capra` (Latticini)
 - Endpoint autocomplete fuzzy
 - Auto-assegnazione categoria
 - UI raggruppata per categoria
