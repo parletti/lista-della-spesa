@@ -13,6 +13,7 @@ import { CreateInviteForm } from "@/app/app/create-invite-form";
 import { ItemActionsMenu } from "@/app/app/item-actions-menu";
 import { OptimisticToggleButton } from "@/app/app/optimistic-toggle-button";
 import { SessionLifetimeGuard } from "@/app/app/session-lifetime-guard";
+import { ShareShoppingModal } from "@/app/app/share-shopping-modal";
 
 export const dynamic = "force-dynamic";
 
@@ -170,6 +171,10 @@ export default async function AppPage() {
 
   const pendingByCategory = groupByCategory(pendingItems);
   const boughtByCategory = groupByCategory(boughtItems);
+  const pendingGroupsForShare = pendingByCategory.map((group) => ({
+    category: group.category,
+    items: group.items.map((item) => ({ id: item.id, text: item.text })),
+  }));
   const displayNameForPresence = (session: PresenceSessionRow) =>
     session.display_name || "Membro famiglia";
   const currentUserPresenceActive = Boolean(
@@ -250,6 +255,9 @@ export default async function AppPage() {
           <div className="mt-3 rounded-2xl bg-white/80 p-2.5 ring-1 ring-black/5">
             <h3 className="ios-section-title">Aggiungi prodotto</h3>
             <AddItemForm />
+            <div className="mt-2">
+              <ShareShoppingModal groups={pendingGroupsForShare} />
+            </div>
           </div>
 
           <div className="mt-4 grid gap-3 md:grid-cols-2">

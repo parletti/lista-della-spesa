@@ -41,6 +41,7 @@
 - Presenza realtime `in spesa` con tabella `shopping_presence_sessions`
 - Banner condiviso con nomi membri attivi
 - Auto-scadenza logica sessione presenza dopo 60 minuti
+- Condivisione esterna selettiva della sola lista `Da comprare` con modal checkbox
 
 ### Step 6 - Inviti sicuri 24h
 - Tabella `invites`
@@ -145,6 +146,11 @@
     - stato condiviso realtime con supporto multi-attivo
     - chiusura presenza automatica su logout
     - timeout logico 60 minuti lato dashboard
+21. Share lista spesa:
+    - modal dedicata con checkbox prodotto
+    - default selezione completa, supporto `Seleziona tutti` / `Deseleziona tutti`
+    - formato testuale raggruppato per categoria con rientro prodotti
+    - `navigator.share` su device supportati con fallback clipboard
 
 ## Test minimi regressione (attuali)
 1. Login email/password
@@ -155,3 +161,4 @@
 6. Assenza duplicati cross-gruppo
 7. Assegnazione categoria da menu `...` e persistenza dopo toggle stato
 8. Sync realtime tra due sessioni
+9. Share selettivo `Da comprare` (condividi/copia + fallback clipboard)

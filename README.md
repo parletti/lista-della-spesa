@@ -7,6 +7,7 @@ App web (Next.js + Supabase) per lista spesa condivisa famigliare con:
 - reset password via email
 - segnalazione realtime "in spesa" (start/stop manuale con auto-scadenza 60 minuti)
 - sincronizzazione realtime
+- condivisione selettiva lista `Da comprare` (mobile/laptop) con export testuale per categoria
 - autocomplete prodotti/categorie
 - raggruppamento prodotti per categoria
 - menu azioni item (`...`) con assegnazione categoria persistente
@@ -111,7 +112,8 @@ curl "http://127.0.0.1:3000/api/autocomplete?q=lat"
 5. Dopo accettazione invito, imposta password obbligatoriamente su `/login/reset`.
 6. Membri aggiungono/spuntano prodotti in realtime.
 7. Un membro può attivare `Sto facendo la spesa`; tutti vedono il banner realtime in dashboard.
-8. Da menu `...`, i membri possono assegnare/modificare categoria e rinominare un item (persistente su DB item).
+8. Un membro può condividere all'esterno solo la lista `Da comprare`, selezionando i prodotti da includere.
+9. Da menu `...`, i membri possono assegnare/modificare categoria e rinominare un item (persistente su DB item).
 
 ## Sicurezza (attuale)
 - Login principale con email/password.

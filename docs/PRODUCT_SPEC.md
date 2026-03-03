@@ -1,6 +1,6 @@
 # Product Spec - Lista della Spesa
 
-Ultimo aggiornamento: 2 marzo 2026
+Ultimo aggiornamento: 3 marzo 2026
 
 ## 1) Scopo del progetto
 Applicazione web/PWA per gestire una lista della spesa condivisa tra membri della stessa famiglia, con aggiornamento realtime, uso semplice da mobile/desktop e gestione prodotti per categoria.
@@ -24,6 +24,7 @@ Obiettivo pratico:
 - Reset password via email
 - Lista spesa condivisa in realtime
 - Presenza realtime `in spesa` condivisa in famiglia (start/stop manuale)
+- Condivisione selettiva esterna della sola lista `Da comprare`
 - Due stati item: `Da comprare` / `Comprati`
 - Raggruppamento per categoria in entrambe le sezioni
 - Autocomplete prodotti/categorie da catalogo
@@ -72,6 +73,14 @@ Dal pulsante `...`:
 5. La sessione viene chiusa automaticamente in logout
 6. Sessioni oltre 60 minuti non vengono più mostrate come attive
 
+### 4.6 Condivisione esterna lista da comprare
+1. Utente apre `Condividi lista` dalla dashboard
+2. Si apre modal con soli prodotti `Da comprare`
+3. Tutti i prodotti sono preselezionati
+4. Utente deseleziona quelli da escludere
+5. Condivide testo via share sheet (mobile) o fallback copia (desktop/non supportato)
+6. Testo inviato è raggruppato per categoria con prodotti rientrati visivamente
+
 ## 5) Requisiti funzionali
 - Isolamento dati per famiglia (multi-tenant)
 - Nessun accesso cross-family
@@ -80,6 +89,7 @@ Dal pulsante `...`:
 - Suggerimenti coerenti da catalogo
 - Supporto uso da browser desktop e mobile (iPhone incluso via browser/PWA)
 - Segnalazione presenza realtime a livello famiglia durante la spesa
+- Condivisione esterna rapida senza creare account destinatario
 
 ## 6) Requisiti non funzionali
 - Sicurezza credenziali e sessioni
@@ -118,6 +128,7 @@ Stato corrente:
 - catalogo alimenti esteso su categorie principali
 - presenza `in spesa` attiva con banner realtime e timeout logico 60 minuti
 - catalogo aggiornato anche con varianti cocco/farine (incluse farine base), kefir e prodotti casa per dispensa
+- condivisione selettiva `Da comprare` disponibile su laptop e mobile
 
 Gap / prossimi step:
 - Step 9: rifinitura offline/PWA (riattivazione SW con strategia cache stabile)
@@ -136,6 +147,7 @@ Gap / prossimi step:
    - add item
    - toggle comprato/compra
    - attivazione/disattivazione stato `in spesa`
+   - condivisione selettiva `Da comprare` (share/copia)
    - realtime su due sessioni
 
 ## 12) Mappa documentazione collegata

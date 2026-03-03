@@ -211,3 +211,37 @@ body {
 .ios-btn-danger:hover {
   transform: translateY(-1px);
 }
+
+.ios-share-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 2147483646;
+  background: rgba(15, 23, 42, 0.24);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 14px;
+}
+
+.ios-share-modal {
+  width: min(640px, 100%);
+  max-height: 88vh;
+  overflow: auto;
+  border-radius: 16px;
+  border: 1px solid rgba(148, 163, 184, 0.38);
+  background: linear-gradient(180deg, #ffffff, #f8fafc);
+  box-shadow: 0 24px 60px rgba(15, 23, 42, 0.22);
+  padding: 12px;
+}
+
+.ios-share-item-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  color: #1f2937;
+}
+
+.ios-share-item-label {
+  padding-left: 8px;
+}
