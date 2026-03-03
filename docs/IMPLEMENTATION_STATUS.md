@@ -79,7 +79,10 @@
   - Assegnazione categoria immediata e persistente su item
   - Rinomina condivisa e persistente del nome item
   - Eliminazione item
+  - Visualizzazione valori nutrizionali generici per 100g/100ml (fallback se assenti)
   - Apertura menu robusta (portal, chiusura click-outside/Esc, posizione dinamica)
+- Nuova tabella `product_nutrition_facts` con policy RLS di sola lettura client
+- Seed iniziale nutrizione (onda 1) su circa 50 prodotti top/base del catalogo
 
 ## In corso / da fare
 
@@ -151,6 +154,11 @@
     - default selezione completa, supporto `Seleziona tutti` / `Deseleziona tutti`
     - formato testuale raggruppato per categoria con rientro prodotti
     - `navigator.share` su device supportati con fallback clipboard
+22. Nutrizione generica:
+    - azione `Valori nutrizionali` da menu `...` item
+    - visualizzazione tabellare campi essenziali con unità per 100g/100ml
+    - fallback esplicito per item senza fact
+    - roadmap ondate dati: `Latticini` -> `Frutta` -> `Verdura`
 
 ## Test minimi regressione (attuali)
 1. Login email/password

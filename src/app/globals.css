@@ -245,3 +245,59 @@ body {
 .ios-share-item-label {
   padding-left: 8px;
 }
+
+.ios-nutrition-card {
+  border: 1px solid rgba(148, 163, 184, 0.34);
+  border-radius: 12px;
+  background: linear-gradient(180deg, #ffffff, #f8fafc);
+  padding: 8px;
+}
+
+.ios-nutrition-title {
+  font-size: 12px;
+  line-height: 1.35;
+  font-weight: 700;
+  color: #111827;
+}
+
+.ios-nutrition-meta {
+  margin-top: 2px;
+  font-size: 11px;
+  color: #6b7280;
+}
+
+.ios-nutrition-table {
+  margin-top: 6px;
+  border-top: 1px solid rgba(148, 163, 184, 0.3);
+}
+
+.ios-nutrition-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  font-size: 11px;
+  border-bottom: 1px solid rgba(148, 163, 184, 0.2);
+  padding: 3px 0;
+}
+
+.ios-nutrition-row dt {
+  color: #374151;
+}
+
+.ios-nutrition-row dd {
+  color: #111827;
+  font-weight: 600;
+}
+
+.ios-nutrition-source {
+  margin-top: 6px;
+  font-size: 10px;
+  color: #6b7280;
+}
+
+.ios-nutrition-fallback {
+  margin-top: 6px;
+  font-size: 11px;
+  color: #6b7280;
+}

@@ -37,6 +37,7 @@ Policy implementate per:
 - `shopping_presence_sessions`: select/insert/update confinati alla propria famiglia e al proprio profilo
 - `invites`: select membri famiglia, insert/update solo admin famiglia
 - `categories/products_catalog/product_aliases`: select authenticated
+- `product_nutrition_facts`: select authenticated (nessuna write client-side)
 - `audit_logs`: select solo membri della stessa famiglia
 
 ## Inviti

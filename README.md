@@ -12,6 +12,7 @@ App web (Next.js + Supabase) per lista spesa condivisa famigliare con:
 - raggruppamento prodotti per categoria
 - menu azioni item (`...`) con assegnazione categoria persistente
 - rinomina condivisa del nome item da menu `...` (persistente su DB)
+- valori nutrizionali generici da menu `...` (fallback se non disponibili)
 - UI iOS-like con palette soft e separazione visiva tra `Da comprare` e `Comprati`
 - PWA installabile con supporto offline base
 
@@ -79,6 +80,8 @@ Esegui in ordine i file in `supabase/migrations/`:
 23. `20260302100000_step7_catalog_add_cocco_kefir_flours.sql`
 24. `20260302102000_step7_catalog_add_flours_base.sql`
 25. `20260302104000_step7_catalog_add_home_supplies.sql`
+26. `20260303120000_step7_product_nutrition_facts.sql`
+27. `20260303121000_step7_product_nutrition_facts_seed_wave1.sql`
 
 ## Comandi utili
 ```bash
@@ -114,6 +117,7 @@ curl "http://127.0.0.1:3000/api/autocomplete?q=lat"
 7. Un membro può attivare `Sto facendo la spesa`; tutti vedono il banner realtime in dashboard.
 8. Un membro può condividere all'esterno solo la lista `Da comprare`, selezionando i prodotti da includere.
 9. Da menu `...`, i membri possono assegnare/modificare categoria e rinominare un item (persistente su DB item).
+10. Da menu `...`, i membri possono aprire una scheda con valori nutrizionali generici per 100g/100ml quando disponibili.
 
 ## Sicurezza (attuale)
 - Login principale con email/password.
@@ -130,6 +134,7 @@ curl "http://127.0.0.1:3000/api/autocomplete?q=lat"
 - Pagina `/auth/confirm` dedicata al completamento sessione.
 - Service Worker temporaneamente disattivato per evitare UI stale da cache durante sviluppo/debug.
 - Toggle `Comprato/Compra` ottimizzato lato UI con comportamento ottimistico (feedback immediato).
+- Valori nutrizionali generici disponibili da menu item (`...`) con fallback `Valori nutrizionali non disponibili`.
 - Autocomplete UI attivato solo da 3 caratteri per ridurre chiamate e migliorare reattività.
 - Suggerimenti autocomplete mostrati in lista estesa, ordinati per categoria e poi per prodotto.
 - Suggerimenti prodotto con leggero rientro sotto la categoria per migliorare la leggibilità.

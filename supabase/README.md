@@ -98,6 +98,8 @@ File migration:
 - `supabase/migrations/20260302100000_step7_catalog_add_cocco_kefir_flours.sql`
 - `supabase/migrations/20260302102000_step7_catalog_add_flours_base.sql`
 - `supabase/migrations/20260302104000_step7_catalog_add_home_supplies.sql`
+- `supabase/migrations/20260303120000_step7_product_nutrition_facts.sql`
+- `supabase/migrations/20260303121000_step7_product_nutrition_facts_seed_wave1.sql`
 
 ### Come applicarla
 1. Apri Supabase Dashboard.
@@ -130,6 +132,11 @@ File migration:
 23. Seed latticini integrato con nuove voci (mozzarella pizza, caprini specifici, formaggi a fette, grattugiati/cubetti).
 24. Endpoint `GET /api/autocomplete?q=lat` restituisce suggerimenti pertinenti.
 25. Aggiungendo un prodotto noto (es. `latte`) viene valorizzata la categoria su `shopping_items`.
+26. Nuova tabella `product_nutrition_facts` creata con RLS (select authenticated, write client disabilitata).
+27. Seed iniziale nutrizione (onda 1) applicato su ~50 prodotti base/top.
+
+### Regola operativa nutrizione
+Per ogni nuova migration che aggiunge prodotti alimentari in catalogo, includere anche i corrispondenti record in `product_nutrition_facts` nello stesso ciclo e2e.
 
 ## Step 10 - Security hardening + audit
 

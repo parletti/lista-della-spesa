@@ -7,6 +7,7 @@ import {
   updateShoppingItemTextAction,
   updateShoppingItemCategoryAction,
 } from "@/app/app/actions";
+import type { NutritionFactRow } from "@/lib/nutrition/types";
 
 type CategoryOption = {
   id: string;
@@ -18,6 +19,8 @@ type Props = {
   currentText: string;
   currentCategoryId: string | null;
   categories: CategoryOption[];
+  productId: string | null;
+  nutritionFact: NutritionFactRow | null;
 };
 
 type MenuPosition = {
@@ -27,11 +30,19 @@ type MenuPosition = {
 
 const MENU_WIDTH = 260;
 
-export function ItemActionsMenu({ itemId, currentText, currentCategoryId, categories }: Props) {
+export function ItemActionsMenu({
+  itemId,
+  currentText,
+  currentCategoryId,
+  categories,
+  productId,
+  nutritionFact,
+}: Props) {
   const triggerRef = useRef<HTMLButtonElement>(null);
   const panelRef = useRef<HTMLDivElement>(null);
   const categoryFormRef = useRef<HTMLFormElement>(null);
   const [isOpen, setIsOpen] = useState(false);
+  const [isNutritionOpen, setIsNutritionOpen] = useState(false);
   const [position, setPosition] = useState<MenuPosition>({ top: 0, left: 0 });
 
   useEffect(() => {
@@ -72,11 +83,13 @@ export function ItemActionsMenu({ itemId, currentText, currentCategoryId, catego
       if (panelRef.current?.contains(target)) return;
       if (triggerRef.current?.contains(target)) return;
       setIsOpen(false);
+      setIsNutritionOpen(false);
     };
 
-    const onKeyDown = (event: KeyboardEvent) => {
+      const onKeyDown = (event: KeyboardEvent) => {
       if (event.key === "Escape") {
         setIsOpen(false);
+        setIsNutritionOpen(false);
       }
     };
 
@@ -102,7 +115,13 @@ export function ItemActionsMenu({ itemId, currentText, currentCategoryId, catego
         aria-expanded={isOpen}
         aria-haspopup="menu"
         onClick={() => {
-          setIsOpen((prev) => !prev);
+          setIsOpen((prev) => {
+            const next = !prev;
+            if (!next) {
+              setIsNutritionOpen(false);
+            }
+            return next;
+          });
         }}
       >
         ...
@@ -135,6 +154,7 @@ export function ItemActionsMenu({ itemId, currentText, currentCategoryId, catego
                   onChange={() => {
                     categoryFormRef.current?.requestSubmit();
                     setIsOpen(false);
+                    setIsNutritionOpen(false);
                   }}
                 >
                   <option value="">Altro / Nessuna</option>
@@ -146,11 +166,76 @@ export function ItemActionsMenu({ itemId, currentText, currentCategoryId, catego
                 </select>
               </form>
               <div className="my-2 border-t border-zinc-200" />
+              <button
+                type="button"
+                className="ios-btn-secondary h-7 w-full text-[11px]"
+                onClick={() => {
+                  setIsNutritionOpen((prev) => !prev);
+                }}
+              >
+                Valori nutrizionali
+              </button>
+              {isNutritionOpen ? (
+                <div className="ios-nutrition-card mt-2">
+                  <h5 className="ios-nutrition-title">{currentText}</h5>
+                  {productId && nutritionFact ? (
+                    <>
+                      <p className="ios-nutrition-meta">
+                        Per {nutritionFact.per_quantity}
+                        {nutritionFact.per_unit}
+                      </p>
+                      <dl className="ios-nutrition-table">
+                        <div className="ios-nutrition-row">
+                          <dt>Energia</dt>
+                          <dd>
+                            {nutritionFact.energy_kcal != null ? `${nutritionFact.energy_kcal} kcal` : "-"}
+                          </dd>
+                        </div>
+                        <div className="ios-nutrition-row">
+                          <dt>Carboidrati</dt>
+                          <dd>
+                            {nutritionFact.carbohydrates_g != null ? `${nutritionFact.carbohydrates_g} g` : "-"}
+                          </dd>
+                        </div>
+                        <div className="ios-nutrition-row">
+                          <dt>Zuccheri</dt>
+                          <dd>{nutritionFact.sugars_g != null ? `${nutritionFact.sugars_g} g` : "-"}</dd>
+                        </div>
+                        <div className="ios-nutrition-row">
+                          <dt>Proteine</dt>
+                          <dd>{nutritionFact.proteins_g != null ? `${nutritionFact.proteins_g} g` : "-"}</dd>
+                        </div>
+                        <div className="ios-nutrition-row">
+                          <dt>Grassi</dt>
+                          <dd>{nutritionFact.fats_g != null ? `${nutritionFact.fats_g} g` : "-"}</dd>
+                        </div>
+                        <div className="ios-nutrition-row">
+                          <dt>Grassi saturi</dt>
+                          <dd>
+                            {nutritionFact.saturated_fats_g != null
+                              ? `${nutritionFact.saturated_fats_g} g`
+                              : "-"}
+                          </dd>
+                        </div>
+                        <div className="ios-nutrition-row">
+                          <dt>Sale</dt>
+                          <dd>{nutritionFact.salt_g != null ? `${nutritionFact.salt_g} g` : "-"}</dd>
+                        </div>
+                      </dl>
+                      <p className="ios-nutrition-source">Fonte: dati generici ({nutritionFact.source})</p>
+                    </>
+                  ) : (
+                    <p className="ios-nutrition-fallback">Valori nutrizionali non disponibili.</p>
+                  )}
+                </div>
+              ) : null}
+              <div className="my-2 border-t border-zinc-200" />
               <form
                 action={updateShoppingItemTextAction}
                 className="flex flex-col gap-2"
                 onSubmit={() => {
                   setIsOpen(false);
+                  setIsNutritionOpen(false);
                 }}
               >
                 <input type="hidden" name="item_id" value={itemId} />

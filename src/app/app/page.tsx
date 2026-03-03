@@ -14,6 +14,7 @@ import { ItemActionsMenu } from "@/app/app/item-actions-menu";
 import { OptimisticToggleButton } from "@/app/app/optimistic-toggle-button";
 import { SessionLifetimeGuard } from "@/app/app/session-lifetime-guard";
 import { ShareShoppingModal } from "@/app/app/share-shopping-modal";
+import type { NutritionFactRow } from "@/lib/nutrition/types";
 
 export const dynamic = "force-dynamic";
 
@@ -80,6 +81,7 @@ export default async function AppPage() {
   let items: ShoppingItemRow[] = [];
   let categories: CategoryRow[] = [];
   let activePresenceSessions: PresenceSessionRow[] = [];
+  let nutritionByProductId: Record<string, NutritionFactRow> = {};
   if (profile) {
     const membershipQuery = await admin
       .from("family_members")
@@ -98,6 +100,26 @@ export default async function AppPage() {
 
       if (!itemsQuery.error) {
         items = (itemsQuery.data ?? []) as ShoppingItemRow[];
+      }
+
+      const productIds = Array.from(
+        new Set(items.map((item) => item.product_id).filter((id): id is string => Boolean(id))),
+      );
+      if (productIds.length > 0) {
+        const nutritionQuery = await admin
+          .from("product_nutrition_facts")
+          .select(
+            "product_id, per_quantity, per_unit, energy_kcal, carbohydrates_g, sugars_g, proteins_g, fats_g, saturated_fats_g, salt_g, source, updated_at",
+          )
+          .in("product_id", productIds);
+
+        if (!nutritionQuery.error) {
+          const rows = (nutritionQuery.data ?? []) as NutritionFactRow[];
+          nutritionByProductId = rows.reduce<Record<string, NutritionFactRow>>((acc, row) => {
+            acc[row.product_id] = row;
+            return acc;
+          }, {});
+        }
       }
 
       const categoriesQuery = await admin
@@ -287,6 +309,8 @@ export default async function AppPage() {
                                 currentText={item.text}
                                 currentCategoryId={item.category_id}
                                 categories={categories}
+                                productId={item.product_id}
+                                nutritionFact={item.product_id ? nutritionByProductId[item.product_id] ?? null : null}
                               />
                             </div>
                           </li>
@@ -324,6 +348,8 @@ export default async function AppPage() {
                                 currentText={item.text}
                                 currentCategoryId={item.category_id}
                                 categories={categories}
+                                productId={item.product_id}
+                                nutritionFact={item.product_id ? nutritionByProductId[item.product_id] ?? null : null}
                               />
                             </div>
                           </li>

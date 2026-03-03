@@ -32,6 +32,7 @@ Obiettivo pratico:
   - assegna categoria
   - rinomina
   - elimina
+  - valori nutrizionali generici (se presenti)
 - Anti-duplicati tra pending/bought
 - UI ottimizzata mobile-first in stile iOS-like
 - PWA con manifest + base offline (service worker attualmente disattivato in runtime)
@@ -64,6 +65,8 @@ Dal pulsante `...`:
 - cambio categoria immediato
 - rinomina condivisa (persistente su DB item)
 - eliminazione item
+- apertura pannello `Valori nutrizionali` (dati generici per 100g/100ml)
+- fallback chiaro: `Valori nutrizionali non disponibili`
 
 ### 4.5 Segnalazione "in spesa"
 1. Utente in dashboard clicca `Sto facendo la spesa`
@@ -129,13 +132,18 @@ Stato corrente:
 - presenza `in spesa` attiva con banner realtime e timeout logico 60 minuti
 - catalogo aggiornato anche con varianti cocco/farine (incluse farine base), kefir e prodotti casa per dispensa
 - condivisione selettiva `Da comprare` disponibile su laptop e mobile
+- valori nutrizionali generici disponibili su una prima ondata di circa 50 prodotti
 
 Gap / prossimi step:
 - Step 9: rifinitura offline/PWA (riattivazione SW con strategia cache stabile)
 - Step 10: rate-limit distribuito (Redis/Upstash) al posto dell'in-memory
 - eventuali evoluzioni UX catalogo (workflow arricchimento guidato prodotti/categorie)
+- completare ondate nutrizione: `Latticini` -> `Frutta` -> `Verdura`
 
-## 11) Runbook rapido (ripartenza tra mesi)
+## 11) Regola operativa catalogo alimentare
+- Ogni nuova migration che aggiunge prodotti alimentari deve includere anche il seed in `product_nutrition_facts` nello stesso ciclo e2e (stessa migration o migration accodata immediata).
+
+## 12) Runbook rapido (ripartenza tra mesi)
 1. Leggere questo file (`docs/PRODUCT_SPEC.md`)
 2. Verificare stato avanzamento in `docs/IMPLEMENTATION_STATUS.md`
 3. Verificare sicurezza in `docs/SECURITY.md`
@@ -150,7 +158,7 @@ Gap / prossimi step:
    - condivisione selettiva `Da comprare` (share/copia)
    - realtime su due sessioni
 
-## 12) Mappa documentazione collegata
+## 13) Mappa documentazione collegata
 - Setup + comandi: [README.md](../README.md)
 - Architettura tecnica: [ARCHITECTURE.md](ARCHITECTURE.md)
 - Sicurezza: [SECURITY.md](SECURITY.md)
