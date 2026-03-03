@@ -5,10 +5,15 @@ type ShareItem = {
 };
 
 export function buildShoppingShareText(items: ShareItem[]) {
-  const nowLabel = new Intl.DateTimeFormat("it-IT", {
-    dateStyle: "long",
-    timeStyle: "short",
-  }).format(new Date());
+  let nowLabel = "";
+  try {
+    nowLabel = new Intl.DateTimeFormat("it-IT", {
+      dateStyle: "long",
+      timeStyle: "short",
+    }).format(new Date());
+  } catch {
+    nowLabel = new Date().toLocaleString("it-IT");
+  }
 
   const header = `Lista da comprare - ${nowLabel}`;
   if (items.length === 0) {

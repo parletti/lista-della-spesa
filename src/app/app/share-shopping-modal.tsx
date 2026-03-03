@@ -97,8 +97,8 @@ export function ShareShoppingModal({ groups }: Props) {
   }
 
   async function copySelection() {
-    const text = buildShoppingShareText(selectedItems);
     try {
+      const text = buildShoppingShareText(selectedItems);
       await navigator.clipboard.writeText(text);
       setFeedback("Testo copiato.");
     } catch {
@@ -107,8 +107,9 @@ export function ShareShoppingModal({ groups }: Props) {
   }
 
   async function shareSelection() {
-    const text = buildShoppingShareText(selectedItems);
+    let text = "";
     try {
+      text = buildShoppingShareText(selectedItems);
       if (navigator.share) {
         await navigator.share({
           title: "Lista da comprare",
@@ -125,6 +126,9 @@ export function ShareShoppingModal({ groups }: Props) {
         return;
       }
       try {
+        if (!text) {
+          text = buildShoppingShareText(selectedItems);
+        }
         await navigator.clipboard.writeText(text);
         setFeedback("Condivisione non riuscita: testo copiato.");
       } catch {
