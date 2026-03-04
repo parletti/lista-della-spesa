@@ -127,11 +127,13 @@ export function PhotoImportLab() {
       setCandidates(resolved);
       setProgressMessage("");
     } catch (extractError) {
-      setError(
+      const details =
         extractError instanceof Error
           ? extractError.message
-          : "Errore OCR locale durante l'estrazione.",
-      );
+          : typeof extractError === "string"
+            ? extractError
+            : JSON.stringify(extractError, null, 2);
+      setError(`Errore OCR locale durante l'estrazione: ${details}`);
     } finally {
       setExtracting(false);
     }
