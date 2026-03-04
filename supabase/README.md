@@ -101,6 +101,8 @@ File migration:
 - `supabase/migrations/20260303120000_step7_product_nutrition_facts.sql`
 - `supabase/migrations/20260303121000_step7_product_nutrition_facts_seed_wave1.sql`
 - `supabase/migrations/20260304100000_step7_product_nutrition_facts_seed_wave2.sql`
+- `supabase/migrations/20260304113000_step7_product_nutrition_facts_seed_wave3.sql`
+- `supabase/migrations/20260304123000_step7_product_nutrition_facts_seed_wave4_all_remaining_food.sql`
 
 ### Come applicarla
 1. Apri Supabase Dashboard.
@@ -136,6 +138,8 @@ File migration:
 26. Nuova tabella `product_nutrition_facts` creata con RLS (select authenticated, write client disabilitata).
 27. Seed iniziale nutrizione (onda 1) applicato su ~50 prodotti base/top.
 28. Seed nutrizione onda 2 applicato su ulteriori 50 alimenti del catalogo.
+29. Seed nutrizione onda 3 applicato su ulteriori 50 alimenti del catalogo.
+30. Seed nutrizione onda 4 applicato su tutti i 187 prodotti rimanenti fuori categoria `Igiene e Casa`.
 
 ### Regola operativa nutrizione
 Per ogni nuova migration che aggiunge prodotti alimentari in catalogo, includere anche i corrispondenti record in `product_nutrition_facts` nello stesso ciclo e2e.

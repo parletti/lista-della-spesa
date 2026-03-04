@@ -166,10 +166,27 @@ export function ItemActionsMenu({
                 </select>
               </form>
               <div className="my-2 border-t border-zinc-200" />
-              <form action={deleteShoppingItemAction}>
+              <form
+                action={updateShoppingItemTextAction}
+                className="flex flex-col gap-2"
+                onSubmit={() => {
+                  setIsOpen(false);
+                  setIsNutritionOpen(false);
+                }}
+              >
                 <input type="hidden" name="item_id" value={itemId} />
-                <button className="ios-btn-danger w-full">
-                  Elimina
+                <label className="text-xs font-medium text-zinc-600">Rinomina</label>
+                <input
+                  type="text"
+                  name="text"
+                  required
+                  minLength={1}
+                  maxLength={120}
+                  defaultValue={currentText}
+                  className="h-8 rounded-lg border border-zinc-300 bg-white/95 px-2 text-[11px]"
+                />
+                <button className="ios-btn-secondary h-7 text-[11px]">
+                  Salva nome
                 </button>
               </form>
               <div className="my-2 border-t border-zinc-200" />
@@ -237,27 +254,10 @@ export function ItemActionsMenu({
                 </div>
               ) : null}
               <div className="my-2 border-t border-zinc-200" />
-              <form
-                action={updateShoppingItemTextAction}
-                className="flex flex-col gap-2"
-                onSubmit={() => {
-                  setIsOpen(false);
-                  setIsNutritionOpen(false);
-                }}
-              >
+              <form action={deleteShoppingItemAction}>
                 <input type="hidden" name="item_id" value={itemId} />
-                <label className="text-xs font-medium text-zinc-600">Rinomina</label>
-                <input
-                  type="text"
-                  name="text"
-                  required
-                  minLength={1}
-                  maxLength={120}
-                  defaultValue={currentText}
-                  className="h-8 rounded-lg border border-zinc-300 bg-white/95 px-2 text-[11px]"
-                />
-                <button className="ios-btn-secondary h-7 text-[11px]">
-                  Salva nome
+                <button className="ios-btn-danger w-full">
+                  Elimina
                 </button>
               </form>
             </div>,

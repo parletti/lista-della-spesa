@@ -84,6 +84,8 @@
 - Nuova tabella `product_nutrition_facts` con policy RLS di sola lettura client
 - Seed iniziale nutrizione (onda 1) su circa 50 prodotti top/base del catalogo
 - Seed nutrizione onda 2 su ulteriori 50 alimenti del catalogo
+- Seed nutrizione onda 3 su ulteriori 50 alimenti del catalogo
+- Seed nutrizione onda 4 su tutti i 187 prodotti rimanenti fuori `Igiene e Casa`
 
 ## In corso / da fare
 
