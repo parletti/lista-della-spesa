@@ -22,6 +22,13 @@ type Candidate = {
   categoryLabel: string | null;
 };
 
+const OCR_OPTIONS = {
+  workerPath: "https://cdn.jsdelivr.net/npm/tesseract.js@v7.0.0/dist/worker.min.js",
+  corePath: "https://cdn.jsdelivr.net/npm/tesseract.js-core@v7.0.0",
+  langPath: "https://tessdata.projectnaptha.com/4.0.0",
+  gzip: true,
+} as const;
+
 function confidenceLabel(value: Candidate["confidence"]) {
   if (value === "HIGH") return "Alta";
   if (value === "MEDIUM") return "Media";
@@ -87,18 +94,63 @@ export function PhotoImportLab() {
 
     try {
       const { createWorker } = await import("tesseract.js");
-      const worker = await createWorker("ita", 1, {
-        logger: (message) => {
-          if (!message.status) return;
-          const pct = Math.round((message.progress ?? 0) * 100);
-          setProgressMessage(`${message.status} ${Number.isFinite(pct) ? `${pct}%` : ""}`.trim());
-        },
-      });
+      const runWithLang = async (lang: "ita" | "eng") => {
+        const worker = await createWorker(lang, 1, {
+          ...OCR_OPTIONS,
+          logger: (message) => {
+            if (!message.status) return;
+            const pct = Math.round((message.progress ?? 0) * 100);
+            setProgressMessage(
+              `[${lang}] ${message.status} ${Number.isFinite(pct) ? `${pct}%` : ""}`.trim(),
+            );
+          },
+          errorHandler: (workerError) => {
+            const details =
+              workerError instanceof Error
+                ? workerError.message
+                : typeof workerError === "string"
+                  ? workerError
+                  : JSON.stringify(workerError);
+            setProgressMessage(`[${lang}] errore worker: ${details}`);
+          },
+        });
+        try {
+          const result = await worker.recognize(file);
+          return result.data.text?.trim() ?? "";
+        } finally {
+          await worker.terminate();
+        }
+      };
 
-      const result = await worker.recognize(file);
-      await worker.terminate();
+      let text = "";
+      let primaryError: unknown = null;
+      try {
+        text = await runWithLang("ita");
+      } catch (langError) {
+        primaryError = langError;
+      }
 
-      const text = result.data.text?.trim() ?? "";
+      if (!text) {
+        try {
+          setProgressMessage("Fallback OCR in corso (eng)...");
+          text = await runWithLang("eng");
+        } catch (fallbackError) {
+          const primary =
+            primaryError instanceof Error
+              ? primaryError.message
+              : typeof primaryError === "string"
+                ? primaryError
+                : JSON.stringify(primaryError);
+          const secondary =
+            fallbackError instanceof Error
+              ? fallbackError.message
+              : typeof fallbackError === "string"
+                ? fallbackError
+                : JSON.stringify(fallbackError);
+          throw new Error(`ita failed: ${primary} | eng failed: ${secondary}`);
+        }
+      }
+
       setRawText(text);
       if (!text) {
         setError("Nessun testo rilevato. Prova con una foto più nitida.");
@@ -133,7 +185,7 @@ export function PhotoImportLab() {
           : typeof extractError === "string"
             ? extractError
             : JSON.stringify(extractError, null, 2);
-      setError(`Errore OCR locale durante l'estrazione: ${details}`);
+      setError(`Errore OCR locale durante l'estrazione: ${details}.`);
     } finally {
       setExtracting(false);
     }
