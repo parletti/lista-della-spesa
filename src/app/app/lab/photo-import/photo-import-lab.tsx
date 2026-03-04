@@ -27,6 +27,7 @@ const OCR_OPTIONS = {
   corePath: "https://cdn.jsdelivr.net/npm/tesseract.js-core@v7.0.0",
   langPath: "https://tessdata.projectnaptha.com/4.0.0",
   gzip: true,
+  workerBlobURL: false,
 } as const;
 
 function confidenceLabel(value: Candidate["confidence"]) {
@@ -58,6 +59,11 @@ export function PhotoImportLab() {
     () => candidates.filter((candidate) => candidate.selected).length,
     [candidates],
   );
+  const runtimeInfo = useMemo(() => {
+    if (typeof window === "undefined") return "";
+    const hasWorker = typeof window.Worker !== "undefined";
+    return `Runtime mobile: worker=${hasWorker ? "ok" : "missing"}`;
+  }, []);
 
   useEffect(() => {
     setIsMobile(isMobileViewport());
@@ -209,11 +215,17 @@ export function PhotoImportLab() {
     setRawText("");
     setSelectedFile(file);
 
-    const nextUrl = URL.createObjectURL(file);
-    setPreviewUrl((current) => {
-      if (current) URL.revokeObjectURL(current);
-      return nextUrl;
-    });
+    const reader = new FileReader();
+    reader.onload = () => {
+      if (typeof reader.result === "string") {
+        setPreviewUrl(reader.result);
+      }
+    };
+    reader.onerror = () => {
+      setError("Impossibile leggere il file selezionato.");
+      setPreviewUrl(null);
+    };
+    reader.readAsDataURL(file);
   }
 
   async function addSelectedItems() {
@@ -330,6 +342,7 @@ export function PhotoImportLab() {
       </div>
 
       {progressMessage ? <p className="mt-2 text-xs text-zinc-600">{progressMessage}</p> : null}
+      {runtimeInfo ? <p className="mt-1 text-[10px] text-zinc-500">{runtimeInfo}</p> : null}
       {error ? <p className="mt-2 text-xs text-red-600">{error}</p> : null}
       {statusMessage ? <p className="mt-2 text-xs text-green-700">{statusMessage}</p> : null}
 
