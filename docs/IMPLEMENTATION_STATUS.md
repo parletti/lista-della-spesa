@@ -162,6 +162,11 @@
     - visualizzazione tabellare campi essenziali con unità per 100g/100ml
     - fallback esplicito per item senza fact
     - roadmap ondate dati: `Latticini` -> `Frutta` -> `Verdura`
+23. LAB OCR mobile (branch/preview):
+    - route admin `\/app\/lab\/photo-import`
+    - import da rullino (una foto alla volta, no camera UI)
+    - OCR locale in italiano con review obbligatoria prima del salvataggio
+    - aggiunta batch su `Da comprare` via endpoint esistente `/api/items`
 
 ## Test minimi regressione (attuali)
 1. Login email/password

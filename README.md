@@ -13,6 +13,7 @@ App web (Next.js + Supabase) per lista spesa condivisa famigliare con:
 - menu azioni item (`...`) con assegnazione categoria persistente
 - rinomina condivisa del nome item da menu `...` (persistente su DB)
 - valori nutrizionali generici da menu `...` (fallback se non disponibili)
+- laboratorio OCR mobile-only da rullino su route admin `/app/lab/photo-import` (preview/branch)
 - UI iOS-like con palette soft e separazione visiva tra `Da comprare` e `Comprati`
 - PWA installabile con supporto offline base
 

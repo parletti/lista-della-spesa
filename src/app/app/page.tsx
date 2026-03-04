@@ -1,4 +1,5 @@
 import { redirect } from "next/navigation";
+import Link from "next/link";
 import { getSupabaseAdminClient } from "@/lib/supabase/admin";
 import { getSupabaseServerClient } from "@/lib/supabase/server";
 import { CreateFamilyForm } from "@/app/app/create-family-form";
@@ -277,8 +278,16 @@ export default async function AppPage() {
           <div className="mt-3 rounded-2xl bg-white/80 p-2.5 ring-1 ring-black/5">
             <h3 className="ios-section-title">Aggiungi prodotto</h3>
             <AddItemForm />
-            <div className="mt-2">
+            <div className="mt-2 flex flex-wrap items-center gap-2">
               <ShareShoppingModal groups={pendingGroupsForShare} />
+              {membership.role === "ADMIN" ? (
+                <Link
+                  href="/app/lab/photo-import"
+                  className="ios-btn-secondary inline-flex items-center px-3 text-[11px] sm:hidden"
+                >
+                  Lab rullino
+                </Link>
+              ) : null}
             </div>
           </div>
 
