@@ -166,6 +166,13 @@ export function ItemActionsMenu({
                 </select>
               </form>
               <div className="my-2 border-t border-zinc-200" />
+              <form action={deleteShoppingItemAction}>
+                <input type="hidden" name="item_id" value={itemId} />
+                <button className="ios-btn-danger w-full">
+                  Elimina
+                </button>
+              </form>
+              <div className="my-2 border-t border-zinc-200" />
               <button
                 type="button"
                 className="ios-btn-secondary h-7 w-full text-[11px]"
@@ -251,13 +258,6 @@ export function ItemActionsMenu({
                 />
                 <button className="ios-btn-secondary h-7 text-[11px]">
                   Salva nome
-                </button>
-              </form>
-              <div className="my-2 border-t border-zinc-200" />
-              <form action={deleteShoppingItemAction}>
-                <input type="hidden" name="item_id" value={itemId} />
-                <button className="ios-btn-danger w-full">
-                  Elimina
                 </button>
               </form>
             </div>,

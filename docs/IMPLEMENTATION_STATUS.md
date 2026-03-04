@@ -83,6 +83,7 @@
   - Apertura menu robusta (portal, chiusura click-outside/Esc, posizione dinamica)
 - Nuova tabella `product_nutrition_facts` con policy RLS di sola lettura client
 - Seed iniziale nutrizione (onda 1) su circa 50 prodotti top/base del catalogo
+- Seed nutrizione onda 2 su ulteriori 50 alimenti del catalogo
 
 ## In corso / da fare
 

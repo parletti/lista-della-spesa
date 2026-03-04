@@ -100,6 +100,7 @@ File migration:
 - `supabase/migrations/20260302104000_step7_catalog_add_home_supplies.sql`
 - `supabase/migrations/20260303120000_step7_product_nutrition_facts.sql`
 - `supabase/migrations/20260303121000_step7_product_nutrition_facts_seed_wave1.sql`
+- `supabase/migrations/20260304100000_step7_product_nutrition_facts_seed_wave2.sql`
 
 ### Come applicarla
 1. Apri Supabase Dashboard.
@@ -134,6 +135,7 @@ File migration:
 25. Aggiungendo un prodotto noto (es. `latte`) viene valorizzata la categoria su `shopping_items`.
 26. Nuova tabella `product_nutrition_facts` creata con RLS (select authenticated, write client disabilitata).
 27. Seed iniziale nutrizione (onda 1) applicato su ~50 prodotti base/top.
+28. Seed nutrizione onda 2 applicato su ulteriori 50 alimenti del catalogo.
 
 ### Regola operativa nutrizione
 Per ogni nuova migration che aggiunge prodotti alimentari in catalogo, includere anche i corrispondenti record in `product_nutrition_facts` nello stesso ciclo e2e.

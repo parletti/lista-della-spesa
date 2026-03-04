@@ -82,6 +82,7 @@ Esegui in ordine i file in `supabase/migrations/`:
 25. `20260302104000_step7_catalog_add_home_supplies.sql`
 26. `20260303120000_step7_product_nutrition_facts.sql`
 27. `20260303121000_step7_product_nutrition_facts_seed_wave1.sql`
+28. `20260304100000_step7_product_nutrition_facts_seed_wave2.sql`
 
 ## Comandi utili
 ```bash
