@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { getSupabaseAdminClient } from "@/lib/supabase/admin";
 import { normalizeProductText } from "@/lib/catalog/normalize";
 import { consumeRateLimit } from "@/lib/security/rate-limit";
+import type { NickelLevel, ProductNickelLevelRow } from "@/lib/nickel/types";
 
 type ProductRow = {
   id: string;
@@ -25,6 +26,7 @@ type Suggestion = {
   productId: string;
   label: string;
   categoryLabel: string | null;
+  nickelLevel: NickelLevel;
   confidence: number;
 };
 
@@ -186,6 +188,18 @@ export async function GET(request: Request) {
     aliasByProduct.set(row.product_id, current);
   }
 
+  const productIds = products.map((product) => product.id);
+  const nickelQuery = await admin
+    .from("product_nickel_levels")
+    .select("product_id, nickel_level, source, updated_at")
+    .in("product_id", productIds);
+  const nickelByProduct = new Map<string, NickelLevel>();
+  if (!nickelQuery.error) {
+    for (const row of (nickelQuery.data ?? []) as ProductNickelLevelRow[]) {
+      nickelByProduct.set(row.product_id, row.nickel_level);
+    }
+  }
+
   const suggestions = products
     .map((product) => {
       let score = computeScore(product, normalizedQuery, q);
@@ -204,6 +218,7 @@ export async function GET(request: Request) {
         productId: product.id,
         label: product.display_name,
         categoryLabel: categories.get(product.category_id) ?? null,
+        nickelLevel: nickelByProduct.get(product.id) ?? "UNKNOWN",
         confidence: score,
       } satisfies Suggestion;
     })

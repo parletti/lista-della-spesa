@@ -82,10 +82,12 @@
   - Visualizzazione valori nutrizionali generici per 100g/100ml (fallback se assenti)
   - Apertura menu robusta (portal, chiusura click-outside/Esc, posizione dinamica)
 - Nuova tabella `product_nutrition_facts` con policy RLS di sola lettura client
+- Nuova tabella `product_nickel_levels` con policy RLS di sola lettura client
 - Seed iniziale nutrizione (onda 1) su circa 50 prodotti top/base del catalogo
 - Seed nutrizione onda 2 su ulteriori 50 alimenti del catalogo
 - Seed nutrizione onda 3 su ulteriori 50 alimenti del catalogo
 - Seed nutrizione onda 4 su tutti i 187 prodotti rimanenti fuori `Igiene e Casa`
+- Seed iniziale nichel v1 su prodotti alimentari catalogo (fallback `UNKNOWN` su non alimentari/non classificati)
 
 ## In corso / da fare
 
@@ -162,6 +164,10 @@
     - visualizzazione tabellare campi essenziali con unità per 100g/100ml
     - fallback esplicito per item senza fact
     - roadmap ondate dati: `Latticini` -> `Frutta` -> `Verdura`
+23. Nichel informativo:
+    - badge nichel nei suggerimenti autocomplete (`Basso`, `Medio`, `Alto`, `Non disponibile`)
+    - livello nichel visibile nel menu item `...`
+    - nessun blocco aggiunta: feature solo informativa
 
 ## Test minimi regressione (attuali)
 1. Login email/password

@@ -206,6 +206,43 @@ body {
   background: rgba(0, 122, 255, 0.07);
 }
 
+.ios-nickel-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 999px;
+  border: 1px solid transparent;
+  padding: 2px 8px;
+  font-size: 10px;
+  line-height: 1.1;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.ios-nickel-low {
+  background: rgba(34, 197, 94, 0.16);
+  border-color: rgba(22, 163, 74, 0.35);
+  color: #166534;
+}
+
+.ios-nickel-medium {
+  background: rgba(245, 158, 11, 0.18);
+  border-color: rgba(217, 119, 6, 0.35);
+  color: #92400e;
+}
+
+.ios-nickel-high {
+  background: rgba(239, 68, 68, 0.16);
+  border-color: rgba(220, 38, 38, 0.35);
+  color: #991b1b;
+}
+
+.ios-nickel-unknown {
+  background: rgba(148, 163, 184, 0.2);
+  border-color: rgba(100, 116, 139, 0.35);
+  color: #475569;
+}
+
 .ios-btn-primary:hover,
 .ios-btn-secondary:hover,
 .ios-btn-danger:hover {

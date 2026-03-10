@@ -103,6 +103,8 @@ File migration:
 - `supabase/migrations/20260304100000_step7_product_nutrition_facts_seed_wave2.sql`
 - `supabase/migrations/20260304113000_step7_product_nutrition_facts_seed_wave3.sql`
 - `supabase/migrations/20260304123000_step7_product_nutrition_facts_seed_wave4_all_remaining_food.sql`
+- `supabase/migrations/20260310110000_step7_product_nickel_levels.sql`
+- `supabase/migrations/20260310111000_step7_product_nickel_levels_seed_v1.sql`
 
 ### Come applicarla
 1. Apri Supabase Dashboard.
@@ -140,9 +142,14 @@ File migration:
 28. Seed nutrizione onda 2 applicato su ulteriori 50 alimenti del catalogo.
 29. Seed nutrizione onda 3 applicato su ulteriori 50 alimenti del catalogo.
 30. Seed nutrizione onda 4 applicato su tutti i 187 prodotti rimanenti fuori categoria `Igiene e Casa`.
+31. Nuova tabella `product_nickel_levels` creata con RLS (select authenticated, write client disabilitata).
+32. Seed nichel v1 applicato su catalogo alimentare con fallback `UNKNOWN` su non alimentari/non classificati.
 
 ### Regola operativa nutrizione
 Per ogni nuova migration che aggiunge prodotti alimentari in catalogo, includere anche i corrispondenti record in `product_nutrition_facts` nello stesso ciclo e2e.
+
+### Regola operativa nichel
+Per ogni nuova migration che aggiunge prodotti alimentari in catalogo, includere anche i corrispondenti record in `product_nickel_levels` nello stesso ciclo e2e.
 
 ## Step 10 - Security hardening + audit
 
