@@ -2,11 +2,13 @@
 
 import { FormEvent, useEffect, useMemo, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
+import { getNickelLevelClassName, getNickelLevelLabel, type NickelLevel } from "@/lib/nickel/types";
 
 type Suggestion = {
   productId: string;
   label: string;
   categoryLabel: string | null;
+  nickelLevel: NickelLevel;
 };
 
 type QueueItem = {
@@ -292,6 +294,9 @@ export function AddItemForm() {
                         }}
                       >
                         <span>{suggestion.label}</span>
+                        <span className={getNickelLevelClassName(suggestion.nickelLevel)}>
+                          Nikel: {getNickelLevelLabel(suggestion.nickelLevel)}
+                        </span>
                       </button>
                     </li>
                   ))}

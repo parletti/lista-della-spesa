@@ -15,6 +15,7 @@ import { OptimisticToggleButton } from "@/app/app/optimistic-toggle-button";
 import { SessionLifetimeGuard } from "@/app/app/session-lifetime-guard";
 import { ShareShoppingModal } from "@/app/app/share-shopping-modal";
 import type { NutritionFactRow } from "@/lib/nutrition/types";
+import type { NickelLevel, ProductNickelLevelRow } from "@/lib/nickel/types";
 
 export const dynamic = "force-dynamic";
 
@@ -82,6 +83,7 @@ export default async function AppPage() {
   let categories: CategoryRow[] = [];
   let activePresenceSessions: PresenceSessionRow[] = [];
   let nutritionByProductId: Record<string, NutritionFactRow> = {};
+  let nickelByProductId: Record<string, NickelLevel> = {};
   if (profile) {
     const membershipQuery = await admin
       .from("family_members")
@@ -106,17 +108,31 @@ export default async function AppPage() {
         new Set(items.map((item) => item.product_id).filter((id): id is string => Boolean(id))),
       );
       if (productIds.length > 0) {
-        const nutritionQuery = await admin
-          .from("product_nutrition_facts")
-          .select(
-            "product_id, per_quantity, per_unit, energy_kcal, carbohydrates_g, sugars_g, proteins_g, fats_g, saturated_fats_g, salt_g, source, updated_at",
-          )
-          .in("product_id", productIds);
+        const [nutritionQuery, nickelQuery] = await Promise.all([
+          admin
+            .from("product_nutrition_facts")
+            .select(
+              "product_id, per_quantity, per_unit, energy_kcal, carbohydrates_g, sugars_g, proteins_g, fats_g, saturated_fats_g, salt_g, source, updated_at",
+            )
+            .in("product_id", productIds),
+          admin
+            .from("product_nickel_levels")
+            .select("product_id, nickel_level, source, updated_at")
+            .in("product_id", productIds),
+        ]);
 
         if (!nutritionQuery.error) {
           const rows = (nutritionQuery.data ?? []) as NutritionFactRow[];
           nutritionByProductId = rows.reduce<Record<string, NutritionFactRow>>((acc, row) => {
             acc[row.product_id] = row;
+            return acc;
+          }, {});
+        }
+
+        if (!nickelQuery.error) {
+          const rows = (nickelQuery.data ?? []) as ProductNickelLevelRow[];
+          nickelByProductId = rows.reduce<Record<string, NickelLevel>>((acc, row) => {
+            acc[row.product_id] = row.nickel_level;
             return acc;
           }, {});
         }
@@ -311,6 +327,7 @@ export default async function AppPage() {
                                 categories={categories}
                                 productId={item.product_id}
                                 nutritionFact={item.product_id ? nutritionByProductId[item.product_id] ?? null : null}
+                                nickelLevel={item.product_id ? nickelByProductId[item.product_id] ?? "UNKNOWN" : "UNKNOWN"}
                               />
                             </div>
                           </li>
@@ -350,6 +367,7 @@ export default async function AppPage() {
                                 categories={categories}
                                 productId={item.product_id}
                                 nutritionFact={item.product_id ? nutritionByProductId[item.product_id] ?? null : null}
+                                nickelLevel={item.product_id ? nickelByProductId[item.product_id] ?? "UNKNOWN" : "UNKNOWN"}
                               />
                             </div>
                           </li>

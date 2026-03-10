@@ -61,6 +61,7 @@ Include inoltre una presenza realtime `in spesa` per segnalare ai familiari quan
    - `Rinomina`: update condiviso del campo `shopping_items.text`
    - `Elimina`
    - `Valori nutrizionali`: pannello informativo con dati generici per 100g/100ml (fallback se assenti)
+   - `Livello nichel`: indicatore informativo (`Basso`/`Medio`/`Alto`/`Non disponibile`)
 6. Toggle stato `Comprato/Compra` ottimistico lato client per feedback immediato.
 7. Update realtime tramite subscription Supabase.
 
@@ -83,6 +84,7 @@ Include inoltre una presenza realtime `in spesa` per segnalare ai familiari quan
 - `products_catalog`
 - `product_aliases`
 - `product_nutrition_facts`
+- `product_nickel_levels`
 
 ## Data flow nutrizione
 1. `AppPage` recupera gli item della famiglia.
@@ -90,6 +92,13 @@ Include inoltre una presenza realtime `in spesa` per segnalare ai familiari quan
 3. Query server-side su `product_nutrition_facts` filtrata per i `product_id` correnti.
 4. Costruisce mappa `product_id -> nutrition facts`.
 5. Passa la fact al singolo `ItemActionsMenu`, che espone azione `Valori nutrizionali`.
+
+## Data flow nichel
+1. Endpoint `/api/autocomplete` recupera classificazione nichel per i prodotti suggeriti.
+2. Ogni suggestion include `nickelLevel` (`LOW|MEDIUM|HIGH|UNKNOWN`) e mostra badge in UI.
+3. `AppPage` recupera classificazione nichel per i `product_id` presenti negli item lista.
+4. La mappa `product_id -> nickelLevel` viene passata a `ItemActionsMenu`.
+5. Il menu `...` mostra il livello nichel in modo informativo, senza bloccare azioni utente.
 
 ## Realtime
 - Listener client su `shopping_items` filtrato per `family_id`.

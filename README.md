@@ -13,6 +13,7 @@ App web (Next.js + Supabase) per lista spesa condivisa famigliare con:
 - menu azioni item (`...`) con assegnazione categoria persistente
 - rinomina condivisa del nome item da menu `...` (persistente su DB)
 - valori nutrizionali generici da menu `...` (fallback se non disponibili)
+- livello nichel informativo da suggerimenti e menu `...` (`Basso`/`Medio`/`Alto`/`Non disponibile`)
 - UI iOS-like con palette soft e separazione visiva tra `Da comprare` e `Comprati`
 - PWA installabile con supporto offline base
 
@@ -85,6 +86,8 @@ Esegui in ordine i file in `supabase/migrations/`:
 28. `20260304100000_step7_product_nutrition_facts_seed_wave2.sql`
 29. `20260304113000_step7_product_nutrition_facts_seed_wave3.sql`
 30. `20260304123000_step7_product_nutrition_facts_seed_wave4_all_remaining_food.sql`
+31. `20260310110000_step7_product_nickel_levels.sql`
+32. `20260310111000_step7_product_nickel_levels_seed_v1.sql`
 
 ## Comandi utili
 ```bash
@@ -121,6 +124,7 @@ curl "http://127.0.0.1:3000/api/autocomplete?q=lat"
 8. Un membro può condividere all'esterno solo la lista `Da comprare`, selezionando i prodotti da includere.
 9. Da menu `...`, i membri possono assegnare/modificare categoria e rinominare un item (persistente su DB item).
 10. Da menu `...`, i membri possono aprire una scheda con valori nutrizionali generici per 100g/100ml quando disponibili.
+11. Nei suggerimenti autocomplete e nel menu `...`, i membri vedono anche il livello nichel informativo del prodotto.
 
 ## Sicurezza (attuale)
 - Login principale con email/password.
@@ -138,6 +142,7 @@ curl "http://127.0.0.1:3000/api/autocomplete?q=lat"
 - Service Worker temporaneamente disattivato per evitare UI stale da cache durante sviluppo/debug.
 - Toggle `Comprato/Compra` ottimizzato lato UI con comportamento ottimistico (feedback immediato).
 - Valori nutrizionali generici disponibili da menu item (`...`) con fallback `Valori nutrizionali non disponibili`.
+- Livello nichel informativo disponibile su prodotti alimentari (`LOW|MEDIUM|HIGH|UNKNOWN`), mostrato in italiano in UI.
 - Autocomplete UI attivato solo da 3 caratteri per ridurre chiamate e migliorare reattività.
 - Suggerimenti autocomplete mostrati in lista estesa, ordinati per categoria e poi per prodotto.
 - Suggerimenti prodotto con leggero rientro sotto la categoria per migliorare la leggibilità.

@@ -1,6 +1,6 @@
 # Product Spec - Lista della Spesa
 
-Ultimo aggiornamento: 3 marzo 2026
+Ultimo aggiornamento: 10 marzo 2026
 
 ## 1) Scopo del progetto
 Applicazione web/PWA per gestire una lista della spesa condivisa tra membri della stessa famiglia, con aggiornamento realtime, uso semplice da mobile/desktop e gestione prodotti per categoria.
@@ -33,6 +33,7 @@ Obiettivo pratico:
   - rinomina
   - elimina
   - valori nutrizionali generici (se presenti)
+  - livello nichel informativo (`Basso`/`Medio`/`Alto`/`Non disponibile`)
 - Anti-duplicati tra pending/bought
 - UI ottimizzata mobile-first in stile iOS-like
 - PWA con manifest + base offline (service worker attualmente disattivato in runtime)
@@ -54,11 +55,13 @@ Obiettivo pratico:
 ### 4.3 Gestione lista
 1. Utente digita prodotto nel campo aggiunta
 2. Da 3 caratteri in poi vede suggerimenti per categoria/prodotto
-3. Aggiunge prodotto:
+3. Nei suggerimenti vede badge nichel informativo per ogni prodotto
+4. Sceglie se inserire o meno in base al livello nichel
+5. Aggiunge prodotto:
   - se gia presente in `Da comprare`, non duplica
   - se presente in `Comprati`, viene riattivato
-4. Durante la spesa usa `Comprato` per spostare item
-5. In `Comprati` puo usare `Compra` per riportarlo in pending
+6. Durante la spesa usa `Comprato` per spostare item
+7. In `Comprati` puo usare `Compra` per riportarlo in pending
 
 ### 4.4 Menu azioni item
 Dal pulsante `...`:
@@ -66,6 +69,7 @@ Dal pulsante `...`:
 - rinomina condivisa (persistente su DB item)
 - eliminazione item
 - apertura pannello `Valori nutrizionali` (dati generici per 100g/100ml)
+- visualizzazione livello nichel informativo nel menu item
 - fallback chiaro: `Valori nutrizionali non disponibili`
 
 ### 4.5 Segnalazione "in spesa"
@@ -90,6 +94,7 @@ Dal pulsante `...`:
 - Realtime tra due o piu sessioni attive
 - Ordinamento e leggibilita lista (categoria + nome)
 - Suggerimenti coerenti da catalogo
+- Segnalazione livello nichel nei suggerimenti e nel dettaglio item
 - Supporto uso da browser desktop e mobile (iPhone incluso via browser/PWA)
 - Segnalazione presenza realtime a livello famiglia durante la spesa
 - Condivisione esterna rapida senza creare account destinatario
@@ -123,6 +128,7 @@ Dal pulsante `...`:
 - `shopping_presence_sessions`
 - `invites`
 - `categories`, `products_catalog`, `product_aliases`
+- `product_nickel_levels`
 - `audit_logs`
 
 ## 10) Stato attuale e gap aperti
@@ -133,15 +139,18 @@ Stato corrente:
 - catalogo aggiornato anche con varianti cocco/farine (incluse farine base), kefir e prodotti casa per dispensa
 - condivisione selettiva `Da comprare` disponibile su laptop e mobile
 - valori nutrizionali generici disponibili su una prima ondata di circa 50 prodotti
+- livello nichel informativo disponibile per prodotti alimentari catalogo (fallback `Non disponibile` su non alimentari/non classificati)
 
 Gap / prossimi step:
 - Step 9: rifinitura offline/PWA (riattivazione SW con strategia cache stabile)
 - Step 10: rate-limit distribuito (Redis/Upstash) al posto dell'in-memory
 - eventuali evoluzioni UX catalogo (workflow arricchimento guidato prodotti/categorie)
 - completare ondate nutrizione: `Latticini` -> `Frutta` -> `Verdura`
+- raffinare classificazione nichel generica con eventuali revisioni per prodotto
 
 ## 11) Regola operativa catalogo alimentare
 - Ogni nuova migration che aggiunge prodotti alimentari deve includere anche il seed in `product_nutrition_facts` nello stesso ciclo e2e (stessa migration o migration accodata immediata).
+- Ogni nuova migration che aggiunge prodotti alimentari deve includere anche il seed in `product_nickel_levels` nello stesso ciclo e2e.
 
 ## 12) Runbook rapido (ripartenza tra mesi)
 1. Leggere questo file (`docs/PRODUCT_SPEC.md`)

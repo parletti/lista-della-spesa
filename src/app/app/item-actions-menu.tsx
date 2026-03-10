@@ -8,6 +8,11 @@ import {
   updateShoppingItemCategoryAction,
 } from "@/app/app/actions";
 import type { NutritionFactRow } from "@/lib/nutrition/types";
+import {
+  getNickelLevelClassName,
+  getNickelLevelLabel,
+  type NickelLevel,
+} from "@/lib/nickel/types";
 
 type CategoryOption = {
   id: string;
@@ -21,6 +26,7 @@ type Props = {
   categories: CategoryOption[];
   productId: string | null;
   nutritionFact: NutritionFactRow | null;
+  nickelLevel: NickelLevel | null;
 };
 
 type MenuPosition = {
@@ -37,6 +43,7 @@ export function ItemActionsMenu({
   categories,
   productId,
   nutritionFact,
+  nickelLevel,
 }: Props) {
   const triggerRef = useRef<HTMLButtonElement>(null);
   const panelRef = useRef<HTMLDivElement>(null);
@@ -189,6 +196,13 @@ export function ItemActionsMenu({
                   Salva nome
                 </button>
               </form>
+              <div className="my-2 border-t border-zinc-200" />
+              <div className="flex items-center justify-between gap-2 rounded-lg bg-zinc-50 px-2 py-1.5">
+                <span className="text-[11px] font-medium text-zinc-600">Livello nichel</span>
+                <span className={getNickelLevelClassName(nickelLevel)}>
+                  {getNickelLevelLabel(nickelLevel)}
+                </span>
+              </div>
               <div className="my-2 border-t border-zinc-200" />
               <button
                 type="button"
