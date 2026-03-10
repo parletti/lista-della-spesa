@@ -226,15 +226,15 @@ body {
 }
 
 .ios-nickel-medium {
-  background: rgba(245, 158, 11, 0.18);
-  border-color: rgba(217, 119, 6, 0.35);
-  color: #92400e;
+  background: rgba(251, 146, 60, 0.24);
+  border-color: rgba(249, 115, 22, 0.55);
+  color: #9a3412;
 }
 
 .ios-nickel-high {
-  background: rgba(239, 68, 68, 0.16);
-  border-color: rgba(220, 38, 38, 0.35);
-  color: #991b1b;
+  background: rgba(248, 113, 113, 0.32);
+  border-color: rgba(239, 68, 68, 0.68);
+  color: #b91c1c;
 }
 
 .ios-nickel-unknown {

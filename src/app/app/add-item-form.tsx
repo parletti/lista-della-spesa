@@ -295,7 +295,7 @@ export function AddItemForm() {
                       >
                         <span>{suggestion.label}</span>
                         <span className={getNickelLevelClassName(suggestion.nickelLevel)}>
-                          Ni: {getNickelLevelLabel(suggestion.nickelLevel)}
+                          Nikel: {getNickelLevelLabel(suggestion.nickelLevel)}
                         </span>
                       </button>
                     </li>
