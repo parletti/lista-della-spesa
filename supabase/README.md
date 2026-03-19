@@ -107,6 +107,7 @@ File migration:
 - `supabase/migrations/20260310111000_step7_product_nickel_levels_seed_v1.sql`
 - `supabase/migrations/20260319113000_step7_catalog_product_requests.sql`
 - `supabase/migrations/20260319120000_step7_catalog_add_formaggio_cremoso_tipo_philadelfia.sql`
+- `supabase/migrations/20260319123000_step7_catalog_remove_unused_carne_pesce.sql`
 
 ### Come applicarla
 1. Apri Supabase Dashboard.
@@ -150,6 +151,7 @@ File migration:
 34. Ogni inserimento testo libero non catalogato puo' aggiornare il backlog tramite `public.register_catalog_product_request(...)`.
 35. Quando un prodotto viene aggiunto al catalogo, `public.resolve_catalog_product_request(product_id)` chiude il backlog e riallinea gli `shopping_items` esistenti.
 36. Aggiunta voce `Formaggio cremoso tipo Philadelfia` in `Latticini` con valori nutrizionali generici e nichel `LOW`, piu' chiusura backlog correlato.
+37. Rimossa la categoria storica `Carne e Pesce` se non piu' referenziata da catalogo o shopping items.
 
 ### Regola operativa nutrizione
 Per ogni nuova migration che aggiunge prodotti alimentari in catalogo, includere anche i corrispondenti record in `product_nutrition_facts` nello stesso ciclo e2e.
