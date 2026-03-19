@@ -71,6 +71,7 @@
 - Catalogo aggiornato con: `olio di cocco` (Condimenti), `farina di cocco`/`farina di mandorle` (Dispensa), `kefir`/`kefir di capra` (Latticini)
 - Catalogo aggiornato con farine base in `Dispensa`: `farina`, `farina di farro`, `farina di riso`
 - Catalogo aggiornato con prodotti casa in `Dispensa`: `carta da forno`, `pellicola trasparente`, `pellicola alluminio`, `spugne lavello`, `pastiglie lavastoviglie`, `sale lavastoviglie`, `ammorbidente`
+- Catalogo aggiornato con `Formaggio cremoso tipo Philadelfia` in `Latticini`, completo di nutrizione generica e nichel
 - Endpoint autocomplete fuzzy
 - Auto-assegnazione categoria
 - UI raggruppata per categoria
