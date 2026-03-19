@@ -5,6 +5,7 @@ import {
   resolveCatalogMatchByProductId,
   resolveCatalogMatchByText,
 } from "@/lib/catalog/resolve";
+import { registerCatalogProductRequest } from "@/lib/catalog/product-requests";
 import { normalizeProductText } from "@/lib/catalog/normalize";
 import { parseShoppingText } from "@/lib/validation/input";
 import { consumeRateLimit } from "@/lib/security/rate-limit";
@@ -78,6 +79,14 @@ function getClientIp(request: Request) {
   return "unknown";
 }
 
+async function registerCatalogProductRequestSafely(text: string, normalizedText: string) {
+  try {
+    await registerCatalogProductRequest(text, normalizedText);
+  } catch (error) {
+    console.error("Unable to register catalog product request.", error);
+  }
+}
+
 export async function POST(request: Request) {
   const body = (await request.json().catch(() => null)) as Body | null;
   const text = parseShoppingText(body?.text);
@@ -135,6 +144,10 @@ export async function POST(request: Request) {
   }
 
   if (pendingExisting.data) {
+    if (!match.productId) {
+      await registerCatalogProductRequestSafely(text, canonicalNormalized);
+    }
+
     await writeAuditLog({
       familyId: context.familyId,
       actorProfileId: context.profileId,
@@ -189,6 +202,10 @@ export async function POST(request: Request) {
       return NextResponse.json({ ok: false, error: reactivate.error.message }, { status: 500 });
     }
 
+    if (!match.productId) {
+      await registerCatalogProductRequestSafely(text, canonicalNormalized);
+    }
+
     await writeAuditLog({
       familyId: context.familyId,
       actorProfileId: context.profileId,
@@ -213,6 +230,10 @@ export async function POST(request: Request) {
 
   if (insertResult.error || !insertResult.data) {
     return NextResponse.json({ ok: false, error: insertResult.error.message }, { status: 500 });
+  }
+
+  if (!match.productId) {
+    await registerCatalogProductRequestSafely(text, canonicalNormalized);
   }
 
   await writeAuditLog({

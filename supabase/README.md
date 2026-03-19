@@ -105,6 +105,7 @@ File migration:
 - `supabase/migrations/20260304123000_step7_product_nutrition_facts_seed_wave4_all_remaining_food.sql`
 - `supabase/migrations/20260310110000_step7_product_nickel_levels.sql`
 - `supabase/migrations/20260310111000_step7_product_nickel_levels_seed_v1.sql`
+- `supabase/migrations/20260319113000_step7_catalog_product_requests.sql`
 
 ### Come applicarla
 1. Apri Supabase Dashboard.
@@ -144,12 +145,38 @@ File migration:
 30. Seed nutrizione onda 4 applicato su tutti i 187 prodotti rimanenti fuori categoria `Igiene e Casa`.
 31. Nuova tabella `product_nickel_levels` creata con RLS (select authenticated, write client disabilitata).
 32. Seed nichel v1 applicato su catalogo alimentare con fallback `UNKNOWN` su non alimentari/non classificati.
+33. Nuova tabella `catalog_product_requests` creata per backlog globale prodotti mancanti dal catalogo.
+34. Ogni inserimento testo libero non catalogato puo' aggiornare il backlog tramite `public.register_catalog_product_request(...)`.
+35. Quando un prodotto viene aggiunto al catalogo, `public.resolve_catalog_product_request(product_id)` chiude il backlog e riallinea gli `shopping_items` esistenti.
 
 ### Regola operativa nutrizione
 Per ogni nuova migration che aggiunge prodotti alimentari in catalogo, includere anche i corrispondenti record in `product_nutrition_facts` nello stesso ciclo e2e.
 
 ### Regola operativa nichel
 Per ogni nuova migration che aggiunge prodotti alimentari in catalogo, includere anche i corrispondenti record in `product_nickel_levels` nello stesso ciclo e2e.
+
+### Regola operativa backlog prodotti mancanti
+Quando aggiungi manualmente un nuovo prodotto a `products_catalog` che era stato inserito prima come testo libero:
+1. inserisci/aggiorna il prodotto nel catalogo;
+2. esegui:
+
+```sql
+select public.resolve_catalog_product_request('<product_id>'::uuid);
+```
+
+3. verifica backlog aperto:
+
+```sql
+select
+  normalized_text,
+  raw_text_last_seen,
+  request_count,
+  first_seen_at,
+  last_seen_at
+from public.catalog_product_requests
+where status = 'OPEN'
+order by request_count desc, last_seen_at desc;
+```
 
 ## Step 10 - Security hardening + audit
 

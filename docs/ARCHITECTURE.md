@@ -55,15 +55,16 @@ Include inoltre una presenza realtime `in spesa` per segnalare ai familiari quan
 3. Anti-duplicati:
    - se item uguale già `PENDING`: nessun duplicato
    - se uguale già `BOUGHT`: viene riattivato `PENDING`
-4. UI mostra due sezioni: `Da comprare` e `Comprati`, entrambe raggruppate per categoria.
-5. Menu `...` per item:
+4. Se il prodotto non esiste nel catalogo (`product_id = null`), il sistema registra anche una richiesta backlog globale in `catalog_product_requests`.
+5. UI mostra due sezioni: `Da comprare` e `Comprati`, entrambe raggruppate per categoria.
+6. Menu `...` per item:
    - `Categoria`: assegnazione immediata (persistente su `shopping_items.category_id`)
    - `Rinomina`: update condiviso del campo `shopping_items.text`
    - `Elimina`
    - `Valori nutrizionali`: pannello informativo con dati generici per 100g/100ml (fallback se assenti)
    - `Livello nichel`: indicatore informativo (`Basso`/`Medio`/`Alto`/`Non disponibile`)
-6. Toggle stato `Comprato/Compra` ottimistico lato client per feedback immediato.
-7. Update realtime tramite subscription Supabase.
+7. Toggle stato `Comprato/Compra` ottimistico lato client per feedback immediato.
+8. Update realtime tramite subscription Supabase.
 
 ### 4) Presenza "in spesa"
 1. Utente attiva `Sto facendo la spesa` dalla dashboard.
@@ -83,6 +84,7 @@ Include inoltre una presenza realtime `in spesa` per segnalare ai familiari quan
 - `categories`
 - `products_catalog`
 - `product_aliases`
+- `catalog_product_requests`
 - `product_nutrition_facts`
 - `product_nickel_levels`
 
@@ -99,6 +101,16 @@ Include inoltre una presenza realtime `in spesa` per segnalare ai familiari quan
 3. `AppPage` recupera classificazione nichel per i `product_id` presenti negli item lista.
 4. La mappa `product_id -> nickelLevel` viene passata a `ItemActionsMenu`.
 5. Il menu `...` mostra il livello nichel in modo informativo, senza bloccare azioni utente.
+
+## Data flow backlog prodotti mancanti
+1. Inserimento item da API o Server Action.
+2. Risoluzione catalogo tramite `resolveCatalogMatchByText` / `resolveCatalogMatchByProductId`.
+3. Se il prodotto resta senza `product_id`, l'app chiama `public.register_catalog_product_request(normalized_text, raw_text)`.
+4. La tabella backlog mantiene una sola riga per `normalized_text` e aggiorna contatore e timestamp.
+5. Quando un prodotto viene poi aggiunto a `products_catalog`, la migration/admin flow deve eseguire `public.resolve_catalog_product_request(product_id)`:
+   - backlog `OPEN` -> `ADDED`
+   - valorizzazione `added_product_id`
+   - backfill di `shopping_items` esistenti con stesso `normalized_text`
 
 ## Realtime
 - Listener client su `shopping_items` filtrato per `family_id`.
@@ -142,3 +154,4 @@ Include inoltre una presenza realtime `in spesa` per segnalare ai familiari quan
 - Rate-limit attuale in-memory (istanza singola).
 - In produzione multi-istanziazione: migrare rate-limit su Redis/Upstash.
 - Con dataset catalogo più grande: introdurre indice trigram/full-text in Postgres.
+- Con backlog catalogo più ampio: possibile evoluzione futura con UI admin dedicata e filtri per priorità/stato.

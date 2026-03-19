@@ -11,6 +11,7 @@ import {
   resolveCatalogMatchByProductId,
   resolveCatalogMatchByText,
 } from "@/lib/catalog/resolve";
+import { registerCatalogProductRequest } from "@/lib/catalog/product-requests";
 import { normalizeProductText } from "@/lib/catalog/normalize";
 import { consumeRateLimit } from "@/lib/security/rate-limit";
 import { writeAuditLog } from "@/lib/security/audit";
@@ -101,6 +102,14 @@ function enforceUserRateLimit(
   windowMs: number,
 ) {
   return consumeRateLimit(`action:${action}:${context.authUserId}`, limit, windowMs);
+}
+
+async function registerCatalogProductRequestSafely(text: string, normalizedText: string) {
+  try {
+    await registerCatalogProductRequest(text, normalizedText);
+  } catch (error) {
+    console.error("Unable to register catalog product request.", error);
+  }
 }
 
 async function endActivePresenceSession(context: UserContext, reason: PresenceEndReason) {
@@ -364,6 +373,10 @@ export async function addShoppingItemAction(
   }
 
   if (pendingExisting.data) {
+    if (!match.productId) {
+      await registerCatalogProductRequestSafely(text, canonicalNormalized);
+    }
+
     await writeAuditLog({
       familyId: context.familyId,
       actorProfileId: context.profileId,
@@ -419,6 +432,10 @@ export async function addShoppingItemAction(
       return { ok: false, error: reactivate.error.message };
     }
 
+    if (!match.productId) {
+      await registerCatalogProductRequestSafely(text, canonicalNormalized);
+    }
+
     await writeAuditLog({
       familyId: context.familyId,
       actorProfileId: context.profileId,
@@ -444,6 +461,10 @@ export async function addShoppingItemAction(
 
   if (insertResult.error || !insertResult.data) {
     return { ok: false, error: insertResult.error.message };
+  }
+
+  if (!match.productId) {
+    await registerCatalogProductRequestSafely(text, canonicalNormalized);
   }
 
   await writeAuditLog({

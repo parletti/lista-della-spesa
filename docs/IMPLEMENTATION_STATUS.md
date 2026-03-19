@@ -83,11 +83,14 @@
   - Apertura menu robusta (portal, chiusura click-outside/Esc, posizione dinamica)
 - Nuova tabella `product_nutrition_facts` con policy RLS di sola lettura client
 - Nuova tabella `product_nickel_levels` con policy RLS di sola lettura client
+- Nuova tabella `catalog_product_requests` per backlog globale prodotti mancanti dal catalogo
 - Seed iniziale nutrizione (onda 1) su circa 50 prodotti top/base del catalogo
 - Seed nutrizione onda 2 su ulteriori 50 alimenti del catalogo
 - Seed nutrizione onda 3 su ulteriori 50 alimenti del catalogo
 - Seed nutrizione onda 4 su tutti i 187 prodotti rimanenti fuori `Igiene e Casa`
 - Seed iniziale nichel v1 su prodotti alimentari catalogo (fallback `UNKNOWN` su non alimentari/non classificati)
+- Registrazione automatica backlog quando un prodotto viene aggiunto come testo libero e non esiste nel catalogo
+- Funzione SQL `resolve_catalog_product_request(product_id)` per chiudere backlog e riallineare gli `shopping_items` ancora presenti
 
 ## In corso / da fare
 
@@ -168,6 +171,10 @@
     - badge nichel nei suggerimenti autocomplete (`Basso`, `Medio`, `Alto`, `Non disponibile`)
     - livello nichel visibile nel menu item `...`
     - nessun blocco aggiunta: feature solo informativa
+24. Backlog catalogo mancanti:
+    - ogni inserimento testo libero non catalogato aggiorna `catalog_product_requests`
+    - backlog deduplicato per `normalized_text`, con `request_count`, `first_seen_at`, `last_seen_at`
+    - consultazione prevista via Codex/SQL, senza UI admin dedicata in v1
 
 ## Test minimi regressione (attuali)
 1. Login email/password

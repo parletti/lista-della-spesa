@@ -1,6 +1,6 @@
 # Product Spec - Lista della Spesa
 
-Ultimo aggiornamento: 10 marzo 2026
+Ultimo aggiornamento: 19 marzo 2026
 
 ## 1) Scopo del progetto
 Applicazione web/PWA per gestire una lista della spesa condivisa tra membri della stessa famiglia, con aggiornamento realtime, uso semplice da mobile/desktop e gestione prodotti per categoria.
@@ -9,6 +9,7 @@ Obiettivo pratico:
 - ridurre dimenticanze durante la spesa
 - evitare duplicati nella lista
 - avere una base catalogo prodotti riutilizzabile con suggerimenti rapidi
+- raccogliere automaticamente un backlog dei prodotti mancanti dal catalogo per arricchimenti futuri
 
 ## 2) Utenti e ruoli
 - `ADMIN` famiglia
@@ -34,6 +35,7 @@ Obiettivo pratico:
   - elimina
   - valori nutrizionali generici (se presenti)
   - livello nichel informativo (`Basso`/`Medio`/`Alto`/`Non disponibile`)
+- Backlog automatico globale dei prodotti mancanti dal catalogo
 - Anti-duplicati tra pending/bought
 - UI ottimizzata mobile-first in stile iOS-like
 - PWA con manifest + base offline (service worker attualmente disattivato in runtime)
@@ -60,6 +62,7 @@ Obiettivo pratico:
 5. Aggiunge prodotto:
   - se gia presente in `Da comprare`, non duplica
   - se presente in `Comprati`, viene riattivato
+  - se non esiste in catalogo, viene comunque aggiunto alla lista e registrato in backlog globale deduplicato
 6. Durante la spesa usa `Comprato` per spostare item
 7. In `Comprati` puo usare `Compra` per riportarlo in pending
 
@@ -95,6 +98,7 @@ Dal pulsante `...`:
 - Ordinamento e leggibilita lista (categoria + nome)
 - Suggerimenti coerenti da catalogo
 - Segnalazione livello nichel nei suggerimenti e nel dettaglio item
+- Registrazione automatica prodotti mancanti in backlog globale deduplicato
 - Supporto uso da browser desktop e mobile (iPhone incluso via browser/PWA)
 - Segnalazione presenza realtime a livello famiglia durante la spesa
 - Condivisione esterna rapida senza creare account destinatario
@@ -128,6 +132,7 @@ Dal pulsante `...`:
 - `shopping_presence_sessions`
 - `invites`
 - `categories`, `products_catalog`, `product_aliases`
+- `catalog_product_requests`
 - `product_nickel_levels`
 - `audit_logs`
 
@@ -140,6 +145,7 @@ Stato corrente:
 - condivisione selettiva `Da comprare` disponibile su laptop e mobile
 - valori nutrizionali generici disponibili su una prima ondata di circa 50 prodotti
 - livello nichel informativo disponibile per prodotti alimentari catalogo (fallback `Non disponibile` su non alimentari/non classificati)
+- backlog globale prodotti mancanti disponibile per consultazione via Codex/SQL
 
 Gap / prossimi step:
 - Step 9: rifinitura offline/PWA (riattivazione SW con strategia cache stabile)
@@ -147,10 +153,12 @@ Gap / prossimi step:
 - eventuali evoluzioni UX catalogo (workflow arricchimento guidato prodotti/categorie)
 - completare ondate nutrizione: `Latticini` -> `Frutta` -> `Verdura`
 - raffinare classificazione nichel generica con eventuali revisioni per prodotto
+- eventuale UI admin dedicata per backlog catalogo (oggi consultazione solo via Codex/SQL)
 
 ## 11) Regola operativa catalogo alimentare
 - Ogni nuova migration che aggiunge prodotti alimentari deve includere anche il seed in `product_nutrition_facts` nello stesso ciclo e2e (stessa migration o migration accodata immediata).
 - Ogni nuova migration che aggiunge prodotti alimentari deve includere anche il seed in `product_nickel_levels` nello stesso ciclo e2e.
+- Ogni nuovo prodotto catalogato che nasce da backlog deve chiudere la relativa richiesta in `catalog_product_requests` e riallineare gli `shopping_items` ancora presenti tramite `public.resolve_catalog_product_request(...)`.
 
 ## 12) Runbook rapido (ripartenza tra mesi)
 1. Leggere questo file (`docs/PRODUCT_SPEC.md`)
@@ -166,6 +174,9 @@ Gap / prossimi step:
    - attivazione/disattivazione stato `in spesa`
    - condivisione selettiva `Da comprare` (share/copia)
    - realtime su due sessioni
+8. Per backlog prodotti mancanti:
+   - query backlog aperto ordinato per priorita
+   - quando un prodotto viene aggiunto a catalogo, eseguire `select public.resolve_catalog_product_request('<product_id>'::uuid);`
 
 ## 13) Mappa documentazione collegata
 - Setup + comandi: [README.md](../README.md)

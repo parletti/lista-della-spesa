@@ -14,6 +14,7 @@ App web (Next.js + Supabase) per lista spesa condivisa famigliare con:
 - rinomina condivisa del nome item da menu `...` (persistente su DB)
 - valori nutrizionali generici da menu `...` (fallback se non disponibili)
 - livello nichel informativo da suggerimenti e menu `...` (`Basso`/`Medio`/`Alto`/`Non disponibile`)
+- backlog automatico prodotti mancanti dal catalogo (consultabile via Codex/SQL)
 - UI iOS-like con palette soft e separazione visiva tra `Da comprare` e `Comprati`
 - PWA installabile con supporto offline base
 
@@ -88,6 +89,7 @@ Esegui in ordine i file in `supabase/migrations/`:
 30. `20260304123000_step7_product_nutrition_facts_seed_wave4_all_remaining_food.sql`
 31. `20260310110000_step7_product_nickel_levels.sql`
 32. `20260310111000_step7_product_nickel_levels_seed_v1.sql`
+33. `20260319113000_step7_catalog_product_requests.sql`
 
 ## Comandi utili
 ```bash
@@ -125,6 +127,7 @@ curl "http://127.0.0.1:3000/api/autocomplete?q=lat"
 9. Da menu `...`, i membri possono assegnare/modificare categoria e rinominare un item (persistente su DB item).
 10. Da menu `...`, i membri possono aprire una scheda con valori nutrizionali generici per 100g/100ml quando disponibili.
 11. Nei suggerimenti autocomplete e nel menu `...`, i membri vedono anche il livello nichel informativo del prodotto.
+12. Se un prodotto viene aggiunto come testo libero e non esiste ancora nel catalogo, l'app registra automaticamente una richiesta backlog globale deduplicata.
 
 ## Sicurezza (attuale)
 - Login principale con email/password.
@@ -143,6 +146,7 @@ curl "http://127.0.0.1:3000/api/autocomplete?q=lat"
 - Toggle `Comprato/Compra` ottimizzato lato UI con comportamento ottimistico (feedback immediato).
 - Valori nutrizionali generici disponibili da menu item (`...`) con fallback `Valori nutrizionali non disponibili`.
 - Livello nichel informativo disponibile su prodotti alimentari (`LOW|MEDIUM|HIGH|UNKNOWN`), mostrato in italiano in UI.
+- I prodotti mancanti dal catalogo vengono registrati in `catalog_product_requests` con contatore richieste e ultimo testo visto.
 - Autocomplete UI attivato solo da 3 caratteri per ridurre chiamate e migliorare reattività.
 - Suggerimenti autocomplete mostrati in lista estesa, ordinati per categoria e poi per prodotto.
 - Suggerimenti prodotto con leggero rientro sotto la categoria per migliorare la leggibilità.
@@ -162,6 +166,21 @@ curl "http://127.0.0.1:3000/api/autocomplete?q=lat"
 - Sicurezza: [docs/SECURITY.md](docs/SECURITY.md)
 - Stato implementazione: [docs/IMPLEMENTATION_STATUS.md](docs/IMPLEMENTATION_STATUS.md)
 - Note migration Supabase: [supabase/README.md](supabase/README.md)
+
+## Query backlog mancanti
+Prodotti da catalogare ancora aperti:
+
+```sql
+select
+  normalized_text,
+  raw_text_last_seen,
+  request_count,
+  first_seen_at,
+  last_seen_at
+from public.catalog_product_requests
+where status = 'OPEN'
+order by request_count desc, last_seen_at desc;
+```
 
 ## Deploy on Vercel
 
