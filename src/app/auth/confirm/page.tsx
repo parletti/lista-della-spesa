@@ -64,7 +64,15 @@ export default function AuthConfirmPage() {
               throw new Error("Parametri auth mancanti nel magic link.");
             }
           } else {
-            throw new Error("Parametri auth mancanti nel magic link.");
+            // With the browser client, Supabase may already consume the recovery
+            // parameters from the URL and persist the session before this page runs.
+            const {
+              data: { session },
+            } = await supabase.auth.getSession();
+
+            if (!session) {
+              throw new Error("Parametri auth mancanti nel magic link.");
+            }
           }
         }
 
