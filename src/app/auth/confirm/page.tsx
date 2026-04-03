@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import type { EmailOtpType } from "@supabase/supabase-js";
+import type { AuthChangeEvent, EmailOtpType, Session } from "@supabase/supabase-js";
 import { getSupabaseBrowserClient } from "@/lib/supabase/client";
 import { setSessionStartedCookie } from "@/lib/auth/session-lifetime";
 
@@ -21,6 +21,41 @@ function getSafeNext(nextRaw: string | null) {
     return "/app";
   }
   return nextRaw;
+}
+
+async function waitForSupabaseSession(
+  supabase: ReturnType<typeof getSupabaseBrowserClient>,
+  timeoutMs = 2500,
+) {
+  const immediate = await supabase.auth.getSession();
+  if (immediate.data.session) {
+    return immediate.data.session;
+  }
+
+  return await new Promise<Awaited<ReturnType<typeof supabase.auth.getSession>>["data"]["session"]>(
+    (resolve) => {
+      let settled = false;
+      const timeoutId = window.setTimeout(async () => {
+        if (settled) return;
+        settled = true;
+        subscription.data.subscription.unsubscribe();
+        const fallback = await supabase.auth.getSession();
+        resolve(fallback.data.session);
+      }, timeoutMs);
+
+      const subscription = supabase.auth.onAuthStateChange(
+        async (event: AuthChangeEvent, session: Session | null) => {
+          if (settled) return;
+          if (event === "PASSWORD_RECOVERY" || event === "SIGNED_IN" || session) {
+            settled = true;
+            window.clearTimeout(timeoutId);
+            subscription.data.subscription.unsubscribe();
+            resolve(session);
+          }
+        },
+      );
+    },
+  );
 }
 
 export default function AuthConfirmPage() {
@@ -66,9 +101,7 @@ export default function AuthConfirmPage() {
           } else {
             // With the browser client, Supabase may already consume the recovery
             // parameters from the URL and persist the session before this page runs.
-            const {
-              data: { session },
-            } = await supabase.auth.getSession();
+            const session = await waitForSupabaseSession(supabase);
 
             if (!session) {
               throw new Error("Parametri auth mancanti nel magic link.");
