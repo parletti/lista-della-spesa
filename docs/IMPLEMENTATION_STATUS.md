@@ -73,6 +73,7 @@
 - Catalogo aggiornato con prodotti casa in `Dispensa`: `carta da forno`, `pellicola trasparente`, `pellicola alluminio`, `spugne lavello`, `pastiglie lavastoviglie`, `sale lavastoviglie`, `ammorbidente`
 - Catalogo aggiornato con `Formaggio cremoso tipo Philadelfia` in `Latticini`, completo di nutrizione generica e nichel
 - Cleanup categorie: rimossa la categoria storica inutilizzata `Carne e Pesce`
+- Catalogo aggiornato con backlog alimenti wave 1: `Chiodi di garofano`, `Strutto`, `Maionese`, `Patate dolci`, `Vanillina`, `Pane toast`, `Crauti`, `Burro chiarificato`, `Macinato di maiale`
 - Endpoint autocomplete fuzzy
 - Auto-assegnazione categoria
 - UI raggruppata per categoria

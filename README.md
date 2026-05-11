@@ -92,6 +92,7 @@ Esegui in ordine i file in `supabase/migrations/`:
 33. `20260319113000_step7_catalog_product_requests.sql`
 34. `20260319120000_step7_catalog_add_formaggio_cremoso_tipo_philadelfia.sql`
 35. `20260319123000_step7_catalog_remove_unused_carne_pesce.sql`
+36. `20260511113000_step7_catalog_add_backlog_foods_wave1.sql`
 
 ## Comandi utili
 ```bash
