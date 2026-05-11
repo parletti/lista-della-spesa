@@ -122,7 +122,24 @@ set
   source = excluded.source,
   updated_at = now();
 
-with nickel_levels(normalized_name, nickel_level) as (
+with resolved_products as (
+  select
+    pc.id,
+    pc.normalized_name
+  from public.products_catalog pc
+  where pc.normalized_name in (
+    'chiodi di garofano',
+    'strutto',
+    'maionese',
+    'patate dolci',
+    'vanillina',
+    'pane toast',
+    'crauti',
+    'burro chiarificato',
+    'macinato di maiale'
+  )
+),
+nickel_levels(normalized_name, nickel_level) as (
   values
     ('chiodi di garofano', 'HIGH'),
     ('strutto', 'LOW'),

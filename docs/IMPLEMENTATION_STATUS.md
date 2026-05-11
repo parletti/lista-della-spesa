@@ -179,6 +179,8 @@
     - ogni inserimento testo libero non catalogato aggiorna `catalog_product_requests`
     - backlog deduplicato per `normalized_text`, con `request_count`, `first_seen_at`, `last_seen_at`
     - consultazione prevista via Codex/SQL, senza UI admin dedicata in v1
+25. Recovery/reset password:
+    - `/auth/confirm` attende esplicitamente la sessione Supabase di recovery prima di mostrare errore, riducendo i falsi `Parametri auth mancanti nel magic link`
 
 ## Test minimi regressione (attuali)
 1. Login email/password

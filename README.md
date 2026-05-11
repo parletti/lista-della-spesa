@@ -151,6 +151,7 @@ curl "http://127.0.0.1:3000/api/autocomplete?q=lat"
 - Valori nutrizionali generici disponibili da menu item (`...`) con fallback `Valori nutrizionali non disponibili`.
 - Livello nichel informativo disponibile su prodotti alimentari (`LOW|MEDIUM|HIGH|UNKNOWN`), mostrato in italiano in UI.
 - I prodotti mancanti dal catalogo vengono registrati in `catalog_product_requests` con contatore richieste e ultimo testo visto.
+- Recovery/reset password via link reso più robusto anche quando Supabase finalizza la sessione con un piccolo ritardo lato browser.
 - Autocomplete UI attivato solo da 3 caratteri per ridurre chiamate e migliorare reattività.
 - Suggerimenti autocomplete mostrati in lista estesa, ordinati per categoria e poi per prodotto.
 - Suggerimenti prodotto con leggero rientro sotto la categoria per migliorare la leggibilità.
