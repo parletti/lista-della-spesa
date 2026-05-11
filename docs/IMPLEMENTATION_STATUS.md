@@ -74,6 +74,7 @@
 - Catalogo aggiornato con `Formaggio cremoso tipo Philadelfia` in `Latticini`, completo di nutrizione generica e nichel
 - Cleanup categorie: rimossa la categoria storica inutilizzata `Carne e Pesce`
 - Catalogo aggiornato con backlog alimenti wave 1: `Chiodi di garofano`, `Strutto`, `Maionese`, `Patate dolci`, `Vanillina`, `Pane toast`, `Crauti`, `Burro chiarificato`, `Macinato di maiale`
+- Catalogo aggiornato con backlog non alimenti wave 1: `Sapone cucina`, `Ramechini alluminio`, `Sacchetti pattume compostabile`, `Sacchetti pattume indifferenziato`, `Deodorante auto`, `Stracci lavandino`, `Scotch carta`
 - Endpoint autocomplete fuzzy
 - Auto-assegnazione categoria
 - UI raggruppata per categoria

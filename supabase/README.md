@@ -109,6 +109,7 @@ File migration:
 - `supabase/migrations/20260319120000_step7_catalog_add_formaggio_cremoso_tipo_philadelfia.sql`
 - `supabase/migrations/20260319123000_step7_catalog_remove_unused_carne_pesce.sql`
 - `supabase/migrations/20260511113000_step7_catalog_add_backlog_foods_wave1.sql`
+- `supabase/migrations/20260511120000_step7_catalog_add_backlog_non_foods_wave1.sql`
 
 ### Come applicarla
 1. Apri Supabase Dashboard.
@@ -154,6 +155,7 @@ File migration:
 36. Aggiunta voce `Formaggio cremoso tipo Philadelfia` in `Latticini` con valori nutrizionali generici e nichel `LOW`, piu' chiusura backlog correlato.
 37. Rimossa la categoria storica `Carne e Pesce` se non piu' referenziata da catalogo o shopping items.
 38. Aggiunta wave backlog alimenti con nutrizione, nichel e chiusura backlog automatica per 9 prodotti (`Chiodi di garofano`, `Strutto`, `Maionese`, `Patate dolci`, `Vanillina`, `Pane toast`, `Crauti`, `Burro chiarificato`, `Macinato di maiale`).
+39. Aggiunta wave backlog non alimenti con chiusura backlog automatica per 7 prodotti (`Sapone cucina`, `Ramechini alluminio`, `Sacchetti pattume compostabile`, `Sacchetti pattume indifferenziato`, `Deodorante auto`, `Stracci lavandino`, `Scotch carta`).
 
 ### Regola operativa nutrizione
 Per ogni nuova migration che aggiunge prodotti alimentari in catalogo, includere anche i corrispondenti record in `product_nutrition_facts` nello stesso ciclo e2e.
